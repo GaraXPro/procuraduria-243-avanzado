@@ -49,6 +49,11 @@
 
     <!-- Controles Corporativos y Ficha del Cargo -->
     <div class="topbar__actions">
+      <button id="open-hot-exam-btn" class="action-chip action-chip--hot" type="button" title="Iniciar Examen Oficial en Caliente (Aleatorio · 7 Módulos)">
+        <span aria-hidden="true">🔥</span>
+        <span>Examen Oficial en Caliente</span>
+      </button>
+
       <button id="open-trophies-btn" class="action-chip action-chip--trophy" type="button" title="Abrir Sala de Trofeos y Progreso XP (Estilo PS5)">
         <span class="trophy-chip-icon" aria-hidden="true">🏆</span>
         <span>Trofeos y XP</span>
@@ -146,6 +151,10 @@
 
       <!-- Pie del Panel Lateral -->
       <div class="sidebar__footer">
+        <button type="button" id="sidebar-hot-exam-btn" class="sidebar-hot-exam-btn">
+          <span>🔥 Examen Oficial en Caliente</span>
+          <small>10, 20 o 35 PJS · 100% Aleatorio</small>
+        </button>
         <div class="sidebar-stat-grid">
           <div class="sidebar-stat">
             <span class="sidebar-stat__value" id="stat-completed-modules">0/7</span>
@@ -562,90 +571,199 @@
       </section>
 
       <!-- ====================================================================
-           PESTAÑA 5: SIMULADOR DE JUICIO SITUACIONAL + CRONÓMETRO + BANDEJA DE ERRORES
+           PESTAÑA 5: SIMULADOR DE JUICIO SITUACIONAL + EXAMEN EN CALIENTE + TELEMETRÍA
            ==================================================================== -->
       <section id="tab-simulador" class="tab-panel simulador-container is-hidden" role="tabpanel" aria-label="Simulador de Juicio Situacional">
+        <!-- Selector Superior de Modalidad -->
         <header class="simulador-header">
           <div class="simulador-header__top">
-            <div class="sim-mode-pills">
-              <button type="button" id="sim-mode-all-btn" class="sim-mode-btn is-active">
-                Simulacro Oficial (10 Preguntas)
+            <div class="sim-mode-pills" role="tablist" aria-label="Modalidad del simulador">
+              <button type="button" id="sim-mode-hot-btn" class="sim-mode-btn is-active" data-sim-mode="caliente">
+                🔥 Examen Oficial en Caliente
               </button>
-              <button type="button" id="sim-mode-errors-btn" class="sim-mode-btn">
-                <span>Bandeja de Errores · Repasar mis errores</span>
+              <button type="button" id="sim-mode-all-btn" class="sim-mode-btn" data-sim-mode="all">
+                🎓 Práctica Guiada (Con Pistas)
+              </button>
+              <button type="button" id="sim-mode-errors-btn" class="sim-mode-btn" data-sim-mode="errors">
+                <span>⚠️ Bandeja de Errores</span>
                 <span id="sim-errors-count-badge" class="error-count-badge">0</span>
               </button>
             </div>
 
-            <!-- Cronómetro Integrado -->
-            <div class="sim-timer-box" aria-label="Cronómetro del simulacro">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <span id="sim-timer-display" class="sim-timer-display">00:00</span>
-              <button type="button" id="sim-timer-toggle-btn" class="sim-timer-btn" title="Pausar/Reanudar cronómetro">Pausar</button>
-              <button type="button" id="sim-timer-reset-btn" class="sim-timer-btn" title="Reiniciar cronómetro">Reiniciar</button>
+            <!-- Controles rápidos de longitud del examen -->
+            <div class="sim-length-pills" id="sim-length-selector" role="group" aria-label="Cantidad de preguntas del examen">
+              <button type="button" class="sim-length-btn" data-length="10">Corto (10 PJS · 20m)</button>
+              <button type="button" class="sim-length-btn is-active" data-length="20">Estándar (20 PJS · 40m)</button>
+              <button type="button" class="sim-length-btn" data-length="35">Maratón Total (35 PJS · 70m)</button>
             </div>
           </div>
 
-          <h2 id="sim-title" class="lesson-title">Simulador de Juicio Situacional · Cargo 5AM-09</h2>
+          <h2 id="sim-title" class="lesson-title">🔥 Simulacro Real en Caliente · Examen Oficial 5AM-09</h2>
           <p id="sim-description" class="lesson-summary">
-            Cada ítem presenta un Caso Situacional en Oficina, el Enunciado y 4 opciones, indicando si evalúa Conocimientos (60% Eliminatorio · Mínimo 65%) o Competencias Comportamentales (20% Clasificatorio).
+            Preguntas seleccionadas y barajadas de forma 100% aleatoria entre los 7 módulos oficiales. En modo Examen en Caliente las respuestas y explicaciones paso a paso se revelan al finalizar el intento.
           </p>
-
-          <!-- Barra de Progreso del Simulacro -->
-          <div class="sim-progress-bar-wrap">
-            <div class="sim-progress-meta">
-              <span id="sim-question-counter">Pregunta 1 de 10</span>
-              <span class="sim-threshold-tag">Umbral mínimo aprobatorio Conocimientos: 65%</span>
-            </div>
-            <div class="sim-progress-track">
-              <div id="sim-progress-fill" class="sim-progress-fill" style="width: 10%"></div>
-            </div>
-          </div>
         </header>
 
-        <!-- Vista de Pregunta Situacional Activa -->
-        <div id="sim-question-card" class="sim-question-card">
+        <!-- 1. TARJETA DE INICIO Y PAUSA PERSISTENTE (ESTILO SIMULACRO FINAL) -->
+        <div id="sim-lobby-card" class="sim-lobby-card">
+          <div class="sim-lobby-card__badge-row">
+            <span id="sim-lobby-mode-pill" class="sim-lobby-mode-pill">🔥 MODO EXAMEN OFICIAL EN CALIENTE · SIN PISTAS HASTA FINALIZAR</span>
+            <span class="sim-lobby-bank-pill">Banco Activo: 35 Casos Situacionales (7 Módulos)</span>
+          </div>
+
+          <h3 id="sim-lobby-heading" class="sim-lobby-card__title">Simulacro Oficial de Juicio Situacional · Procuraduría 243-2026</h3>
+          <p class="sim-lobby-card__subtitle">
+            Condiciones reales de prueba para el cargo Auxiliar Administrativo (Código 5AM-09). El cronómetro calcula tu ritmo sobre una base técnica de 2 minutos por pregunta.
+          </p>
+
+          <!-- Tres Recuadros de Métricas -->
+          <div class="sim-lobby-metrics">
+            <div class="sim-lobby-metric">
+              <span class="sim-lobby-metric__label">PREGUNTAS</span>
+              <strong id="sim-metric-questions" class="sim-lobby-metric__value">20 Preguntas</strong>
+              <span id="sim-metric-questions-sub" class="sim-lobby-metric__sub">Sorteo 100% aleatorio (7 módulos)</span>
+            </div>
+            <div class="sim-lobby-metric">
+              <span class="sim-lobby-metric__label">TIEMPO</span>
+              <strong id="sim-metric-time" class="sim-lobby-metric__value">40 minutos</strong>
+              <span class="sim-lobby-metric__sub">Base oficial: 2:00 min por pregunta</span>
+            </div>
+            <div class="sim-lobby-metric">
+              <span class="sim-lobby-metric__label">PARA APROBAR</span>
+              <strong id="sim-metric-pass" class="sim-lobby-metric__value">65% Eliminatorio / 80% Meta</strong>
+              <span class="sim-lobby-metric__sub">Conocimientos 60% · Comportamental 20%</span>
+            </div>
+          </div>
+
+          <!-- Aviso de Intento en Pausa en localStorage -->
+          <div id="sim-paused-notice" class="sim-paused-notice" hidden>
+            <span class="sim-paused-notice__dot" aria-hidden="true">●</span>
+            <div>
+              <strong>Tienes un intento en pausa con tus respuestas guardadas. El tiempo corre solo mientras lo presentas.</strong>
+              <div id="sim-paused-meta" class="sim-paused-notice__meta"></div>
+            </div>
+          </div>
+
+          <div class="sim-lobby-actions">
+            <button type="button" id="sim-resume-btn" class="btn-sim-resume-yellow" hidden>
+              <span>Continuar mi intento →</span>
+            </button>
+            <button type="button" id="sim-start-btn" class="btn-sim-resume-yellow">
+              <span>Iniciar Simulacro Ahora →</span>
+            </button>
+            <button type="button" id="sim-new-random-btn" class="btn-sim-secondary-dark">
+              <span>Reiniciar / Nuevo Intento Aleatorio ↻</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. BARRA DE TELEMETRÍA DE TIEMPOS EN VIVO (GLOBAL Y RITMO) -->
+        <div id="sim-live-telemetry" class="sim-live-telemetry" hidden>
+          <div class="sim-live-telemetry__top">
+            <div class="sim-live-telemetry__left">
+              <button type="button" id="sim-pause-btn" class="btn-sim-pause" title="Pausar examen y guardar segundo exacto en localStorage">
+                ⏸ Pausar
+              </button>
+              <div class="sim-live-titles">
+                <strong id="sim-live-title" class="sim-live-title">Simulacro Oficial en Caliente · 5AM-09</strong>
+                <span id="sim-answered-subtitle" class="sim-answered-subtitle">0 de 20 respondidas · Progreso guardado</span>
+              </div>
+            </div>
+
+            <div class="sim-live-telemetry__right">
+              <div id="sim-countdown-pill" class="sim-countdown-pill" title="Tiempo restante del examen (Base 2 min por pregunta)">
+                <span aria-hidden="true">🕒</span>
+                <span id="sim-timer-display" class="sim-timer-display">40:00</span>
+              </div>
+              <!-- Botones auxiliares ocultos por compatibilidad -->
+              <button type="button" id="sim-timer-toggle-btn" class="sim-timer-btn" hidden>Pausar</button>
+              <button type="button" id="sim-timer-reset-btn" class="sim-timer-btn" hidden>Reiniciar</button>
+            </div>
+          </div>
+
+          <!-- Barra de Ritmo con Indicador Dinámico -->
+          <div class="sim-pace-bar">
+            <div class="sim-pace-bar__left">
+              <span id="sim-pace-status" class="sim-pace-status sim-pace-status--good">● Vas a buen ritmo</span>
+              <span id="sim-question-counter" class="sim-pace-counter">Pregunta 1 de 20</span>
+            </div>
+            <div class="sim-pace-bar__right">
+              <span id="sim-pace-avg-live" class="sim-pace-avg-live">Promedio actual: 0:00 / preg.</span>
+              <span id="sim-pace-target" class="sim-pace-target">≈ 2:00 por pregunta</span>
+            </div>
+          </div>
+
+          <div class="sim-progress-track">
+            <div id="sim-progress-fill" class="sim-progress-fill" style="width: 5%"></div>
+          </div>
+        </div>
+
+        <!-- 3. VISTA DE PREGUNTA SITUACIONAL ACTIVA + CRONÓMETRO INDIVIDUAL + IR A LA PREGUNTA -->
+        <div id="sim-question-card" class="sim-question-card" hidden>
           <div class="sim-question-meta-bar">
-            <span class="sim-question-card__number" id="sim-q-badge">PREGUNTA 1 DE 10</span>
             <div class="sim-question-tags">
+              <span class="sim-question-card__number" id="sim-q-badge">PREGUNTA 1 DE 20</span>
               <span id="sim-q-modulo-tag" class="norma-chip">Gestión Documental</span>
               <span id="sim-q-peso-tag" class="sim-peso-pill">Conocimientos (60% · Eliminatorio)</span>
               <span id="sim-q-comp-tag" class="sim-comp-pill">Organización del Trabajo (Nivel C)</span>
             </div>
+
+            <!-- Cronómetro Individual de esta Pregunta -->
+            <div id="sim-q-timer-pill" class="sim-q-timer-pill" title="Tiempo acumulado leyendo esta pregunta">
+              🕒 0:00 / 2:00
+            </div>
           </div>
 
-          <!-- Recuadro de CASO SITUACIONAL EN OFICINA -->
+          <!-- Estructura limpia: Caso: y Enunciado: -->
           <div class="sim-office-case-box">
-            <div class="sim-office-case-box__label">📂 CASO SITUACIONAL EN OFICINA (EMPLEO 5AM-09)</div>
-            <p id="sim-case-context" class="sim-office-case-box__text"></p>
+            <div class="sim-office-case-box__label">CASO SITUACIONAL EN OFICINA (CARGO 5AM-09)</div>
+            <p class="sim-office-case-box__text">
+              <strong class="sim-inline-tag">Caso:</strong>
+              <span id="sim-case-context" class="sim-case-bold-text"></span>
+            </p>
           </div>
 
-          <!-- Recuadro de ENUNCIADO -->
           <div class="sim-enunciado-box">
-            <div class="sim-enunciado-box__label">🎯 ENUNCIADO EVALUATIVO</div>
-            <p id="sim-question-text" class="sim-question-stem"></p>
+            <p class="sim-question-stem">
+              <strong class="sim-inline-tag">Enunciado:</strong>
+              <span id="sim-question-text"></span>
+            </p>
           </div>
 
           <!-- 4 Opciones de Selección Múltiple -->
           <div id="sim-options-grid" class="sim-options-grid" role="radiogroup" aria-label="Opciones de respuesta"></div>
 
-          <!-- Caja de Justificación Normativa -->
+          <!-- Caja de Justificación Normativa (Solo visible durante el examen en modo Práctica Guiada) -->
           <div id="sim-justification-box" class="sim-justification-box" hidden>
             <div id="sim-justification-status" class="sim-justification-status"></div>
             <p id="sim-justification-text" class="sim-justification-text"></p>
           </div>
 
           <div class="sim-question-actions">
-            <span id="sim-action-hint" class="sim-action-hint">Selecciona una opción (A, B, C o D) para validar tu respuesta.</span>
-            <button id="sim-next-btn" type="button" class="btn-primary-advance" disabled>
-              <span id="sim-next-label">Siguiente Pregunta</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </button>
+            <div class="sim-question-actions__left">
+              <button id="sim-prev-btn" type="button" class="btn-back-reading">← Anterior</button>
+              <span id="sim-action-hint" class="sim-action-hint">Selecciona una opción (A, B, C o D).</span>
+            </div>
+            <div class="sim-question-actions__right">
+              <button id="sim-finish-exam-btn" type="button" class="btn-secondary-gold">
+                Finalizar y Calificar ✓
+              </button>
+              <button id="sim-next-btn" type="button" class="btn-primary-advance">
+                <span id="sim-next-label">Siguiente Pregunta</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cuadrícula Inferior: IR A LA PREGUNTA -->
+          <div class="sim-jump-panel" aria-label="Navegador rápido de preguntas">
+            <div class="sim-jump-panel__header">
+              <span class="sim-jump-panel__title">IR A LA PREGUNTA</span>
+              <span id="sim-jump-legend" class="sim-jump-panel__legend">Borde amarillo: actual · Fondo verde/azul: respondida</span>
+            </div>
+            <div id="sim-jump-grid" class="sim-jump-grid"></div>
           </div>
         </div>
 
@@ -653,16 +771,16 @@
         <div id="sim-empty-errors-card" class="sim-results-card" hidden>
           <div class="sim-eval-banner sim-eval-banner--success">
             <div class="sim-eval-banner__title">🎉 ¡Tu Bandeja de Errores está limpia!</div>
-            <p>Actualmente no tienes preguntas falladas pendientes por repasar. Puedes realizar el Simulacro Oficial Completo de 10 preguntas para seguir entrenando.</p>
+            <p>Actualmente no tienes preguntas falladas pendientes por repasar. Puedes lanzar un Examen Oficial en Caliente (10, 20 o 35 preguntas aleatorias) para ponerte a prueba.</p>
           </div>
           <div>
             <button type="button" id="sim-return-full-btn" class="btn-evaluar-conocimientos">
-              Iniciar Simulacro Completo (10 Preguntas)
+              Ir a 🔥 Examen Oficial en Caliente
             </button>
           </div>
         </div>
 
-        <!-- Vista de Evaluación Final -->
+        <!-- 4. VISTA DE EVALUACIÓN FINAL + AUDITORÍA DE TIEMPOS + EXPLICACIÓN PASO A PASO -->
         <div id="sim-results-card" class="sim-results-card" hidden>
           <div class="sim-score-header">
             <div id="sim-score-circle" class="sim-score-circle">
@@ -670,18 +788,38 @@
               <span class="sim-score-caption">Puntaje</span>
             </div>
             <div class="sim-score-summary">
-              <h3 class="sim-score-title">Resultado Final del Simulacro</h3>
-              <p id="sim-score-detail" class="sim-score-detail">Has acertado 0 de 10 preguntas.</p>
+              <h3 class="sim-score-title">Resultado Final y Auditoría de Tiempos</h3>
+              <p id="sim-score-detail" class="sim-score-detail">Has acertado 0 de 20 preguntas.</p>
               <p id="sim-time-detail" class="sim-time-detail">Tiempo empleado: 00:00</p>
+            </div>
+          </div>
+
+          <!-- Cuadrícula de Telemetría Final (Hora de inicio, fin, total y promedio) -->
+          <div class="sim-results-telemetry-grid">
+            <div class="sim-telemetry-kpi">
+              <span class="sim-telemetry-kpi__label">Hora exacta de inicio</span>
+              <strong id="sim-res-start-time" class="sim-telemetry-kpi__value">--:--:--</strong>
+            </div>
+            <div class="sim-telemetry-kpi">
+              <span class="sim-telemetry-kpi__label">Hora de finalización</span>
+              <strong id="sim-res-end-time" class="sim-telemetry-kpi__value">--:--:--</strong>
+            </div>
+            <div class="sim-telemetry-kpi">
+              <span class="sim-telemetry-kpi__label">Tiempo total empleado</span>
+              <strong id="sim-res-total-time" class="sim-telemetry-kpi__value">0m 00s</strong>
+            </div>
+            <div class="sim-telemetry-kpi">
+              <span class="sim-telemetry-kpi__label">Promedio por pregunta</span>
+              <strong id="sim-res-avg-time" class="sim-telemetry-kpi__value">0m 00s / preg.</strong>
             </div>
           </div>
 
           <!-- Alerta Dinámica: >= 65% Verde / < 65% Rojo -->
           <div id="sim-eval-banner" class="sim-eval-banner" role="alert"></div>
 
-          <!-- Resumen de Respuestas y Justificaciones -->
+          <!-- Resumen de Respuestas, Tiempos por Pregunta y Explicación Paso a Paso -->
           <div class="sim-review-section">
-            <h4 class="sim-review-heading">Revisión Detallada de Casos Situacionales y Justificaciones</h4>
+            <h4 class="sim-review-heading">Desglose Pregunta por Pregunta: Tiempo Invertido y Explicación Paso a Paso</h4>
             <div id="sim-review-list" class="sim-review-list"></div>
           </div>
 
@@ -692,7 +830,7 @@
                   <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
                   <path d="M3 3v5h5"></path>
                 </svg>
-                <span>Repetir Simulacro Completo</span>
+                <span>Nuevo Intento Aleatorio ↻</span>
               </button>
               <button id="sim-practice-mistakes-btn" type="button" class="btn-danger-outline" hidden>
                 Repasar Mis Errores de este Intento

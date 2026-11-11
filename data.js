@@ -2686,6 +2686,531 @@ const simuladorData = [
     respuesta_correcta: "A",
     justificacion:
       "El comprobante de salida de almacén, al ser firmado por quien recibe, formaliza la entrega y traslada la responsabilidad de la custodia y uso del bien al funcionario correspondiente."
+  },
+  {
+    id: "sim-q11",
+    modulo: "Gestión Documental",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Cumplimiento (Nivel D)",
+    caso_situacional:
+      "Un viernes a las 4:45 p. m., un profesional de su dependencia le solicita apartar cuatro números consecutivos de radicación de salida en la Ventanilla Única para unos oficios que él terminará de redactar y pasará a firma del Procurador Regional el lunes a primera hora.",
+    pregunta:
+      "De conformidad con el artículo 5 del Acuerdo 060 de 2001 del Archivo General de la Nación (AGN), ¿cuál debe ser su actuación como Auxiliar Administrativo 5AM-09?",
+    opciones: [
+      "A) Reservar los cuatro números dejando una nota provisional en el libro radicador.",
+      "B) Negarse respetuosamente, ya que está prohibido reservar números de radicación, dejar espacios en blanco o numerar actos no firmados.",
+      "C) Asignarles el mismo número del último oficio del viernes agregando los sufijos BIS-1 a BIS-4.",
+      "D) Reservar los números únicamente si el profesional deja un correo electrónico de respaldo."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "El artículo 5 del Acuerdo AGN 060 de 2001 prohíbe taxativamente reservar números de radicación, repetirlos, dejar espacios en blanco o usar numeración con sufijos (BIS). Solo se radican comunicaciones debidamente firmadas.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: El Art. 5 del Acuerdo 060 de 2001 exige numeración estrictamente secuencial y prohíbe reservar radicados o numerar documentos sin firma. 2) Por qué A, C y D son trampas: Ni las notas provisionales, ni los sufijos BIS, ni los correos internos autorizan vulnerar la prohibición legal de reserva de consecutivos."
+  },
+  {
+    id: "sim-q12",
+    modulo: "Gestión Documental",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "Durante el proceso técnico de Organización Documental en el Archivo de Gestión de la Procuraduría Provincial, usted ya agrupó las carpetas por series según el CCD y ordenó cronológicamente cada pieza foliándola. Ahora procede a diligenciar el Formato Único de Inventario Documental (FUID) y los metadatos de localización.",
+    pregunta:
+      "Según el Decreto 1080 de 2015, la actividad de elaborar el inventario FUID e índices de búsqueda corresponde específicamente a la etapa técnica de:",
+    opciones: [
+      "A) Clasificación documental.",
+      "B) Ordenación documental.",
+      "C) Descripción documental.",
+      "D) Valoración documental."
+    ],
+    respuesta_correcta: "C",
+    justificacion:
+      "La Organización Documental se compone de tres fases secuenciales: 1º Clasificación (agrupar por series), 2º Ordenación (disponer cronológicamente y foliar) y 3º Descripción (registrar atributos en el FUID e índices para su recuperación).",
+    explicacion_paso_a_paso:
+      "1) Por qué C es correcta: La Descripción es la 3ª etapa de la Organización Documental y consiste en elaborar instrumentos de control y consulta como el FUID. 2) Por qué A y B son trampas: Clasificación es agrupar por series/subseries y Ordenación es ubicar cronológicamente y foliar. 3) D es otro de los 8 procesos (determinar valores primarios/secundarios)."
+  },
+  {
+    id: "sim-q13",
+    modulo: "Documentos GTC 185",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Cumplimiento (Nivel D)",
+    caso_situacional:
+      "El Procurador Regional le pide proyectar dos comunicaciones: la primera está dirigida al Alcalde Municipal solicitando copia de un decreto local; la segunda está dirigida al Coordinador del Grupo de Gestión Documental de la misma Procuraduría solicitando cajas de archivo X-200.",
+    pregunta:
+      "De acuerdo con la Guía Técnica Colombiana GTC 185 y las normas de comunicaciones oficiales, ¿qué tipos documentales debe proyectar respectivamente para cada destinatario?",
+    opciones: [
+      "A) Un memorando para el Alcalde y un oficio para el Coordinador interno.",
+      "B) Un oficio (carta) para el Alcalde Municipal (externo) y un memorando para el Coordinador interno de la entidad.",
+      "C) Dos circulares generales sin numeración consecutiva.",
+      "D) Dos actas administrativas firmadas únicamente por el auxiliar."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "Según la GTC 185, el oficio o carta institucional se emplea para las comunicaciones externas (dirigidas a otras entidades o ciudadanos), mientras que el memorando es el documento propio de la comunicación interna entre dependencias de la misma entidad.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: El oficio va hacia afuera de la PGN (Alcaldía) y el memorando circula internamente entre oficinas de la misma PGN. 2) Por qué A es trampa: Invierte los conceptos de oficio y memorando. 3) C y D usan documentos con finalidades distintas (la circular da instrucciones generales y el acta registra reuniones)."
+  },
+  {
+    id: "sim-q14",
+    modulo: "Documentos GTC 185",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "Usted apoya como secretario técnico una reunión del Comité Regional y debe elaborar el acta correspondiente conforme a la GTC 185. Uno de los asistentes le pide que transcriba palabra por palabra todas las discusiones de dos horas y que deje el acta firmada en blanco para agregar compromisos la semana siguiente.",
+    pregunta:
+      "Conforme a las buenas prácticas de elaboración de actas (GTC 185), ¿cuál es la actuación técnica correcta?",
+    opciones: [
+      "A) Firmar el acta en blanco y completarla cuando los asistentes envíen sus comentarios por chat.",
+      "B) Consignar el orden del día, asistentes, síntesis de las deliberaciones, decisiones adoptadas y matriz de compromisos (responsable y fecha), pasándola a firma de quien presidió y del secretario sin dejar espacios en blanco.",
+      "C) Omitir la lista de asistentes y registrar únicamente las opiniones personales del auxiliar.",
+      "D) Reemplazar el acta por una cuenta de cobro interna."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "El acta administrativa no es una transcripción literal palabra por palabra, sino el documento probatorio que sintetiza los temas tratados, las decisiones tomadas y los compromisos con responsable y fecha límite, suscrito por presidente y secretario.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Recoge todos los elementos estructurales de la GTC 185 y respeta la prohibición de firmar en blanco. 2) Por qué A es trampa: Jamás se firman actas en blanco ni con espacios abiertos. 3) C y D desnaturalizan el valor probatorio del acta."
+  },
+  {
+    id: "sim-q15",
+    modulo: "Documentos GTC 185",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Gestión de Recursos (Nivel D)",
+    caso_situacional:
+      "En su dependencia se presentan simultáneamente tres necesidades administrativas: 1) Solicitar al almacén 20 resmas de papel y 4 tóners; 2) Ordenar la reparación técnica de una fotocopiadora averiada; y 3) Tramitar el cobro de honorarios de un perito externo no obligado a expedir factura electrónica.",
+    pregunta:
+      "¿Qué documentos de soporte administrativo corresponden exactamente a cada una de estas tres situaciones (1, 2 y 3)?",
+    opciones: [
+      "A) 1: Cuenta de cobro; 2: Orden de pedido; 3: Orden de trabajo.",
+      "B) 1: Orden de pedido (requisición); 2: Orden de trabajo; 3: Cuenta de cobro con sus soportes y visto bueno de supervisión.",
+      "C) 1: Circular; 2: Memorando; 3: Acta de comité.",
+      "D) 1: Orden de trabajo; 2: Cuenta de cobro; 3: Requisición de insumos."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "La orden de pedido o requisición solicita bienes/suministros al almacén; la orden de trabajo instruye la ejecución de un servicio o mantenimiento; y la cuenta de cobro soporta el pago de servicios a personas no obligadas a facturar.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Asigna a cada necesidad su documento exacto (Bienes = Orden de pedido; Servicio/Mantenimiento = Orden de trabajo; Pago sin factura = Cuenta de cobro). 2) A y D invierten las definiciones para confundir al aspirante."
+  },
+  {
+    id: "sim-q16",
+    modulo: "Documentos GTC 185",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Responsabilidad (Nivel C)",
+    caso_situacional:
+      "Usted termina de digitar un oficio de respuesta proyectado por el abogado sustanciador para la firma del Procurador Provincial. Al final del documento, debajo del bloque de firma y de la línea de 'Anexos', debe incluir las líneas de identificación de trazabilidad según la GTC 185.",
+    pregunta:
+      "¿Cuál es la finalidad de registrar al pie del oficio las líneas de 'Proyectó / Elaboró' y 'Revisó'?",
+    opciones: [
+      "A) Reemplazar la firma del Procurador Provincial para que el oficio salga más rápido.",
+      "B) Dejar trazabilidad administrativa y documental sobre los servidores que intervinieron en la proyección, digitación y revisión previa del documento antes de la firma del competente.",
+      "C) Permitir que el destinatario externo presente recursos contra el digitador.",
+      "D) Cumplir un requisito meramente decorativo que puede inventarse con iniciales falsas."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "En la GTC 185, las líneas de 'Proyectó/Elaboró' y 'Revisó' garantizan el control interno y la trazabilidad documental dentro del expediente, sin sustituir en ningún caso la firma del jefe o funcionario competente.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Identifica la cadena de responsabilidad interna en la producción documental. 2) Por qué A es trampa: El auxiliar proyecta o digita, pero jamás reemplaza la firma del titular de la competencia."
+  },
+  {
+    id: "sim-q17",
+    modulo: "Documentos GTC 185",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "El Despacho del Procurador Regional necesita comunicar a los 18 funcionarios de la sede el nuevo horario de cierre de inventario documental de fin de mes, utilizando una sola comunicación interna numerada que sea conocida por todos.",
+    pregunta:
+      "¿Qué documento organizacional de la GTC 185 es el idóneo para impartir una instrucción interna de carácter general a múltiples destinatarios?",
+    opciones: [
+      "A) La Circular interna numerada.",
+      "B) La Cuenta de cobro.",
+      "C) El Comprobante de salida de almacén.",
+      "D) El Acta de baja de bienes."
+    ],
+    respuesta_correcta: "A",
+    justificacion:
+      "La circular tiene como propósito dar a conocer información o instrucciones de carácter general a un grupo plural de destinatarios internos o externos.",
+    explicacion_paso_a_paso:
+      "1) Por qué A es correcta: La circular está diseñada específicamente para dirigirse a varios destinatarios con una misma instrucción general. 2) B, C y D son soportes contables o de almacén ajenos a una directriz general de personal."
+  },
+  {
+    id: "sim-q18",
+    modulo: "Atención al Usuario",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Cumplimiento (Nivel D)",
+    caso_situacional:
+      "En la sede de la Procuraduría se radican el mismo día dos derechos de petición: el primero es una solicitud de interés particular sobre el reconocimiento de una acreencia laboral; el segundo es una consulta jurídica formulada por un ciudadano sobre la interpretación de una norma disciplinaria.",
+    pregunta:
+      "Según el artículo 14 de la Ley 1755 de 2015, ¿cuáles son los términos legales máximos para resolver cada una de estas peticiones respectivamente?",
+    opciones: [
+      "A) 10 días hábiles para la petición general y 15 días hábiles para la consulta.",
+      "B) 15 días hábiles para la petición general/particular y 30 días hábiles para la consulta.",
+      "C) 30 días calendario para ambas solicitudes.",
+      "D) 5 días hábiles para la petición general y 10 días hábiles para la consulta."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "El artículo 14 de la Ley 1755 de 2015 establece: 15 días hábiles para peticiones generales o particulares, 10 días hábiles para peticiones de información y documentos, y 30 días hábiles para resolver consultas.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Aplica la regla 15-10-30 de la Ley 1755/2015 (15 días petición general, 10 días documentos/información, 30 días consultas). 2) Por qué C es trampa: En derecho administrativo los términos de días son HÁBILES, nunca calendario, salvo disposición expresa."
+  },
+  {
+    id: "sim-q19",
+    modulo: "Atención al Usuario",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Orientación al Usuario (Nivel B)",
+    caso_situacional:
+      "Al revisar una petición recién radicada, el profesional advierte que falta un documento indispensable para poder decidir de fondo y le pide a usted proyectar el oficio de requerimiento al peticionario para que complete la solicitud conforme al artículo 17 de la Ley 1755 de 2015.",
+    pregunta:
+      "¿Dentro de qué término debe requerirse al peticionario para que complete su petición y qué plazo tiene el ciudadano para aportar lo faltante antes de que opere el desistimiento tácito?",
+    opciones: [
+      "A) Requerir en 30 días hábiles y el ciudadano tiene 5 días para responder.",
+      "B) Requerir dentro de los 10 días siguientes a la radicación y el ciudadano cuenta con un (1) mes para completar la petición (prorrogable hasta por otro mes si lo solicita antes de vencer).",
+      "C) Rechazar de plano la petición el mismo día sin conceder plazo de subsanación.",
+      "D) Requerir en 15 días calendario y esperar un año."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "El artículo 17 de la Ley 1755 de 2015 dispone que la autoridad debe requerir al peticionario por una sola vez dentro de los diez (10) días siguientes a la fecha de radicación, y el peticionario tendrá un (1) mes para aportar lo requerido.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Cita con exactitud los dos plazos del Art. 17 Ley 1755 (10 días para requerir + 1 mes para que el ciudadano subsane). 2) Por qué C es trampa: Ninguna petición incompleta puede rechazarse de plano sin antes requerir al ciudadano."
+  },
+  {
+    id: "sim-q20",
+    modulo: "Atención al Usuario",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Responsabilidad (Nivel C)",
+    caso_situacional:
+      "Un periodista solicita en ventanilla copia íntegra de un expediente disciplinario que apenas se encuentra en etapa de Investigación Disciplinaria (antes de formularse pliego de cargos). Usted debe verificar el régimen de acceso a la información pública y las excepciones legales.",
+    pregunta:
+      "De acuerdo con la Ley 1712 de 2014 (Transparencia) y el artículo 115 del Código General Disciplinario (Ley 1952 de 2019), ¿cuál es el estado de reserva de esa actuación?",
+    opciones: [
+      "A) Es información pública de libre acceso para cualquier tercero desde el primer día.",
+      "B) En el proceso disciplinario las actuaciones están sometidas a reserva legal durante la indagación previa y la investigación disciplinaria; solo tienen acceso los sujetos procesales hasta que se cite a audiencia y se formule pliego de cargos o se ordene el archivo.",
+      "C) El Auxiliar Administrativo puede entregar copia informal si el solicitante paga las fotocopias.",
+      "D) La reserva solo aplica para procesos penales, nunca para procesos disciplinarios en la PGN."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "El artículo 115 de la Ley 1952 de 2019 establece que la actuación disciplinaria es reservada durante la indagación previa y la investigación; cesa la reserva para terceros cuando se formula pliego de cargos o se profiere archivo definitivo.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Articula la Ley 1712/2014 con la reserva legal especial del Art. 115 del CGD. 2) Por qué A, C y D son trampas: Entregar copias a terceros no sujetos procesales durante la etapa de investigación constituye falta disciplinaria por violación de la reserva."
+  },
+  {
+    id: "sim-q21",
+    modulo: "Inventarios",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Gestión de Recursos (Nivel D)",
+    caso_situacional:
+      "En el almacén seccional de la Procuraduría existen dos lotes de cajas de resmas de papel ecológico y cartuchos de impresión: el Lote #1 ingresó en febrero con vencimiento de garantía próximo y el Lote #2 ingresó en agosto. Usted debe despachar suministros a las dependencias evitando el deterioro u obsolescencia del stock.",
+    pregunta:
+      "¿Qué método técnico de gestión y rotación de inventarios en Kardex asegura que los primeros elementos que ingresaron al almacén sean los primeros en entregarse al servicio?",
+    opciones: [
+      "A) Método UEPS (Últimas en Entrar, Primeras en Salir).",
+      "B) Método PEPS / FIFO (Primeras en Entrar, Primeras en Salir).",
+      "C) Método de baja automática sin registro Kardex.",
+      "D) Método aleatorio sin control de fechas de ingreso."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "El método PEPS (Primeras en Entrar, Primeras en Salir, o FIFO) garantiza la rotación ordenada de los bienes de consumo en el Kardex, despachando primero las unidades más antiguas para prevenir su deterioro o vencimiento.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: PEPS despacha primero el lote de febrero antes que el de agosto, protegiendo el patrimonio público frente a vencimientos. 2) Por qué A es trampa: UEPS dejaría envejecer el lote antiguo en el fondo de la bodega."
+  },
+  {
+    id: "sim-q22",
+    modulo: "Inventarios",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Responsabilidad (Nivel C)",
+    caso_situacional:
+      "Un compañero de otra dependencia le pide prestado por dos meses un escáner de alta velocidad que figura cargado en el inventario individual suyo como Auxiliar Administrativo 5AM-09. Él le dice que se lo lleva de una vez y que 'no hace falta avisar a almacén porque están en el mismo piso'.",
+    pregunta:
+      "Desde el punto de vista del control administrativo y fiscal de bienes devolutivos, ¿cuál es el procedimiento obligatorio antes de entregar el equipo?",
+    opciones: [
+      "A) Entregarlo verbalmente, pues la responsabilidad fiscal se traslada sola por el simple préstamo físico.",
+      "B) Tramitar y suscribir previamente el formato o comprobante oficial de traslado/traspaso de bienes ante el área de Almacén e Inventarios para actualizar el responsable de la custodia.",
+      "C) Quitarle la placa de inventario al escáner mientras dure el préstamo.",
+      "D) Darlo de baja definitiva en contabilidad."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "Todo bien devolutivo está asignado individualmente mediante placa a un servidor responsable. Si el bien se entrega de mano en mano sin acta formal de traslado en Almacén, el funcionario inicial sigue respondiendo disciplinaria y fiscalmente por cualquier pérdida o daño.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Solo el comprobante oficial de traslado actualiza la custodia en el sistema de inventarios. 2) Por qué A es trampa: Los préstamos informales 'de mano en mano' no eximen de responsabilidad al titular del inventario."
+  },
+  {
+    id: "sim-q23",
+    modulo: "Inventarios",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Cumplimiento (Nivel D)",
+    caso_situacional:
+      "Durante el conteo físico anual de inventarios en la Procuraduría Regional, se identifican tres impresoras de matriz de punto totalmente inservibles y sin posibilidad de reparación económica. El coordinador pregunta cómo retirarlas legalmente del inventario y de los estados financieros.",
+    pregunta:
+      "¿Qué requisitos exige el procedimiento de Baja de Bienes Devolutivos en una entidad pública?",
+    opciones: [
+      "A) Arrojarlas directamente al contenedor de basura municipal para liberar espacio.",
+      "B) Reintegrar los equipos al almacén, contar con el concepto técnico de inservibilidad u obsolescencia, recomendación del comité de bienes, acto administrativo motivado de baja y acta de disposición final (ej. gestor ambiental RAEE).",
+      "C) Regalarlas a los funcionarios de la oficina sin acto administrativo.",
+      "D) Borrarlas de la hoja de Excel sin soporte técnico ni resolución."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "La baja definitiva de bienes públicos requiere reintegro al almacén, dictamen técnico de inservibilidad/obsolescencia, acto administrativo que ordene la baja contable y física, y disposición ambientalmente segura (RAEE en equipos electrónicos).",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Cumple el ciclo legal, técnico, contable y ambiental de baja de activos públicos. 2) A, C y D configuran faltas disciplinarias y fiscales por disposición arbitraria de bienes del Estado."
+  },
+  {
+    id: "sim-q24",
+    modulo: "Estructura PGN",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Cumplimiento (Nivel D)",
+    caso_situacional:
+      "En una jornada de orientación interinstitucional, se analizan las tres funciones misionales que ejerce la Procuraduría General de la Nación conforme a la Constitución Política y al Decreto Ley 262 de 2000 (modificado por el Decreto Ley 1851 de 2021).",
+    pregunta:
+      "¿Cuáles son las tres (3) funciones misionales que identifican el quehacer de la Procuraduría General de la Nación?",
+    opciones: [
+      "A) Función Legislativa, Función Electoral y Función Cambiaria.",
+      "B) Función Preventiva, Función de Intervención Judicial y Administrativa, y Función Disciplinaria.",
+      "C) Función de Control Fiscal, Función Penal Acusatoria y Función Militar.",
+      "D) Función Notarial, Función Registral y Función Tributaria."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "Conforme al Decreto Ley 262 de 2000, la Procuraduría cumple tres funciones misionales: 1) Preventiva (anticiparse y vigilar el cumplimiento de la ley sin coadministrar), 2) De Intervención (ante autoridades judiciales y administrativas en defensa del orden jurídico) y 3) Disciplinaria (investigar y sancionar faltas de servidores públicos).",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Reúne exactamente los tres ejes misionales del Decreto Ley 262 de 2000. 2) Por qué C es trampa: El control fiscal es de la Contraloría y la acción penal acusatoria es de la Fiscalía General de la Nación."
+  },
+  {
+    id: "sim-q25",
+    modulo: "Estructura PGN",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "Usted debe radicar y repartir internamente las comunicaciones que llegan al despacho, distinguiendo cuándo una actuación corresponde a la competencia territorial de una Procuraduría Regional, Distrital o Provincial y cuándo el Procurador General puede asumir directamente un proceso.",
+    pregunta:
+      "Según la Constitución Política (Art. 277 num. 6) y el Decreto Ley 262 de 2000, la facultad mediante la cual la Procuraduría puede desplazar el control disciplinario interno de cualquier entidad pública para asumir directamente una investigación se denomina:",
+    opciones: [
+      "A) Control fiscal excepcional.",
+      "B) Poder disciplinario preferente.",
+      "C) Coadministración preventiva.",
+      "D) Jurisdicción coactiva tributaria."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "El poder disciplinario preferente faculta al Procurador General de la Nación (y por delegación a las dependencias competentes de la PGN) para iniciar, proseguir o remitir cualquier investigación o juzgamiento de competencia de los órganos de control disciplinario interno de las entidades públicas.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: El poder preferente es la figura constitucional (Art. 277-6 C.P.) exclusiva del Ministerio Público en materia disciplinaria. 2) Por qué C es trampa: La función preventiva jamás implica coadministrar en las entidades vigiladas."
+  },
+  {
+    id: "sim-q26",
+    modulo: "Estructura PGN",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Cumplimiento (Nivel D)",
+    caso_situacional:
+      "Con la entrada en vigencia del Código General Disciplinario (Ley 1952 de 2019, reformada por la Ley 2094 de 2021), en las Procuradurías se implementó una separación estricta de roles procesales para garantizar la imparcialidad en los procesos disciplinarios. Usted apoya el control de reparto de expedientes.",
+    pregunta:
+      "¿Cuál es la regla de separación de funciones entre la etapa de Instrucción y la etapa de Juzgamiento establecida por la Ley 2094 de 2021?",
+    opciones: [
+      "A) El mismo funcionario que investiga y formula el pliego de cargos debe dictar también el fallo de primera instancia.",
+      "B) El funcionario que adelanta la etapa de Instrucción (investigación y formulación del pliego de cargos) debe ser diferente e independiente del funcionario que adelanta la etapa de Juzgamiento (descargos, pruebas de juicio y fallo).",
+      "C) El Auxiliar Administrativo 5AM-09 puede dictar el fallo disciplinario cuando el Procurador esté en comisión.",
+      "D) Ya no existe pliego de cargos en el procedimiento disciplinario colombiano."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "La Ley 2094 de 2021 garantizó que en el proceso disciplinario el funcionario instructor (quien investiga y formula cargos) sea siempre distinto del funcionario de juzgamiento (quien dirige la etapa de juicio y profiere el fallo).",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Es el pilar de la reforma de la Ley 2094 de 2021 (separación entre instrucción y juzgamiento). 2) A describe el esquema antiguo ya derogado. 3) C es falso porque el nivel asistencial no tiene competencia sancionatoria."
+  },
+  {
+    id: "sim-q27",
+    modulo: "Estructura PGN",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Cumplimiento (Nivel D)",
+    caso_situacional:
+      "Un ciudadano acude a la sede de la Procuraduría y pregunta quién elige al Procurador General de la Nación, cuánto dura su período constitucional y quiénes integran la terna de candidatos según el artículo 276 de la Constitución Política.",
+    pregunta:
+      "De acuerdo con el artículo 276 de la Constitución Política de Colombia, el Procurador General de la Nación es elegido por:",
+    opciones: [
+      "A) La Cámara de Representantes para un período de 8 años, de terna enviada por los Gobernadores.",
+      "B) El Senado de la República para un período de cuatro (4) años, de terna integrada por candidatos del Presidente de la República, la Corte Suprema de Justicia y el Consejo de Estado.",
+      "C) El Presidente de la República mediante libre nombramiento y remoción.",
+      "D) El Congreso en pleno de terna enviada por el Contralor General y el Fiscal General."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "El artículo 276 constitucional establece que el Procurador General de la Nación será elegido por el Senado, para un período de cuatro años, de terna integrada por candidatos del Presidente de la República, la Corte Suprema de Justicia y el Consejo de Estado.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Reúne el elector (Senado), el período (4 años) y los tres ternantes (Presidente, Corte Suprema y Consejo de Estado). 2) A, C y D alteran el órgano elector o los integrantes de la terna."
+  },
+  {
+    id: "sim-q28",
+    modulo: "MIPG y Ofimática",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "En la evaluación anual de gestión institucional bajo el Modelo Integrado de Planeación y Gestión (MIPG - Decreto 1499 de 2017), su dependencia revisa cómo contribuye el trabajo diario de archivo, atención al usuario y autocontrol a las 7 dimensiones operativas del modelo.",
+    pregunta:
+      "Dentro de las siete (7) dimensiones de MIPG, ¿cuál es considerada el 'corazón del modelo' y en cuál dimensión se articula el Modelo Estándar de Control Interno (MECI)?",
+    opciones: [
+      "A) El corazón es Presupuesto y el MECI es la octava dimensión independiente.",
+      "B) El corazón de MIPG es la 1ª dimensión (Talento Humano) y el MECI se integra en la 7ª dimensión (Control Interno).",
+      "C) El corazón es Contratación y el MECI reemplaza a la Gestión Documental.",
+      "D) MIPG solo tiene 3 dimensiones y no incluye control interno."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "MIPG cuenta con 7 dimensiones operativas: la 1ª (Talento Humano) es el corazón del modelo, y en la 7ª dimensión (Control Interno) se estructura el MECI con sus cinco componentes y esquema de líneas de defensa.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Identifica a Talento Humano como corazón de MIPG y ubica al MECI dentro de la 7ª dimensión (Control Interno). 2) Por qué A es trampa frecuente: El MECI NO es una octava dimensión, sino parte de la séptima."
+  },
+  {
+    id: "sim-q29",
+    modulo: "MIPG y Ofimática",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Responsabilidad (Nivel C)",
+    caso_situacional:
+      "Para garantizar la validez jurídica y probatoria de un auto notificado electrónicamente desde la Procuraduría, el área de sistemas verifica que el archivo no haya sido alterado tras su firma, que solo tengan acceso los sujetos autorizados y que esté disponible en el repositorio oficial.",
+    pregunta:
+      "En Seguridad Digital de la Información (ISO 27001 / Política de Gobierno Digital), ¿cuáles son los tres pilares de la 'Tríada CID' y cuál de ellos garantiza específicamente que el documento no ha sido modificado ni alterado?",
+    opciones: [
+      "A) Capacidad, Impresión y Duplicidad; garantiza la Impresión.",
+      "B) Confidencialidad, Integridad y Disponibilidad; el pilar que garantiza que la información sea exacta, completa y no haya sufrido alteración no autorizada es la Integridad.",
+      "C) Clasificación, Inventario y Descarte; garantiza el Descarte.",
+      "D) Conectividad, Intranet y Dominio; garantiza el Dominio."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "La Tríada CID se compone de Confidencialidad (acceso solo a autorizados), Integridad (exactitud y no alteración de los datos) y Disponibilidad (acceso oportuno cuando se requiera).",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Define con precisión los 3 pilares (Confidencialidad, Integridad y Disponibilidad) e identifica a la Integridad como la garantía contra alteraciones. 2) A, C y D usan acrónimos falsos."
+  },
+  {
+    id: "sim-q30",
+    modulo: "MIPG y Ofimática",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "Como Auxiliar Administrativo 5AM-09, usted lleva en Microsoft Excel la matriz de seguimiento de Derechos de Petición radicados. Tiene en la celda A2 la fecha de recepción, en B2 el plazo legal de 10 días hábiles y en el rango F2:F20 el listado oficial de días festivos de Colombia.",
+    pregunta:
+      "¿Qué función de Excel le permite calcular automáticamente la fecha exacta de vencimiento sumando únicamente días hábiles y excluyendo fines de semana y los festivos del rango F2:F20?",
+    opciones: [
+      "A) =SUMA(A2;B2;F2:F20)",
+      "B) =DIA.LAB(A2; B2; F2:F20)",
+      "C) =CONCATENAR(A2; B2)",
+      "D) =CONTAR.SI(A2:B2; \"FESTIVO\")"
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "La función =DIA.LAB(fecha_inicial; días; [vacaciones]) devuelve la fecha futura después de sumar un número determinado de días laborables (hábiles), descontando sábados, domingos y los festivos indicados.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: =DIA.LAB calcula una fecha de vencimiento sumando días hábiles; (nota: =DIAS.LAB con S cuenta cuántos días hábiles hay entre dos fechas). 2) A suma números simples incluyendo sábados y domingos, lo que daría una fecha errónea."
+  },
+  {
+    id: "sim-q31",
+    modulo: "MIPG y Ofimática",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "Su dependencia debe generar 60 oficios citatorios personalizados para 60 destinatarios distintos registrados en una tabla de Excel (con columnas Nombre, Cargo, Dirección y Radicado), conservando exactamente el mismo formato institucional en Microsoft Word.",
+    pregunta:
+      "¿Qué herramienta ofimática de Microsoft Word permite cruzar automáticamente la plantilla del oficio con la base de datos de Excel para generar las 60 comunicaciones personalizadas sin copiar y pegar una por una?",
+    opciones: [
+      "A) Control de cambios y comentarios.",
+      "B) Combinación de correspondencia (Mail Merge).",
+      "C) Corrector ortográfico manual.",
+      "D) Salto de sección continuo."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "La Combinación de correspondencia (en la pestaña Correspondencia de Word) vincula un documento principal con un origen de datos (como una hoja de Excel) para producir masivamente cartas, oficios, sobres o etiquetas personalizados.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Automatiza la inserción de campos variables desde Excel en una plantilla oficial de Word. 2) A, C y D son funciones de edición que no cruzan bases de datos."
+  },
+  {
+    id: "sim-q32",
+    modulo: "Comportamentales (20%)",
+    peso_evaluado: "Comportamentales (20% · Clasificatorio)",
+    competencia_asociada: "Orientación al Usuario (Nivel B)",
+    caso_situacional:
+      "En la fila de atención presencial de la Procuraduría Regional aguardan cuatro personas, y acaba de ingresar una ciudadana en avanzado estado de gestación junto con un adulto mayor en silla de ruedas que solicitan radicar un escrito urgente. Algunos usuarios en la fila protestan si se les atiende primero.",
+    pregunta:
+      "De acuerdo con la competencia comportamental de Orientación al Usuario y al Ciudadano (Nivel B) y los protocolos de atención preferencial, ¿cuál debe ser su actuación?",
+    opciones: [
+      "A) Pedirles que hagan la fila general por orden estricto de llegada para evitar reclamos de los demás ciudadanos.",
+      "B) Aplicar de inmediato el protocolo de atención prioritaria y enfoque diferencial para la mujer gestante y el adulto mayor con discapacidad, explicando con cortesía y pedagogía a los demás usuarios el mandato legal de prelación de turno.",
+      "C) Cerrar la ventanilla temporalmente hasta que los usuarios se pongan de acuerdo entre ellos.",
+      "D) Recibirles el documento sin entregarles número ni constancia de radicado."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "El Nivel B de Orientación al Usuario exige identificar sujetos de especial protección constitucional (adultos mayores, personas con discapacidad, gestantes), brindarles atención prioritaria y manejar la situación con asertividad y respeto frente al público.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Aplica el enfoque diferencial obligatorio (Ley 1755 / protocolos de servicio al ciudadano) y comunica con respeto la prelación legal. 2) A desconoce la prelación constitucional; C y D vulneran el deber de servicio y radicación."
+  },
+  {
+    id: "sim-q33",
+    modulo: "Comportamentales (20%)",
+    peso_evaluado: "Comportamentales (20% · Clasificatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "Al iniciar su jornada a las 8:00 a. m. como Auxiliar Administrativo 5AM-09, usted tiene sobre su escritorio tres actividades: 1) Organizar las cajas de archivo histórico del año pasado; 2) Radicar y enviar una contestación de tutela e informe disciplinario cuyo término legal vence hoy a las 11:00 a. m.; y 3) Actualizar el rótulo de las carpetas de suministros.",
+    pregunta:
+      "¿Qué orden de ejecución refleja el Nivel C de la competencia comportamental 'Organización del Trabajo'?",
+    opciones: [
+      "A) Empezar por los rótulos de suministros porque es la tarea más rápida y sencilla.",
+      "B) Priorizar de inmediato la radicación y envío del informe de tutela y actuación con vencimiento hoy a las 11:00 a. m., verificando sus anexos y constancia de entrega, y programar luego las labores de archivo sin término fatal.",
+      "C) Dejar las tres tareas para la jornada de la tarde.",
+      "D) Realizar primero el archivo histórico y pedirle al juez de tutela que espere un día más."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "La competencia Organización del Trabajo en Nivel C exige planificar y priorizar las actividades según la criticidad misional y el vencimiento de términos legales perentorios, evitando riesgos procesales o disciplinarios.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Prioriza lo urgente e impostergable por mandato legal (término judicial/disciplinario que vence hoy) sobre tareas operativas diferibles. 2) A, C y D ocasionarían incumplimiento de términos legales."
+  },
+  {
+    id: "sim-q34",
+    modulo: "Comportamentales (20%)",
+    peso_evaluado: "Comportamentales (20% · Clasificatorio)",
+    competencia_asociada: "Responsabilidad (Nivel C)",
+    caso_situacional:
+      "Usted tiene asignado usuario y clave personal en el sistema institucional SIGDEA/SIM. Un compañero recién trasladado, que aún no ha tramitado su credencial ante la Oficina de Sistemas, le pide que le deje abierta su sesión toda la tarde para él adelantar radicaciones en su computador mientras usted sale a entregar correspondencia.",
+    pregunta:
+      "Conforme a la competencia de Responsabilidad con la Organización (Nivel C) y las políticas de seguridad de la información, usted debe:",
+    opciones: [
+      "A) Prestarle su usuario y contraseña para demostrar trabajo en equipo y compañerismo.",
+      "B) Negarse con amabilidad, bloquear su estación de trabajo al retirarse, explicarle que las credenciales son personales e intransferibles y orientarlo para gestionar de inmediato su propio usuario autorizado.",
+      "C) Anotarle la clave en un papel adherido al monitor para que la use cualquier funcionario de la oficina.",
+      "D) Dejar la sesión abierta pero pedirle que no abra archivos reservados."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "La competencia de Responsabilidad (Nivel C) y la seguridad digital prohíben compartir credenciales de acceso, ya que toda actuación registrada bajo un usuario es responsabilidad exclusiva e indelegable de su titular.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Protege la trazabilidad, la reserva y la integridad del sistema sin dejar de orientar constructivamente al compañero. 2) A, C y D son trampas clásicas de 'falso compañerismo' que violan la seguridad de la información."
+  },
+  {
+    id: "sim-q35",
+    modulo: "Comportamentales (20%)",
+    peso_evaluado: "Comportamentales (20% · Clasificatorio)",
+    competencia_asociada: "Gestión de Recursos (Nivel D) / Cumplimiento (Nivel D)",
+    caso_situacional:
+      "El jueves por la tarde, un familiar suyo le pide que imprima en la fotocopiadora láser de la Procuraduría Regional 350 páginas a color de una tesis universitaria y que las encuaderne con las pastas oficiales del almacén, argumentando que 'en la oficina hay suficiente papel y nadie lo va a notar'.",
+    pregunta:
+      "A la luz de las competencias de Gestión de Recursos y Cumplimiento (Nivel D) del empleo 5AM-09 y del Código General Disciplinario, ¿cuál es la conducta exigible?",
+    opciones: [
+      "A) Imprimir la tesis después de las 5:00 p. m. cuando ya no haya jefes en la sede.",
+      "B) Rechazar la solicitud, dado que los bienes de consumo y equipos de la entidad están destinados exclusivamente al cumplimiento de las funciones oficiales y su uso en provecho particular propio o de un tercero vulnera la ley disciplinaria.",
+      "C) Imprimir solo la mitad de las páginas en la entidad para ahorrar tóner.",
+      "D) Autorizar el uso de las pastas oficiales si el familiar promete reponerlas el mes entrante."
+    ],
+    respuesta_correcta: "B",
+    justificacion:
+      "Las competencias de Gestión de Recursos y Cumplimiento (Nivel D), así como la Ley 1952 de 2019, exigen destinar los bienes, equipos e insumos públicos exclusivamente a los fines del servicio institucional, prohibiendo todo uso particular.",
+    explicacion_paso_a_paso:
+      "1) Por qué B es correcta: Los recursos públicos son sagrados y de uso estrictamente oficial, sin importar la hora ni la cantidad. 2) A, C y D representan formas de uso indebido de bienes del Estado sancionables disciplinariamente."
   }
 ];
 

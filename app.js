@@ -19,7 +19,8 @@
     STEPS_DONE: "pgn243_steps_done_v1",
     USER_VIDEOS: "pgn243_user_videos_v1",
     UNLOCKED_TROPHIES: "pgn243_unlocked_trophies_v1",
-    SIM_STATS: "pgn243_sim_stats_v1"
+    SIM_STATS: "pgn243_sim_stats_v1",
+    PAUSED_SIM: "pgn243_paused_sim_v1"
   };
 
   // Secuencia guiada de 5 pasos por tema (orden fijo)
@@ -96,13 +97,20 @@
     state.activeTopicId = allTopicsFlat[0].id;
   }
 
-  // Estado interno del Simulador (Pestaña 5) y su Cronómetro
+  // Estado interno del Simulador (Pestaña 5) y su Telemetría de Tiempos
   const simSession = {
-    mode: "all", // 'all' | 'errors'
+    mode: "caliente", // 'caliente' | 'all' | 'errors'
+    lengthPreset: 20, // 10 | 20 | 35
     questions: [],
     currentIndex: 0,
     answers: {}, // { [questionId]: 'A' | 'B' | 'C' | 'D' }
+    questionTimes: {}, // { [questionId]: segundos acumulados }
     elapsedSeconds: 0,
+    totalAllowedSeconds: 20 * 120,
+    startedAtISO: null,
+    finishedAtISO: null,
+    isActiveExam: false,
+    isPaused: false,
     timerRunning: false,
     timerInterval: null
   };
@@ -241,13 +249,38 @@
     fcReviewLaterBtn: document.getElementById("fc-review-later-btn"),
     fcMasteredBtn: document.getElementById("fc-mastered-btn"),
 
-    // Pestaña 5: Simulador Situacional + Bandeja de Errores + Cronómetro
+    // Pestaña 5: Simulador Situacional + Examen en Caliente + Telemetría + Bandeja de Errores
+    openHotExamBtn: document.getElementById("open-hot-exam-btn"),
+    sidebarHotExamBtn: document.getElementById("sidebar-hot-exam-btn"),
+    simModeHotBtn: document.getElementById("sim-mode-hot-btn"),
     simModeAllBtn: document.getElementById("sim-mode-all-btn"),
     simModeErrorsBtn: document.getElementById("sim-mode-errors-btn"),
+    simLengthSelector: document.getElementById("sim-length-selector"),
+    simLengthBtns: document.querySelectorAll(".sim-length-btn"),
     simErrorsCountBadge: document.getElementById("sim-errors-count-badge"),
+    simLobbyCard: document.getElementById("sim-lobby-card"),
+    simLobbyModePill: document.getElementById("sim-lobby-mode-pill"),
+    simLobbyHeading: document.getElementById("sim-lobby-heading"),
+    simMetricQuestions: document.getElementById("sim-metric-questions"),
+    simMetricQuestionsSub: document.getElementById("sim-metric-questions-sub"),
+    simMetricTime: document.getElementById("sim-metric-time"),
+    simMetricPass: document.getElementById("sim-metric-pass"),
+    simPausedNotice: document.getElementById("sim-paused-notice"),
+    simPausedMeta: document.getElementById("sim-paused-meta"),
+    simResumeBtn: document.getElementById("sim-resume-btn"),
+    simStartBtn: document.getElementById("sim-start-btn"),
+    simNewRandomBtn: document.getElementById("sim-new-random-btn"),
+    simLiveTelemetry: document.getElementById("sim-live-telemetry"),
+    simPauseBtn: document.getElementById("sim-pause-btn"),
+    simLiveTitle: document.getElementById("sim-live-title"),
+    simAnsweredSubtitle: document.getElementById("sim-answered-subtitle"),
+    simCountdownPill: document.getElementById("sim-countdown-pill"),
     simTimerDisplay: document.getElementById("sim-timer-display"),
     simTimerToggleBtn: document.getElementById("sim-timer-toggle-btn"),
     simTimerResetBtn: document.getElementById("sim-timer-reset-btn"),
+    simPaceStatus: document.getElementById("sim-pace-status"),
+    simPaceAvgLive: document.getElementById("sim-pace-avg-live"),
+    simPaceTarget: document.getElementById("sim-pace-target"),
     simTitle: document.getElementById("sim-title"),
     simDescription: document.getElementById("sim-description"),
     simQuestionCounter: document.getElementById("sim-question-counter"),
@@ -257,15 +290,20 @@
     simQModuloTag: document.getElementById("sim-q-modulo-tag"),
     simQPesoTag: document.getElementById("sim-q-peso-tag"),
     simQCompTag: document.getElementById("sim-q-comp-tag"),
+    simQTimerPill: document.getElementById("sim-q-timer-pill"),
     simCaseContext: document.getElementById("sim-case-context"),
     simQuestionText: document.getElementById("sim-question-text"),
     simOptionsGrid: document.getElementById("sim-options-grid"),
     simJustificationBox: document.getElementById("sim-justification-box"),
     simJustificationStatus: document.getElementById("sim-justification-status"),
     simJustificationText: document.getElementById("sim-justification-text"),
+    simPrevBtn: document.getElementById("sim-prev-btn"),
     simActionHint: document.getElementById("sim-action-hint"),
+    simFinishExamBtn: document.getElementById("sim-finish-exam-btn"),
     simNextBtn: document.getElementById("sim-next-btn"),
     simNextLabel: document.getElementById("sim-next-label"),
+    simJumpGrid: document.getElementById("sim-jump-grid"),
+    simJumpLegend: document.getElementById("sim-jump-legend"),
     simEmptyErrorsCard: document.getElementById("sim-empty-errors-card"),
     simReturnFullBtn: document.getElementById("sim-return-full-btn"),
     simResultsCard: document.getElementById("sim-results-card"),
@@ -273,6 +311,10 @@
     simScorePercent: document.getElementById("sim-score-percent"),
     simScoreDetail: document.getElementById("sim-score-detail"),
     simTimeDetail: document.getElementById("sim-time-detail"),
+    simResStartTime: document.getElementById("sim-res-start-time"),
+    simResEndTime: document.getElementById("sim-res-end-time"),
+    simResTotalTime: document.getElementById("sim-res-total-time"),
+    simResAvgTime: document.getElementById("sim-res-avg-time"),
     simEvalBanner: document.getElementById("sim-eval-banner"),
     simReviewList: document.getElementById("sim-review-list"),
     simRetryBtn: document.getElementById("sim-retry-btn"),
@@ -349,10 +391,12 @@
     });
 
     if (tabId === "tab-simulador") {
-      if (simSession.questions.length === 0) {
-        initSimuladorSession("all");
-      } else {
+      if (simSession.isActiveExam && !simSession.isPaused && simSession.questions.length > 0) {
         startSimTimer();
+      } else if (dom.simResultsCard && !dom.simResultsCard.hidden) {
+        // Ya está mostrando resultados
+      } else {
+        renderSimLobby();
       }
     } else {
       pauseSimTimer();
@@ -1537,7 +1581,7 @@
   }
 
   /* ==========================================================================
-     PESTAÑA 5: Simulador de Juicio Situacional + Cronómetro + Bandeja de Errores
+     PESTAÑA 5: Simulador de Juicio Situacional + Examen en Caliente + Telemetría
      ========================================================================== */
 
   function parseOptionString(rawOption, index) {
@@ -1555,64 +1599,471 @@
     };
   }
 
+  function shuffleArray(sourceArr) {
+    const arr = [...sourceArr];
+    for (let i = arr.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  function formatTimeShortMSS(totalSeconds) {
+    const safe = Math.max(0, Math.floor(totalSeconds || 0));
+    const mins = Math.floor(safe / 60);
+    const secs = safe % 60;
+    return `${mins}:${String(secs).padStart(2, "0")}`;
+  }
+
+  function formatDurationHuman(totalSeconds) {
+    const safe = Math.max(0, Math.floor(totalSeconds || 0));
+    const mins = Math.floor(safe / 60);
+    const secs = safe % 60;
+    return `${mins}m ${String(secs).padStart(2, "0")}s`;
+  }
+
+  function formatClockHHMMSS(isoStr) {
+    if (!isoStr) return "--:--:--";
+    try {
+      const d = new Date(isoStr);
+      if (Number.isNaN(d.getTime())) return "--:--:--";
+      return d.toLocaleTimeString("es-CO", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      });
+    } catch (err) {
+      return "--:--:--";
+    }
+  }
+
+  function savePausedSimToStorage() {
+    if (!simSession.isActiveExam || !simSession.questions || simSession.questions.length === 0) return;
+    try {
+      const payload = {
+        mode: simSession.mode,
+        lengthPreset: simSession.lengthPreset,
+        questionIds: simSession.questions.map((q, idx) => q.id || `sim-q${idx + 1}`),
+        currentIndex: simSession.currentIndex,
+        answers: simSession.answers,
+        questionTimes: simSession.questionTimes,
+        elapsedSeconds: simSession.elapsedSeconds,
+        totalAllowedSeconds: simSession.totalAllowedSeconds,
+        startedAtISO: simSession.startedAtISO,
+        isPaused: simSession.isPaused,
+        savedAtISO: new Date().toISOString()
+      };
+      localStorage.setItem(STORAGE_KEYS.PAUSED_SIM, JSON.stringify(payload));
+    } catch (err) {
+      // Ignorar errores de almacenamiento
+    }
+  }
+
+  function clearPausedSimFromStorage() {
+    try {
+      localStorage.removeItem(STORAGE_KEYS.PAUSED_SIM);
+    } catch (err) {
+      // Ignorar
+    }
+  }
+
+  function getSavedPausedSimPayload() {
+    return loadJSON(STORAGE_KEYS.PAUSED_SIM, null);
+  }
+
+  function restoreSimSessionFromPayload(payload) {
+    if (!payload || !Array.isArray(payload.questionIds) || payload.questionIds.length === 0) {
+      return false;
+    }
+    const baseQuestions = Array.isArray(simuladorData) ? simuladorData : [];
+    const byId = new Map();
+    baseQuestions.forEach((q, idx) => {
+      byId.set(q.id || `sim-q${idx + 1}`, q);
+    });
+    const restoredQuestions = payload.questionIds.map((id) => byId.get(id)).filter(Boolean);
+    if (restoredQuestions.length === 0) return false;
+
+    simSession.mode = payload.mode || "caliente";
+    simSession.lengthPreset = Number(payload.lengthPreset) || restoredQuestions.length;
+    simSession.questions = restoredQuestions;
+    simSession.currentIndex = Math.min(
+      Math.max(0, Number(payload.currentIndex) || 0),
+      restoredQuestions.length - 1
+    );
+    simSession.answers = payload.answers && typeof payload.answers === "object" ? { ...payload.answers } : {};
+    simSession.questionTimes =
+      payload.questionTimes && typeof payload.questionTimes === "object" ? { ...payload.questionTimes } : {};
+    simSession.elapsedSeconds = Math.max(0, Number(payload.elapsedSeconds) || 0);
+    simSession.totalAllowedSeconds =
+      Number(payload.totalAllowedSeconds) || restoredQuestions.length * 120;
+    simSession.startedAtISO = payload.startedAtISO || new Date().toISOString();
+    simSession.isActiveExam = true;
+    simSession.isPaused = true;
+    return true;
+  }
+
   function startSimTimer() {
     if (simSession.timerRunning) return;
     simSession.timerRunning = true;
-    dom.simTimerToggleBtn.textContent = "Pausar";
+    simSession.isPaused = false;
+    if (dom.simTimerToggleBtn) dom.simTimerToggleBtn.textContent = "Pausar";
+    updateLiveTelemetryUI();
+
     simSession.timerInterval = setInterval(() => {
       simSession.elapsedSeconds += 1;
-      dom.simTimerDisplay.textContent = formatTimeMMSS(simSession.elapsedSeconds);
+
+      const currentQ = simSession.questions[simSession.currentIndex];
+      if (currentQ) {
+        const qKey = currentQ.id || `sim-q${simSession.currentIndex + 1}`;
+        simSession.questionTimes[qKey] = (simSession.questionTimes[qKey] || 0) + 1;
+      }
+
+      updateLiveTelemetryUI();
+      savePausedSimToStorage();
+
+      // Si el tiempo global llega a 0 en modo Examen en Caliente, calificar automáticamente
+      if (
+        simSession.mode === "caliente" &&
+        simSession.totalAllowedSeconds > 0 &&
+        simSession.elapsedSeconds >= simSession.totalAllowedSeconds
+      ) {
+        showMotivationalToast("✔ Tiempo oficial completado. Calculando resultados del simulacro...");
+        renderSimResults();
+      }
     }, 1000);
   }
 
   function pauseSimTimer() {
     simSession.timerRunning = false;
-    dom.simTimerToggleBtn.textContent = "Reanudar";
+    if (dom.simTimerToggleBtn) dom.simTimerToggleBtn.textContent = "Reanudar";
     if (simSession.timerInterval) {
       clearInterval(simSession.timerInterval);
       simSession.timerInterval = null;
+    }
+    if (simSession.isActiveExam) {
+      savePausedSimToStorage();
     }
   }
 
   function resetSimTimer() {
     pauseSimTimer();
     simSession.elapsedSeconds = 0;
-    dom.simTimerDisplay.textContent = "00:00";
+    if (dom.simTimerDisplay) {
+      dom.simTimerDisplay.textContent = formatTimeMMSS(simSession.totalAllowedSeconds || 2400);
+    }
   }
 
-  function initSimuladorSession(mode) {
-    simSession.mode = mode;
-    dom.simModeAllBtn.classList.toggle("is-active", mode === "all");
-    dom.simModeErrorsBtn.classList.toggle("is-active", mode === "errors");
+  function updateLiveTelemetryUI() {
+    const total = simSession.questions.length || simSession.lengthPreset || 20;
+    const answeredCount = Object.keys(simSession.answers).length;
+    const remainingSeconds = Math.max(0, (simSession.totalAllowedSeconds || total * 120) - simSession.elapsedSeconds);
+
+    if (dom.simTimerDisplay) {
+      dom.simTimerDisplay.textContent = formatTimeMMSS(remainingSeconds);
+    }
+    if (dom.simCountdownPill) {
+      dom.simCountdownPill.classList.toggle("is-low-time", remainingSeconds <= 180);
+    }
+    if (dom.simAnsweredSubtitle) {
+      dom.simAnsweredSubtitle.textContent = `${answeredCount} de ${total} respondidas · Progreso guardado`;
+    }
+    if (dom.simLiveTitle) {
+      dom.simLiveTitle.textContent =
+        simSession.mode === "caliente"
+          ? `🔥 Examen Oficial en Caliente (${total} PJS)`
+          : simSession.mode === "errors"
+          ? `⚠️ Repaso de Bandeja de Errores (${total} PJS)`
+          : `🎓 Práctica Guiada con Pistas (${total} PJS)`;
+    }
+
+    // Cronómetro individual de la pregunta activa (🕒 0:16 / 2:00)
+    const currentQ = simSession.questions[simSession.currentIndex];
+    if (currentQ && dom.simQTimerPill) {
+      const qKey = currentQ.id || `sim-q${simSession.currentIndex + 1}`;
+      const qSecs = simSession.questionTimes[qKey] || 0;
+      dom.simQTimerPill.textContent = `🕒 ${formatTimeShortMSS(qSecs)} / 2:00`;
+      dom.simQTimerPill.classList.toggle("is-over-2m", qSecs > 120);
+    }
+
+    // Indicador dinámico de ritmo (base 120s por pregunta)
+    const divisor = Math.max(1, answeredCount > 0 ? answeredCount : simSession.currentIndex + 1);
+    const avgSecs = Math.round(simSession.elapsedSeconds / divisor);
+
+    if (dom.simPaceAvgLive) {
+      dom.simPaceAvgLive.textContent = `Promedio actual: ${formatTimeShortMSS(avgSecs)} / preg.`;
+    }
+    if (dom.simPaceStatus) {
+      dom.simPaceStatus.className = "sim-pace-status";
+      if (avgSecs <= 120 && remainingSeconds >= (total - answeredCount) * 60) {
+        dom.simPaceStatus.classList.add("sim-pace-status--good");
+        dom.simPaceStatus.textContent = "● Vas a buen ritmo";
+      } else if (avgSecs <= 155) {
+        dom.simPaceStatus.classList.add("sim-pace-status--warn");
+        dom.simPaceStatus.textContent = "● Ritmo ajustado";
+      } else {
+        dom.simPaceStatus.classList.add("sim-pace-status--danger");
+        dom.simPaceStatus.textContent = "● Cuidado con el tiempo";
+      }
+    }
+  }
+
+  function syncSimHeaderControls() {
+    const mode = simSession.mode;
+    if (dom.simModeHotBtn) dom.simModeHotBtn.classList.toggle("is-active", mode === "caliente");
+    if (dom.simModeAllBtn) dom.simModeAllBtn.classList.toggle("is-active", mode === "all");
+    if (dom.simModeErrorsBtn) dom.simModeErrorsBtn.classList.toggle("is-active", mode === "errors");
+
+    if (dom.simLengthBtns) {
+      dom.simLengthBtns.forEach((btn) => {
+        const len = Number(btn.getAttribute("data-length"));
+        btn.classList.toggle("is-active", len === simSession.lengthPreset);
+      });
+    }
+
+    if (dom.simLengthSelector) {
+      dom.simLengthSelector.hidden = mode === "errors";
+    }
+
+    if (dom.simTitle && dom.simDescription) {
+      if (mode === "caliente") {
+        dom.simTitle.textContent = "🔥 Simulacro Real en Caliente · Examen Oficial 5AM-09";
+        dom.simDescription.textContent =
+          "Preguntas seleccionadas y barajadas de forma 100% aleatoria entre los 7 módulos oficiales. En modo Examen en Caliente las respuestas y explicaciones paso a paso se revelan únicamente al finalizar el intento.";
+      } else if (mode === "errors") {
+        dom.simTitle.textContent = "⚠️ Entrenamiento Focalizado · Bandeja de Errores";
+        dom.simDescription.textContent =
+          "Repasa exclusivamente los casos situacionales que has fallado previamente. Cada acierto limpia automáticamente la pregunta de tu Bandeja de Errores.";
+      } else {
+        dom.simTitle.textContent = "🎓 Práctica Guiada · Retroalimentación Inmediata";
+        dom.simDescription.textContent =
+          "Entrena con validación inmediata en cada pregunta: al elegir una opción verás al instante la justificación normativa antes de pasar al siguiente ítem.";
+      }
+    }
+  }
+
+  function renderSimLobby() {
+    pauseSimTimer();
+    syncSimHeaderControls();
 
     const baseQuestions = Array.isArray(simuladorData) ? simuladorData : [];
 
-    if (mode === "errors") {
-      simSession.questions = baseQuestions.filter((q, idx) => {
+    if (simSession.mode === "errors") {
+      const errorQuestions = baseQuestions.filter((q, idx) => {
         const qKey = q.id || `sim-q${idx + 1}`;
         return state.failedSimIds.has(qKey);
       });
-    } else {
-      simSession.questions = [...baseQuestions];
+      if (errorQuestions.length === 0) {
+        if (dom.simLobbyCard) dom.simLobbyCard.hidden = true;
+        if (dom.simLiveTelemetry) dom.simLiveTelemetry.hidden = true;
+        if (dom.simQuestionCard) dom.simQuestionCard.hidden = true;
+        if (dom.simResultsCard) dom.simResultsCard.hidden = true;
+        if (dom.simEmptyErrorsCard) dom.simEmptyErrorsCard.hidden = false;
+        return;
+      }
     }
 
-    simSession.currentIndex = 0;
-    simSession.answers = {};
-    resetSimTimer();
+    if (dom.simEmptyErrorsCard) dom.simEmptyErrorsCard.hidden = true;
+    if (dom.simLiveTelemetry) dom.simLiveTelemetry.hidden = true;
+    if (dom.simQuestionCard) dom.simQuestionCard.hidden = true;
+    if (dom.simResultsCard) dom.simResultsCard.hidden = true;
+    if (dom.simLobbyCard) dom.simLobbyCard.hidden = false;
 
-    if (simSession.questions.length === 0 && mode === "errors") {
-      dom.simQuestionCard.hidden = true;
-      dom.simResultsCard.hidden = true;
-      dom.simEmptyErrorsCard.hidden = false;
+    const savedPayload = getSavedPausedSimPayload();
+    const hasPausedAttempt =
+      savedPayload && Array.isArray(savedPayload.questionIds) && savedPayload.questionIds.length > 0;
+
+    const targetCount =
+      simSession.mode === "errors"
+        ? Math.max(1, state.failedSimIds.size)
+        : Math.min(simSession.lengthPreset || 20, baseQuestions.length || 35);
+    const targetMinutes = targetCount * 2;
+
+    if (dom.simLobbyModePill) {
+      dom.simLobbyModePill.textContent =
+        simSession.mode === "caliente"
+          ? "🔥 MODO EXAMEN OFICIAL EN CALIENTE · SIN PISTAS HASTA FINALIZAR"
+          : simSession.mode === "errors"
+          ? "⚠️ MODO BANDEJA DE ERRORES · REFUERZO DE FALLOS"
+          : "🎓 MODO PRÁCTICA GUIADA · CON RETROALIMENTACIÓN INMEDIATA";
+    }
+
+    if (dom.simMetricQuestions) {
+      dom.simMetricQuestions.textContent = `${targetCount} Preguntas`;
+    }
+    if (dom.simMetricQuestionsSub) {
+      dom.simMetricQuestionsSub.textContent =
+        simSession.mode === "errors"
+          ? "Ítems pendientes en tu Bandeja de Errores"
+          : `Sorteo 100% aleatorio de ${baseQuestions.length} casos (7 módulos)`;
+    }
+    if (dom.simMetricTime) {
+      dom.simMetricTime.textContent = `${targetMinutes} minutos`;
+    }
+    if (dom.simMetricPass) {
+      dom.simMetricPass.textContent = "65% Eliminatorio / 80% Meta";
+    }
+
+    if (hasPausedAttempt) {
+      const answeredPaused = savedPayload.answers ? Object.keys(savedPayload.answers).length : 0;
+      const totalPaused = savedPayload.questionIds.length;
+      const remSecs = Math.max(
+        0,
+        (Number(savedPayload.totalAllowedSeconds) || totalPaused * 120) -
+          (Number(savedPayload.elapsedSeconds) || 0)
+      );
+      const modeLabel =
+        savedPayload.mode === "caliente"
+          ? "Examen en Caliente"
+          : savedPayload.mode === "errors"
+          ? "Bandeja de Errores"
+          : "Práctica Guiada";
+
+      if (dom.simPausedNotice) dom.simPausedNotice.hidden = false;
+      if (dom.simPausedMeta) {
+        dom.simPausedMeta.textContent = `Modalidad: ${modeLabel} · Respondidas: ${answeredPaused} de ${totalPaused} · Tiempo restante guardado: ${formatTimeMMSS(
+          remSecs
+        )}`;
+      }
+      if (dom.simResumeBtn) dom.simResumeBtn.hidden = false;
+      if (dom.simStartBtn) dom.simStartBtn.hidden = true;
+    } else {
+      if (dom.simPausedNotice) dom.simPausedNotice.hidden = true;
+      if (dom.simResumeBtn) dom.simResumeBtn.hidden = true;
+      if (dom.simStartBtn) dom.simStartBtn.hidden = false;
+    }
+  }
+
+  function startNewSimAttempt(modeOverride, lengthOverride) {
+    pauseSimTimer();
+    if (modeOverride) simSession.mode = modeOverride;
+    if (lengthOverride) simSession.lengthPreset = Number(lengthOverride);
+
+    syncSimHeaderControls();
+
+    const baseQuestions = Array.isArray(simuladorData) ? simuladorData : [];
+    let selectedQuestions = [];
+
+    if (simSession.mode === "errors") {
+      selectedQuestions = shuffleArray(
+        baseQuestions.filter((q, idx) => {
+          const qKey = q.id || `sim-q${idx + 1}`;
+          return state.failedSimIds.has(qKey);
+        })
+      );
+    } else {
+      const count = Math.min(simSession.lengthPreset || 20, baseQuestions.length);
+      selectedQuestions = shuffleArray(baseQuestions).slice(0, count);
+    }
+
+    if (selectedQuestions.length === 0 && simSession.mode === "errors") {
+      renderSimLobby();
       return;
     }
 
-    dom.simEmptyErrorsCard.hidden = true;
-    dom.simResultsCard.hidden = true;
-    dom.simQuestionCard.hidden = false;
+    simSession.questions = selectedQuestions;
+    simSession.currentIndex = 0;
+    simSession.answers = {};
+    simSession.questionTimes = {};
+    simSession.elapsedSeconds = 0;
+    simSession.totalAllowedSeconds = selectedQuestions.length * 120;
+    simSession.startedAtISO = new Date().toISOString();
+    simSession.finishedAtISO = null;
+    simSession.isActiveExam = true;
+    simSession.isPaused = false;
+
+    savePausedSimToStorage();
+
+    if (dom.simLobbyCard) dom.simLobbyCard.hidden = true;
+    if (dom.simEmptyErrorsCard) dom.simEmptyErrorsCard.hidden = true;
+    if (dom.simResultsCard) dom.simResultsCard.hidden = true;
+    if (dom.simLiveTelemetry) dom.simLiveTelemetry.hidden = false;
+    if (dom.simQuestionCard) dom.simQuestionCard.hidden = false;
 
     startSimTimer();
     renderSimQuestion();
+  }
+
+  function resumePausedSimAttempt() {
+    const savedPayload = getSavedPausedSimPayload();
+    if (savedPayload) {
+      restoreSimSessionFromPayload(savedPayload);
+    }
+    if (!simSession.questions || simSession.questions.length === 0) {
+      startNewSimAttempt(simSession.mode, simSession.lengthPreset);
+      return;
+    }
+
+    syncSimHeaderControls();
+    simSession.isActiveExam = true;
+    simSession.isPaused = false;
+
+    if (dom.simLobbyCard) dom.simLobbyCard.hidden = true;
+    if (dom.simEmptyErrorsCard) dom.simEmptyErrorsCard.hidden = true;
+    if (dom.simResultsCard) dom.simResultsCard.hidden = true;
+    if (dom.simLiveTelemetry) dom.simLiveTelemetry.hidden = false;
+    if (dom.simQuestionCard) dom.simQuestionCard.hidden = false;
+
+    startSimTimer();
+    renderSimQuestion();
+  }
+
+  function pauseExamAndShowLobby() {
+    simSession.isPaused = true;
+    pauseSimTimer();
+    savePausedSimToStorage();
+    renderSimLobby();
+    showMotivationalToast("✔ Examen en pausa. Tus respuestas y tu tiempo quedaron guardados.");
+  }
+
+  function initSimuladorSession(mode, autoStart) {
+    if (mode) simSession.mode = mode;
+    syncSimHeaderControls();
+
+    // Si hay un intento en pausa del mismo modo y no se pidió autoStart forzado, mostrar la tarjeta de inicio/pausa
+    if (!autoStart) {
+      renderSimLobby();
+      return;
+    }
+    startNewSimAttempt(simSession.mode, simSession.lengthPreset);
+  }
+
+  function renderSimJumpGrid() {
+    if (!dom.simJumpGrid) return;
+    dom.simJumpGrid.innerHTML = "";
+    const total = simSession.questions.length;
+
+    simSession.questions.forEach((q, i) => {
+      const qKey = q.id || `sim-q${i + 1}`;
+      const userAns = simSession.answers[qKey];
+      const correctLetter = String(q.respuesta_correcta).toUpperCase();
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "sim-jump-btn";
+      btn.textContent = String(i + 1);
+      btn.setAttribute("aria-label", `Ir a la pregunta ${i + 1}`);
+
+      if (i === simSession.currentIndex) {
+        btn.classList.add("is-current");
+      }
+      if (userAns) {
+        btn.classList.add("is-answered");
+        if (simSession.mode !== "caliente" && userAns !== correctLetter) {
+          btn.classList.add("is-wrong-ans");
+        }
+      }
+
+      btn.addEventListener("click", () => {
+        simSession.currentIndex = i;
+        savePausedSimToStorage();
+        renderSimQuestion();
+      });
+
+      dom.simJumpGrid.appendChild(btn);
+    });
   }
 
   function renderSimQuestion() {
@@ -1622,14 +2073,28 @@
     if (!qObj) return;
 
     const qKey = qObj.id || `sim-q${idx + 1}`;
-    const progressPct = Math.round(((idx + 1) / total) * 100);
+    const answeredCount = Object.keys(simSession.answers).length;
+    const progressPct = total > 0 ? Math.max(4, Math.round((answeredCount / total) * 100)) : 0;
+    const isHotMode = simSession.mode === "caliente";
 
-    dom.simQuestionCounter.textContent = `Pregunta ${idx + 1} de ${total}`;
-    dom.simProgressFill.style.width = `${progressPct}%`;
-    dom.simQBadge.textContent = `ÍTEM SITUACIONAL ${idx + 1} DE ${total}`;
-    dom.simQModuloTag.textContent = `Módulo: ${qObj.modulo}`;
-    dom.simQPesoTag.textContent = qObj.peso_evaluado || "Conocimientos (60% · Eliminatorio)";
-    dom.simQCompTag.textContent = qObj.competencia_asociada || "Competencia Funcional 5AM-09";
+    if (dom.simQuestionCounter) {
+      dom.simQuestionCounter.textContent = `Pregunta ${idx + 1} de ${total}`;
+    }
+    if (dom.simProgressFill) {
+      dom.simProgressFill.style.width = `${progressPct}%`;
+    }
+    if (dom.simQBadge) {
+      dom.simQBadge.textContent = `PREGUNTA ${idx + 1} DE ${total}`;
+    }
+    if (dom.simQModuloTag) {
+      dom.simQModuloTag.textContent = `Módulo: ${qObj.modulo}`;
+    }
+    if (dom.simQPesoTag) {
+      dom.simQPesoTag.textContent = qObj.peso_evaluado || "Conocimientos (60% · Eliminatorio)";
+    }
+    if (dom.simQCompTag) {
+      dom.simQCompTag.textContent = qObj.competencia_asociada || "Competencia Funcional 5AM-09";
+    }
 
     dom.simCaseContext.textContent =
       qObj.caso_situacional ||
@@ -1655,62 +2120,113 @@
       `;
 
       if (selectedLetter) {
-        if (parsed.letter === correctLetter) {
-          btn.classList.add("is-correct");
-        } else if (parsed.letter === selectedLetter && selectedLetter !== correctLetter) {
-          btn.classList.add("is-wrong");
+        if (isHotMode) {
+          if (parsed.letter === selectedLetter) {
+            btn.classList.add("is-selected-hot");
+          }
+        } else {
+          if (parsed.letter === correctLetter) {
+            btn.classList.add("is-correct");
+          } else if (parsed.letter === selectedLetter && selectedLetter !== correctLetter) {
+            btn.classList.add("is-wrong");
+          }
         }
       }
 
       btn.addEventListener("click", () => {
-        if (simSession.answers[qKey]) return;
+        // En Práctica Guiada no se cambia la respuesta una vez revelada; en Examen en Caliente sí puede cambiarla antes de finalizar
+        if (!isHotMode && simSession.answers[qKey]) return;
+
         simSession.answers[qKey] = parsed.letter;
 
-        // Actualizar Bandeja de Errores en localStorage
-        if (parsed.letter !== correctLetter) {
-          state.failedSimIds.add(qKey);
-          if (state.simStats) state.simStats.hadErrorsBefore = true;
-        } else {
-          state.failedSimIds.delete(qKey);
-          if (state.simStats && state.simStats.hadErrorsBefore && state.failedSimIds.size === 0) {
-            state.simStats.cleanedErrors = true;
+        if (!isHotMode) {
+          if (parsed.letter !== correctLetter) {
+            state.failedSimIds.add(qKey);
+            if (state.simStats) state.simStats.hadErrorsBefore = true;
+          } else {
+            state.failedSimIds.delete(qKey);
+            if (state.simStats && state.simStats.hadErrorsBefore && state.failedSimIds.size === 0) {
+              state.simStats.cleanedErrors = true;
+            }
           }
+          saveState();
+          updateErrorTrayCounters();
+          evaluateTrophies(true);
         }
-        saveState();
-        updateErrorTrayCounters();
-        evaluateTrophies(true);
+
+        savePausedSimToStorage();
+        updateLiveTelemetryUI();
         renderSimQuestion();
       });
 
       dom.simOptionsGrid.appendChild(btn);
     });
 
-    if (selectedLetter) {
-      const isCorrect = selectedLetter === correctLetter;
-      dom.simJustificationBox.hidden = false;
-      dom.simJustificationBox.classList.add(isCorrect ? "is-correct" : "is-wrong");
-      dom.simJustificationStatus.textContent = isCorrect
-        ? `✓ ¡Respuesta Correcta! (Opción ${correctLetter})`
-        : `✕ Respuesta Incorrecta. Seleccionaste ${selectedLetter} y la opción correcta es la ${correctLetter}. (Agregada a tu Bandeja de Errores)`;
-      dom.simJustificationText.textContent = qObj.justificacion;
+    if (dom.simPrevBtn) {
+      dom.simPrevBtn.disabled = idx === 0;
+    }
 
-      dom.simNextBtn.disabled = false;
-      dom.simActionHint.textContent =
-        idx < total - 1
-          ? "Analiza la justificación normativa y avanza al siguiente caso situacional."
-          : "Has completado todos los ítems. Haz clic para calcular tu puntaje final.";
+    if (selectedLetter) {
+      if (isHotMode) {
+        dom.simJustificationBox.hidden = true;
+        dom.simNextBtn.disabled = false;
+        dom.simActionHint.textContent = `Opción ${selectedLetter} guardada. En Examen en Caliente la calificación y explicación se revelan al finalizar.`;
+      } else {
+        const isCorrect = selectedLetter === correctLetter;
+        dom.simJustificationBox.hidden = false;
+        dom.simJustificationBox.classList.add(isCorrect ? "is-correct" : "is-wrong");
+        dom.simJustificationStatus.textContent = isCorrect
+          ? `✓ ¡Respuesta Correcta! (Opción ${correctLetter})`
+          : `✕ Respuesta Incorrecta. Seleccionaste ${selectedLetter} y la opción correcta es la ${correctLetter}. (Agregada a tu Bandeja de Errores)`;
+        dom.simJustificationText.textContent = qObj.justificacion;
+        dom.simNextBtn.disabled = false;
+        dom.simActionHint.textContent =
+          idx < total - 1
+            ? "Analiza la justificación normativa y avanza al siguiente caso situacional."
+            : "Has completado todos los ítems. Haz clic para calcular tu puntaje final.";
+      }
       dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Calificar";
     } else {
-      dom.simNextBtn.disabled = true;
-      dom.simActionHint.textContent = "Selecciona una opción (A, B, C o D) para validar el caso situacional.";
+      dom.simNextBtn.disabled = !isHotMode;
+      dom.simActionHint.textContent = isHotMode
+        ? "Selecciona una opción (A, B, C o D) o salta a otra pregunta en la cuadrícula inferior."
+        : "Selecciona una opción (A, B, C o D) para validar el caso situacional.";
       dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Calificar";
     }
+
+    updateLiveTelemetryUI();
+    renderSimJumpGrid();
+  }
+
+  function buildStepByStepExplanation(qObj, correctLetter) {
+    if (qObj.explicacion_paso_a_paso) {
+      return qObj.explicacion_paso_a_paso;
+    }
+    const distractorNotes = qObj.opciones
+      .map((opt, idx) => {
+        const parsed = parseOptionString(opt, idx);
+        if (parsed.letter === correctLetter) {
+          return `• Opción ${parsed.letter} (CORRECTA): Aplica de manera exacta la norma oficial vigente (${qObj.modulo}) y el protocolo funcional del cargo Auxiliar Administrativo 5AM-09.`;
+        }
+        return `• Opción ${parsed.letter} (DISTRACTOR): Incurre en imprecisión procedimental, extralimitación de funciones o vulneración de términos legales frente al criterio rector del concurso.`;
+      })
+      .join(" ");
+
+    return `1) Criterio Normativo Rector: ${qObj.justificacion} 2) Descarte Técnico de Opciones: ${distractorNotes}`;
   }
 
   function renderSimResults() {
     pauseSimTimer();
-    dom.simQuestionCard.hidden = true;
-    dom.simResultsCard.hidden = false;
+    simSession.finishedAtISO = new Date().toISOString();
+    simSession.isActiveExam = false;
+    simSession.isPaused = false;
+    clearPausedSimFromStorage();
+
+    if (dom.simLobbyCard) dom.simLobbyCard.hidden = true;
+    if (dom.simLiveTelemetry) dom.simLiveTelemetry.hidden = true;
+    if (dom.simQuestionCard) dom.simQuestionCard.hidden = true;
+    if (dom.simEmptyErrorsCard) dom.simEmptyErrorsCard.hidden = true;
+    if (dom.simResultsCard) dom.simResultsCard.hidden = false;
 
     const total = simSession.questions.length;
     let correctCount = 0;
@@ -1718,8 +2234,13 @@
     simSession.questions.forEach((q, idx) => {
       const qKey = q.id || `sim-q${idx + 1}`;
       const userAns = simSession.answers[qKey];
-      if (userAns === String(q.respuesta_correcta).toUpperCase()) {
+      const correctLetter = String(q.respuesta_correcta).toUpperCase();
+      if (userAns === correctLetter) {
         correctCount += 1;
+        state.failedSimIds.delete(qKey);
+      } else {
+        state.failedSimIds.add(qKey);
+        if (state.simStats) state.simStats.hadErrorsBefore = true;
       }
     });
 
@@ -1742,17 +2263,39 @@
       state.simStats.cleanedErrors = true;
     }
     saveState();
+    updateErrorTrayCounters();
 
     if (isPassed) {
       showMotivationalToast(`✔ ¡Simulacro superado con ${percentage}%! Sigue así 💪`);
     }
     evaluateTrophies(true);
 
+    const avgSecondsPerQ = total > 0 ? Math.round(simSession.elapsedSeconds / total) : 0;
+    const modeTitle =
+      simSession.mode === "caliente"
+        ? `Examen Oficial en Caliente (${total} PJS)`
+        : simSession.mode === "errors"
+        ? `Modo Repaso de Errores (${total} PJS)`
+        : `Práctica Guiada (${total} PJS)`;
+
     dom.simScorePercent.textContent = `${percentage}%`;
-    dom.simScoreDetail.textContent = `Obtuviste ${correctCount} de ${total} aciertos (${
-      simSession.mode === "errors" ? "Modo Repaso de Errores" : "Simulacro Oficial de 10 Preguntas"
-    } · Umbral mínimo aprobatorio: 65%).`;
-    dom.simTimeDetail.textContent = `Tiempo total empleado: ${formatTimeMMSS(simSession.elapsedSeconds)}`;
+    dom.simScoreDetail.textContent = `Obtuviste ${correctCount} de ${total} aciertos (${modeTitle} · Umbral mínimo aprobatorio: 65% Eliminatorio / 80% Meta).`;
+    dom.simTimeDetail.textContent = `Tiempo total empleado: ${formatDurationHuman(
+      simSession.elapsedSeconds
+    )} · Promedio: ${formatDurationHuman(avgSecondsPerQ)} por pregunta.`;
+
+    if (dom.simResStartTime) {
+      dom.simResStartTime.textContent = formatClockHHMMSS(simSession.startedAtISO);
+    }
+    if (dom.simResEndTime) {
+      dom.simResEndTime.textContent = formatClockHHMMSS(simSession.finishedAtISO);
+    }
+    if (dom.simResTotalTime) {
+      dom.simResTotalTime.textContent = formatDurationHuman(simSession.elapsedSeconds);
+    }
+    if (dom.simResAvgTime) {
+      dom.simResAvgTime.textContent = `${formatDurationHuman(avgSecondsPerQ)} / preg.`;
+    }
 
     dom.simScoreCircle.className = `sim-score-circle ${isPassed ? "is-passed" : "is-failed"}`;
 
@@ -1768,7 +2311,7 @@
     } else {
       dom.simEvalBanner.innerHTML = `
         <div class="sim-eval-banner__title">⚠ Alerta de Refuerzo Académico (${percentage}% de aciertos)</div>
-        <p>Tu porcentaje de aciertos es inferior al umbral mínimo del <strong>65%</strong>. Revisa la fundamentación de cada caso situacional abajo y usa el botón <strong>"Repasar Mis Errores"</strong> para entrenar únicamente las preguntas falladas.</p>
+        <p>Tu porcentaje de aciertos es inferior al umbral mínimo del <strong>65%</strong>. Revisa la auditoría de tiempos y la <strong>Explicación Paso a Paso</strong> de cada caso situacional abajo, y usa el botón <strong>"Repasar Mis Errores"</strong> para entrenar las preguntas falladas.</p>
       `;
     }
 
@@ -1778,26 +2321,47 @@
       dom.simPracticeMistakesBtn.textContent = `Repasar Mis Errores (${state.failedSimIds.size})`;
     }
 
-    // Listado de revisión pregunta por pregunta con su justificación
+    // Listado de revisión pregunta por pregunta con tiempo invertido y Explicación Paso a Paso
     dom.simReviewList.innerHTML = "";
     simSession.questions.forEach((q, i) => {
       const qKey = q.id || `sim-q${i + 1}`;
       const userAns = simSession.answers[qKey] || "Sin responder";
       const correctLetter = String(q.respuesta_correcta).toUpperCase();
       const ok = userAns === correctLetter;
+      const qTimeSecs = simSession.questionTimes[qKey] || 0;
       const correctOptionFull =
         q.opciones.find((opt, idx) => parseOptionString(opt, idx).letter === correctLetter) || correctLetter;
+      const userOptionFull =
+        q.opciones.find((opt, idx) => parseOptionString(opt, idx).letter === userAns) || userAns;
+      const stepByStep = buildStepByStepExplanation(q, correctLetter);
 
       const item = document.createElement("div");
       item.className = "sim-review-item";
       item.innerHTML = `
-        <div class="sim-review-item__q">${i + 1}. [${escapeHTML(q.modulo)} · ${escapeHTML(
-          q.peso_evaluado || "60%"
-        )}] ${escapeHTML(q.pregunta)}</div>
-        <div class="sim-review-item__ans ${ok ? "is-ok" : "is-bad"}">
-          Tu respuesta: ${escapeHTML(userAns)} · Respuesta Correcta: ${escapeHTML(correctOptionFull)}
+        <div class="sim-review-item__top">
+          <div class="sim-review-item__q">${i + 1}. [${escapeHTML(q.modulo)} · ${escapeHTML(
+            q.peso_evaluado || "60%"
+          )}]</div>
+          <span class="sim-review-item__time-badge">🕒 Tiempo en esta pregunta: ${escapeHTML(
+            formatDurationHuman(qTimeSecs)
+          )}</span>
         </div>
-        <div class="sim-review-item__just"><strong>Justificación Oficial:</strong> ${escapeHTML(q.justificacion)}</div>
+        <div class="sim-review-item__just" style="margin-bottom:0.35rem;">
+          <strong>Caso:</strong> ${escapeHTML(q.caso_situacional || "")}<br>
+          <strong>Enunciado:</strong> ${escapeHTML(q.pregunta)}
+        </div>
+        <div class="sim-review-item__ans ${ok ? "is-ok" : "is-bad"}">
+          ${ok ? "✓ ACERTADA" : "✕ POR REFORZAR"} · Tu respuesta: ${escapeHTML(
+            userOptionFull
+          )} · Respuesta Correcta: ${escapeHTML(correctOptionFull)}
+        </div>
+        <div class="sim-review-item__just"><strong>Justificación Normativa Oficial:</strong> ${escapeHTML(
+          q.justificacion
+        )}</div>
+        <div class="sim-step-by-step-box">
+          <strong>🔎 Explicación Paso a Paso (Aplicación de la Norma y Descarte de Distractores)</strong>
+          <div>${escapeHTML(stepByStep)}</div>
+        </div>
       `;
       dom.simReviewList.appendChild(item);
     });
@@ -1965,9 +2529,26 @@
     });
 
     dom.openSimuladorBtn.addEventListener("click", () => {
-      initSimuladorSession("all");
+      initSimuladorSession("caliente", false);
       switchTab("tab-simulador");
     });
+
+    if (dom.openHotExamBtn) {
+      dom.openHotExamBtn.addEventListener("click", () => {
+        initSimuladorSession("caliente", false);
+        switchTab("tab-simulador");
+      });
+    }
+
+    if (dom.sidebarHotExamBtn) {
+      dom.sidebarHotExamBtn.addEventListener("click", () => {
+        initSimuladorSession("caliente", false);
+        switchTab("tab-simulador");
+        if (window.innerWidth <= 980) {
+          dom.sidebar.classList.remove("is-open");
+        }
+      });
+    }
 
     dom.completeAndNextBtn.addEventListener("click", () => {
       const wasDone = state.completedTopics.has(state.activeTopicId);
@@ -2104,36 +2685,99 @@
       renderFlashcardStage();
     });
 
-    // 7. Eventos de Pestaña 5 (Simulador Situacional + Bandeja de Errores + Cronómetro)
+    // 7. Eventos de Pestaña 5 (Simulador Situacional + Examen en Caliente + Telemetría + Bandeja de Errores)
+    if (dom.simModeHotBtn) {
+      dom.simModeHotBtn.addEventListener("click", () => {
+        initSimuladorSession("caliente", false);
+      });
+    }
+
     dom.simModeAllBtn.addEventListener("click", () => {
-      initSimuladorSession("all");
+      initSimuladorSession("all", false);
     });
 
     dom.simModeErrorsBtn.addEventListener("click", () => {
-      initSimuladorSession("errors");
+      initSimuladorSession("errors", false);
     });
+
+    if (dom.simLengthBtns) {
+      dom.simLengthBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const newLen = Number(btn.getAttribute("data-length")) || 20;
+          simSession.lengthPreset = newLen;
+          renderSimLobby();
+        });
+      });
+    }
+
+    if (dom.simStartBtn) {
+      dom.simStartBtn.addEventListener("click", () => {
+        startNewSimAttempt(simSession.mode, simSession.lengthPreset);
+      });
+    }
+
+    if (dom.simResumeBtn) {
+      dom.simResumeBtn.addEventListener("click", () => {
+        resumePausedSimAttempt();
+      });
+    }
+
+    if (dom.simNewRandomBtn) {
+      dom.simNewRandomBtn.addEventListener("click", () => {
+        clearPausedSimFromStorage();
+        startNewSimAttempt(simSession.mode, simSession.lengthPreset);
+      });
+    }
+
+    if (dom.simPauseBtn) {
+      dom.simPauseBtn.addEventListener("click", () => {
+        pauseExamAndShowLobby();
+      });
+    }
 
     dom.simReturnFullBtn.addEventListener("click", () => {
-      initSimuladorSession("all");
+      initSimuladorSession("caliente", false);
     });
 
-    dom.simTimerToggleBtn.addEventListener("click", () => {
-      if (simSession.timerRunning) {
-        pauseSimTimer();
-      } else {
-        startSimTimer();
-      }
-    });
+    if (dom.simTimerToggleBtn) {
+      dom.simTimerToggleBtn.addEventListener("click", () => {
+        if (simSession.timerRunning) {
+          pauseExamAndShowLobby();
+        } else {
+          startSimTimer();
+        }
+      });
+    }
 
-    dom.simTimerResetBtn.addEventListener("click", () => {
-      resetSimTimer();
-      startSimTimer();
-    });
+    if (dom.simTimerResetBtn) {
+      dom.simTimerResetBtn.addEventListener("click", () => {
+        clearPausedSimFromStorage();
+        startNewSimAttempt(simSession.mode, simSession.lengthPreset);
+      });
+    }
+
+    if (dom.simPrevBtn) {
+      dom.simPrevBtn.addEventListener("click", () => {
+        if (simSession.currentIndex > 0) {
+          simSession.currentIndex -= 1;
+          savePausedSimToStorage();
+          renderSimQuestion();
+          dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+    }
+
+    if (dom.simFinishExamBtn) {
+      dom.simFinishExamBtn.addEventListener("click", () => {
+        renderSimResults();
+      });
+    }
 
     dom.simNextBtn.addEventListener("click", () => {
       const total = simSession.questions.length;
       if (simSession.currentIndex < total - 1) {
         simSession.currentIndex += 1;
+        savePausedSimToStorage();
         renderSimQuestion();
         dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
       } else {
@@ -2142,11 +2786,12 @@
     });
 
     dom.simRetryBtn.addEventListener("click", () => {
-      initSimuladorSession("all");
+      clearPausedSimFromStorage();
+      startNewSimAttempt(simSession.mode, simSession.lengthPreset);
     });
 
     dom.simPracticeMistakesBtn.addEventListener("click", () => {
-      initSimuladorSession("errors");
+      startNewSimAttempt("errors", state.failedSimIds.size || 10);
     });
 
     dom.simBackReadingBtn.addEventListener("click", () => {
@@ -2229,11 +2874,14 @@
       state.failedSimIds.clear();
       state.unlockedTrophies.clear();
       state.simStats = { bestScore: 0, passed65: false, passed80: false, cleanedErrors: false, hadErrorsBefore: false };
+      clearPausedSimFromStorage();
+      simSession.isActiveExam = false;
+      simSession.isPaused = false;
       saveState();
       updateGlobalProgress();
       renderModuleTree();
       renderActiveLesson();
-      initSimuladorSession("all");
+      initSimuladorSession("caliente", false);
     });
 
     dom.sidebarToggle.addEventListener("click", () => {
@@ -2255,8 +2903,12 @@
     renderModuleTree();
     renderActiveLesson();
     renderPdfLibrary();
-    initSimuladorSession("all");
-    pauseSimTimer();
+
+    const savedPaused = getSavedPausedSimPayload();
+    if (savedPaused) {
+      restoreSimSessionFromPayload(savedPaused);
+    }
+    renderSimLobby();
     switchTab(state.activeTabId);
   }
 

@@ -3714,3 +3714,584 @@ textarea {
   font-size: 0.78rem;
   color: var(--text-muted);
 }
+/* ==========================================================================
+   v5 · Examen Oficial en Caliente, Tarjeta de Inicio/Pausa, Telemetría y Cuadrícula
+   ========================================================================== */
+
+.action-chip--hot {
+  background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+  border-color: #f87171;
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 0 14px rgba(220, 38, 38, 0.35);
+}
+
+.action-chip--hot:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%);
+  border-color: #fde047;
+}
+
+.sidebar-hot-exam-btn {
+  width: 100%;
+  margin-bottom: 0.65rem;
+  padding: 0.68rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid #f59e0b;
+  background: linear-gradient(135deg, #0b192c 0%, #1e293b 100%);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.18s ease;
+}
+
+.sidebar-hot-exam-btn span {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #facc15;
+}
+
+.sidebar-hot-exam-btn small {
+  font-size: 0.69rem;
+  color: #cbd5e1;
+}
+
+.sidebar-hot-exam-btn:hover {
+  border-color: #fde047;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.sim-length-pills {
+  display: inline-flex;
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+}
+
+.sim-length-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.42rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sim-length-btn.is-active {
+  background-color: var(--accent-navy);
+  color: #ffffff;
+}
+
+/* 1. Tarjeta Oscura de Inicio y Pausa Persistente */
+.sim-lobby-card {
+  background: linear-gradient(145deg, #0b1324 0%, #132238 100%);
+  color: #f8fafc;
+  border: 1.5px solid rgba(212, 175, 55, 0.55);
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.2rem;
+  box-shadow: 0 18px 40px rgba(11, 25, 44, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.sim-lobby-card[hidden],
+.sim-live-telemetry[hidden],
+.sim-question-card[hidden],
+.sim-results-card[hidden],
+.sim-paused-notice[hidden],
+.btn-sim-resume-yellow[hidden] {
+  display: none !important;
+}
+
+.sim-lobby-card__badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sim-lobby-mode-pill {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.75rem;
+  border-radius: 999px;
+  background-color: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(250, 204, 21, 0.45);
+  color: #fde047;
+}
+
+.sim-lobby-bank-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.sim-lobby-card__title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin: 0;
+}
+
+.sim-lobby-card__subtitle {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  margin: -0.45rem 0 0;
+}
+
+.sim-lobby-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.sim-lobby-metric {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  padding: 1.05rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sim-lobby-metric__label {
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.sim-lobby-metric__value {
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #facc15;
+}
+
+.sim-lobby-metric__sub {
+  font-size: 0.74rem;
+  color: #cbd5e1;
+}
+
+.sim-paused-notice {
+  background-color: rgba(250, 204, 21, 0.12);
+  border: 1px solid rgba(250, 204, 21, 0.45);
+  border-left: 4px solid #facc15;
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.15rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.86rem;
+  color: #fef08a;
+}
+
+.sim-paused-notice__dot {
+  color: #facc15;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.sim-paused-notice__meta {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  margin-top: 0.2rem;
+}
+
+.sim-lobby-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.btn-sim-resume-yellow {
+  background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+  color: #0b192c;
+  border: 1px solid #fde047;
+  padding: 0.88rem 1.6rem;
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(234, 179, 8, 0.28);
+  transition: all 0.18s ease;
+}
+
+.btn-sim-resume-yellow:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #fde047 0%, #facc15 100%);
+}
+
+.btn-sim-secondary-dark {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  padding: 0.85rem 1.35rem;
+  border-radius: var(--radius-md);
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.btn-sim-secondary-dark:hover {
+  border-color: #facc15;
+  color: #fde047;
+}
+
+/* 2. Barra Superior de Telemetría en Vivo */
+.sim-live-telemetry {
+  background: linear-gradient(135deg, #0b1324 0%, #14243d 100%);
+  color: #f8fafc;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: var(--shadow-md);
+}
+
+.sim-live-telemetry__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sim-live-telemetry__left {
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+  flex-wrap: wrap;
+}
+
+.btn-sim-pause {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fde047;
+  border: 1.5px solid rgba(250, 204, 21, 0.55);
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.btn-sim-pause:hover {
+  background-color: rgba(250, 204, 21, 0.22);
+  color: #ffffff;
+}
+
+.sim-live-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.sim-live-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.sim-answered-subtitle {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.sim-countdown-pill {
+  background-color: rgba(15, 23, 42, 0.9);
+  border: 1.5px solid #facc15;
+  color: #fde047;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-variant-numeric: tabular-nums;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.sim-countdown-pill.is-warning {
+  border-color: #f97316;
+  color: #fdba74;
+}
+
+.sim-countdown-pill.is-danger {
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+.sim-pace-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.8rem;
+}
+
+.sim-pace-bar__left,
+.sim-pace-bar__right {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.sim-pace-status {
+  font-weight: 800;
+  padding: 0.18rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+}
+
+.sim-pace-status--good {
+  background-color: rgba(34, 197, 94, 0.18);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.sim-pace-status--warn {
+  background-color: rgba(250, 204, 21, 0.18);
+  color: #fde047;
+  border: 1px solid rgba(250, 204, 21, 0.4);
+}
+
+.sim-pace-status--danger {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+}
+
+.sim-pace-counter {
+  color: #cbd5e1;
+  font-weight: 700;
+}
+
+.sim-pace-avg-live {
+  color: #94a3b8;
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-pace-target {
+  color: #facc15;
+  font-weight: 700;
+}
+
+/* 3. Cronómetro Individual por Pregunta, Caso/Enunciado y Cuadrícula IR A LA PREGUNTA */
+.sim-q-timer-pill {
+  background-color: #0b192c;
+  color: #fde047;
+  border: 1px solid #d4af37;
+  padding: 0.32rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sim-q-timer-pill.is-over-2min {
+  background-color: #7f1d1d;
+  border-color: #f87171;
+  color: #fecaca;
+}
+
+.sim-inline-tag {
+  color: var(--accent-navy);
+  font-weight: 800;
+  margin-right: 0.35rem;
+}
+
+[data-theme="dark"] .sim-inline-tag {
+  color: #facc15;
+}
+
+.sim-case-bold-text {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.case-option-btn.is-selected-hot {
+  border-color: #d4af37;
+  background-color: rgba(212, 175, 55, 0.14);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.28);
+}
+
+.case-option-btn.is-selected-hot .case-option-letter {
+  background-color: #d4af37;
+  color: #0b192c;
+  border-color: #d4af37;
+}
+
+.sim-question-actions__left,
+.sim-question-actions__right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.sim-jump-panel {
+  margin-top: 0.5rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.sim-jump-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sim-jump-panel__title {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.sim-jump-panel__legend {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.sim-jump-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.sim-jump-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-strong);
+  background-color: var(--bg-surface-alt);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.sim-jump-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+}
+
+.sim-jump-btn.is-answered {
+  background-color: var(--accent-navy);
+  border-color: var(--accent-navy);
+  color: #ffffff;
+}
+
+.sim-jump-btn.is-answered-correct {
+  background-color: var(--status-success);
+  border-color: var(--status-success);
+  color: #ffffff;
+}
+
+.sim-jump-btn.is-answered-wrong {
+  background-color: var(--status-danger);
+  border-color: var(--status-danger);
+  color: #ffffff;
+}
+
+.sim-jump-btn.is-current {
+  border: 2.5px solid #facc15 !important;
+  box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.28);
+  transform: translateY(-1px);
+}
+
+/* 4. Telemetría Final y Explicación Paso a Paso en Resultados */
+.sim-results-telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+}
+
+.sim-telemetry-kpi {
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.sim-telemetry-kpi__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.sim-telemetry-kpi__value {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-review-time-pill {
+  font-size: 0.73rem;
+  font-weight: 800;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  background-color: rgba(11, 25, 44, 0.08);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+}
+
+.sim-step-by-step-box {
+  margin-top: 0.55rem;
+  padding: 0.75rem 0.95rem;
+  background-color: var(--bg-surface);
+  border: 1px dashed var(--accent-gold);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 980px) {
+  .sim-lobby-metrics,
+  .sim-results-telemetry-grid {
+    grid-template-columns: 1fr;
+  }
+}
