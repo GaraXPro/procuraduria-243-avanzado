@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Procuraduría 243-2026 | Academia Interactiva Auxiliar Administrativo 5AM-09</title>
   <meta name="description" content="Plataforma interactiva de estudio para el Concurso de Méritos de la Procuraduría General de la Nación (Convocatoria 243-2026 · Cargo Auxiliar Administrativo 5AM-09)." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 3 56 11v19c0 15.5-10.2 26.6-24 31C18.2 56.6 8 45.5 8 30V11L32 3Z' fill='%2314233C' stroke='%23D4AF37' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='m27 29 4 4 8-8' fill='none' stroke='%234ADE80' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ctext x='32' y='49' text-anchor='middle' font-family='Arial,sans-serif' font-size='13' font-weight='800' fill='%23D4AF37'%3EPGN%3C/text%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#14233C" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@600;700&display=swap" rel="stylesheet" />
@@ -35,7 +38,7 @@
       <div class="progress-meta">
         <span class="progress-meta__label">Progreso General del Curso</span>
         <div class="progress-meta__stats">
-          <span id="global-progress-count" class="progress-count">0 de 12 temas leídos</span>
+          <span id="global-progress-count" class="progress-count">0 de 21 temas leídos</span>
           <span id="global-progress-percent" class="progress-percent">0%</span>
         </div>
       </div>
@@ -46,6 +49,13 @@
 
     <!-- Controles Corporativos y Ficha del Cargo -->
     <div class="topbar__actions">
+      <button id="open-trophies-btn" class="action-chip action-chip--trophy" type="button" title="Abrir Sala de Trofeos y Progreso XP (Estilo PS5)">
+        <span class="trophy-chip-icon" aria-hidden="true">🏆</span>
+        <span>Trofeos y XP</span>
+        <span id="trophies-count-pill" class="trophy-count-pill">0/12</span>
+        <span id="xp-total-pill" class="xp-total-pill">0 XP</span>
+      </button>
+
       <button id="open-ficha-btn" class="action-chip action-chip--gold" type="button" title="Ver Ficha Oficial del Empleo 5AM-09 y Radicado #230688">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -98,7 +108,7 @@
       <div class="sidebar__header">
         <div class="sidebar__title-row">
           <h2 class="sidebar__heading">Árbol de Módulos</h2>
-          <span id="modules-summary-badge" class="badge-pill">5 Módulos · 12 Temas</span>
+          <span id="modules-summary-badge" class="badge-pill">7 Módulos · 21 Temas</span>
         </div>
 
         <!-- Buscador Instantáneo -->
@@ -116,16 +126,18 @@
           />
         </div>
 
-        <!-- Filtros de Estado -->
+        <!-- Filtros de Estado y Módulos M1 a M7 -->
         <div class="filter-chips" role="group" aria-label="Filtrar temas por estado o por módulo">
           <button type="button" class="filter-chip is-active" data-filter="all">Todos</button>
           <button type="button" class="filter-chip" data-filter="pending">Pendientes</button>
           <button type="button" class="filter-chip" data-filter="completed">Leídos</button>
-          <button type="button" class="filter-chip" data-module-filter="0" title="Módulo I">M1</button>
-          <button type="button" class="filter-chip" data-module-filter="1" title="Módulo II">M2</button>
-          <button type="button" class="filter-chip" data-module-filter="2" title="Módulo III">M3</button>
-          <button type="button" class="filter-chip" data-module-filter="3" title="Módulo IV">M4</button>
-          <button type="button" class="filter-chip" data-module-filter="4" title="Módulo V">M5</button>
+          <button type="button" class="filter-chip" data-module-filter="0" title="Módulo I: Gestión Documental">M1</button>
+          <button type="button" class="filter-chip" data-module-filter="1" title="Módulo II: Documentos GTC 185">M2</button>
+          <button type="button" class="filter-chip" data-module-filter="2" title="Módulo III: Atención al Usuario y PQRSDF">M3</button>
+          <button type="button" class="filter-chip" data-module-filter="3" title="Módulo IV: Inventarios y Almacén">M4</button>
+          <button type="button" class="filter-chip" data-module-filter="4" title="Módulo V: Estructura PGN y Disciplinario">M5</button>
+          <button type="button" class="filter-chip" data-module-filter="5" title="Módulo VI: MIPG, Calidad y Ofimática">M6</button>
+          <button type="button" class="filter-chip" data-module-filter="6" title="Módulo VII: Competencias Comportamentales (20%)">M7</button>
         </div>
       </div>
 
@@ -136,7 +148,7 @@
       <div class="sidebar__footer">
         <div class="sidebar-stat-grid">
           <div class="sidebar-stat">
-            <span class="sidebar-stat__value" id="stat-completed-modules">0/5</span>
+            <span class="sidebar-stat__value" id="stat-completed-modules">0/7</span>
             <span class="sidebar-stat__label">Módulos al 100%</span>
           </div>
           <div class="sidebar-stat">
@@ -794,6 +806,74 @@
       </footer>
     </div>
   </div>
+
+  <!-- ====================================================================
+       MODAL DE GAMIFICACIÓN: 🏆 SALA DE TROFEOS Y PROGRESO XP (ESTILO PS5)
+       ==================================================================== -->
+  <div id="trophies-modal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-trophies-title">
+    <div class="modal-card modal-card--trophies">
+      <header class="modal-card__header modal-card__header--ps5">
+        <div>
+          <span class="modal-card__eyebrow">SISTEMA DE MÉRITO Y GAMIFICACIÓN · CONVOCATORIA PGN 243 - 2026</span>
+          <h2 id="modal-trophies-title" class="modal-card__title">🏆 Sala de Trofeos y Progreso XP</h2>
+        </div>
+        <button type="button" id="close-trophies-modal-btn" class="modal-close-btn" aria-label="Cerrar Sala de Trofeos">✕</button>
+      </header>
+
+      <div class="modal-card__body">
+        <!-- Resumen de Nivel XP y Contadores por Categoría de Trofeo -->
+        <div class="ps5-summary-banner">
+          <div class="ps5-rank-box">
+            <span class="ps5-rank-box__eyebrow">RANGO ACTUAL DE CARRERA</span>
+            <strong id="ps5-rank-title" class="ps5-rank-box__title">Aspirante Admitido (#230688)</strong>
+            <div class="ps5-xp-bar-wrap">
+              <div class="ps5-xp-bar-labels">
+                <span id="ps5-xp-current">0 XP acumulados</span>
+                <span id="ps5-trophies-progress-text">0 de 12 Trofeos (0%)</span>
+              </div>
+              <div class="ps5-xp-track">
+                <div id="ps5-xp-fill" class="ps5-xp-fill" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ps5-tier-counters">
+            <div class="ps5-tier-counter ps5-tier-counter--platinum">
+              <span class="ps5-tier-counter__icon">🏆</span>
+              <strong id="count-platinum">0/1</strong>
+              <span>Platino</span>
+            </div>
+            <div class="ps5-tier-counter ps5-tier-counter--gold">
+              <span class="ps5-tier-counter__icon">🥇</span>
+              <strong id="count-gold">0/3</strong>
+              <span>Oro</span>
+            </div>
+            <div class="ps5-tier-counter ps5-tier-counter--silver">
+              <span class="ps5-tier-counter__icon">🥈</span>
+              <strong id="count-silver">0/4</strong>
+              <span>Plata</span>
+            </div>
+            <div class="ps5-tier-counter ps5-tier-counter--bronze">
+              <span class="ps5-tier-counter__icon">🥉</span>
+              <strong id="count-bronze">0/4</strong>
+              <span>Bronce</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Galería de los 12 Trofeos Oficiales -->
+        <div id="trophies-grid" class="trophies-grid"></div>
+      </div>
+
+      <footer class="modal-card__footer">
+        <span class="trophies-footer-hint">💡 Cada tema leído (+50 XP), sub-paso (+15 XP), flashcard dominada (+20 XP) y trofeo desbloqueado suma puntos hacia tu Platino 5AM-09.</span>
+        <button type="button" id="close-trophies-footer-btn" class="btn-evaluar-conocimientos btn-sm">Continuar Estudiando</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Contenedor Flotante Superior Derecho: Toasts Motivacionales + Notificaciones de Trofeo PS5 -->
+  <div id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
 
   <!-- Scripts (Sin dependencias externas) -->
   <script src="data.js"></script>

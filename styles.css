@@ -3296,3 +3296,421 @@ textarea {
 .notes-status {
   white-space: nowrap;
 }
+
+/* ==========================================================================
+   v4 · Gamificación, Toasts Motivacionales y Sala de Trofeos Estilo PS5
+   ========================================================================== */
+
+.action-chip--trophy {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.22) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border-color: #d4af37;
+  color: #fef08a;
+  font-weight: 700;
+}
+
+.action-chip--trophy:hover {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.34) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border-color: #facc15;
+}
+
+.trophy-count-pill {
+  background-color: rgba(250, 204, 21, 0.2);
+  color: #fde047;
+  border: 1px solid rgba(250, 204, 21, 0.45);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.08rem 0.42rem;
+  border-radius: 999px;
+}
+
+.xp-total-pill {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.45);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.08rem 0.45rem;
+  border-radius: 999px;
+}
+
+/* Stack Flotante en la Esquina Superior Derecha */
+.toast-stack {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  max-width: 410px;
+  width: calc(100vw - 36px);
+  pointer-events: none;
+}
+
+/* Toast Motivacional Oscuro con Borde Verde */
+.motivational-toast {
+  pointer-events: auto;
+  background: linear-gradient(135deg, #0b1324 0%, #111c33 100%);
+  color: #f8fafc;
+  border: 1.5px solid #22c55e;
+  border-left: 5px solid #22c55e;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45), 0 0 16px rgba(34, 197, 94, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  animation: toastSlideIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.motivational-toast.is-leaving {
+  animation: toastSlideOut 0.25s ease forwards;
+}
+
+.motivational-toast__content {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.motivational-toast__check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(34, 197, 94, 0.2);
+  border: 1.5px solid #22c55e;
+  color: #4ade80;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.motivational-toast__close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.05rem;
+  line-height: 1;
+  padding: 0.2rem 0.35rem;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.motivational-toast__close:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Notificación Especial de Trofeo Desbloqueado (Estilo PS5) */
+.ps5-trophy-toast {
+  pointer-events: auto;
+  background: radial-gradient(circle at top left, #1e293b 0%, #090d16 75%);
+  color: #ffffff;
+  border: 1.5px solid #d4af37;
+  border-radius: 16px;
+  padding: 0.9rem 1.1rem;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(212, 175, 55, 0.32);
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  position: relative;
+  overflow: hidden;
+  animation: ps5PopIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ps5-trophy-toast::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(250, 204, 21, 0.14) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+.ps5-trophy-toast.is-leaving {
+  animation: toastSlideOut 0.28s ease forwards;
+}
+
+.ps5-trophy-toast__medal {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.28) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 2px solid #facc15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.35);
+}
+
+.ps5-trophy-toast__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ps5-trophy-toast__eyebrow {
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #facc15;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ps5-trophy-toast__title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0.1rem 0;
+}
+
+.ps5-trophy-toast__desc {
+  font-size: 0.76rem;
+  color: #cbd5e1;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes ps5PopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.88);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(3px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toastSlideOut {
+  to {
+    opacity: 0;
+    transform: translateX(48px) scale(0.95);
+  }
+}
+
+/* Modal Sala de Trofeos y Progreso XP */
+.modal-card--trophies {
+  max-width: 960px;
+}
+
+.modal-card__header--ps5 {
+  background: linear-gradient(135deg, #090f1d 0%, #162947 100%);
+  border-bottom: 2px solid #d4af37;
+}
+
+.ps5-summary-banner {
+  background: linear-gradient(135deg, #0b192c 0%, #152b4a 100%);
+  color: #f8fafc;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.ps5-rank-box {
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ps5-rank-box__eyebrow {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #facc15;
+}
+
+.ps5-rank-box__title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.ps5-xp-bar-wrap {
+  margin-top: 0.35rem;
+}
+
+.ps5-xp-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  margin-bottom: 0.3rem;
+}
+
+.ps5-xp-track {
+  height: 10px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.ps5-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e 0%, #facc15 100%);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.ps5-tier-counters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(72px, 1fr));
+  gap: 0.65rem;
+}
+
+.ps5-tier-counter {
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.1rem;
+}
+
+.ps5-tier-counter__icon {
+  font-size: 1.25rem;
+}
+
+.ps5-tier-counter strong {
+  font-size: 0.92rem;
+  color: #ffffff;
+}
+
+.ps5-tier-counter span {
+  font-size: 0.68rem;
+  color: #cbd5e1;
+}
+
+.trophies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+  gap: 0.9rem;
+}
+
+.trophy-card {
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.trophy-card.is-locked {
+  opacity: 0.62;
+  filter: grayscale(0.55);
+}
+
+.trophy-card.is-unlocked {
+  border-color: var(--accent-gold);
+  background: linear-gradient(135deg, var(--bg-surface) 0%, rgba(197, 155, 39, 0.09) 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+.trophy-card--platinum.is-unlocked {
+  border-color: #38bdf8;
+  background: linear-gradient(135deg, var(--bg-surface) 0%, rgba(56, 189, 248, 0.14) 100%);
+}
+
+.trophy-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.trophy-card.is-unlocked .trophy-card__icon {
+  border-color: var(--accent-gold);
+  background-color: rgba(197, 155, 39, 0.15);
+}
+
+.trophy-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.trophy-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-gold);
+}
+
+.trophy-card__status {
+  font-size: 0.66rem;
+  padding: 0.08rem 0.45rem;
+  border-radius: 999px;
+  background-color: var(--bg-surface-alt);
+  color: var(--text-muted);
+}
+
+.trophy-card.is-unlocked .trophy-card__status {
+  background-color: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.trophy-card__title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0.2rem 0;
+}
+
+.trophy-card__desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.trophies-footer-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}

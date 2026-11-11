@@ -17,7 +17,9 @@
     FAILED_SIM_IDS: "pgn243_failed_sim_ids_v1",
     THEME: "pgn243_theme_v1",
     STEPS_DONE: "pgn243_steps_done_v1",
-    USER_VIDEOS: "pgn243_user_videos_v1"
+    USER_VIDEOS: "pgn243_user_videos_v1",
+    UNLOCKED_TROPHIES: "pgn243_unlocked_trophies_v1",
+    SIM_STATS: "pgn243_sim_stats_v1"
   };
 
   // Secuencia guiada de 5 pasos por tema (orden fijo)
@@ -67,8 +69,16 @@
     expandedTopics: new Set(),
     stepsDone: new Set(loadJSON(STORAGE_KEYS.STEPS_DONE, [])),
     userVideos: loadJSON(STORAGE_KEYS.USER_VIDEOS, {}),
+    unlockedTrophies: new Set(loadJSON(STORAGE_KEYS.UNLOCKED_TROPHIES, [])),
+    simStats: loadJSON(STORAGE_KEYS.SIM_STATS, {
+      bestScore: 0,
+      passed65: false,
+      passed80: false,
+      cleanedErrors: false,
+      hadErrorsBefore: false
+    }),
     filterStatus: "all", // 'all' | 'pending' | 'completed'
-    moduleFilter: null, // null | índice de módulo (0..4)
+    moduleFilter: null, // null | índice de módulo (0..6)
     searchQuery: "",
     theme: localStorage.getItem(STORAGE_KEYS.THEME) || "light",
 
@@ -113,6 +123,24 @@
 
     statCompletedModules: document.getElementById("stat-completed-modules"),
     statFlashcardsMastered: document.getElementById("stat-flashcards-mastered"),
+
+    // Gamificación, Toasts y Sala de Trofeos PS5
+    openTrophiesBtn: document.getElementById("open-trophies-btn"),
+    trophiesCountPill: document.getElementById("trophies-count-pill"),
+    xpTotalPill: document.getElementById("xp-total-pill"),
+    trophiesModal: document.getElementById("trophies-modal"),
+    closeTrophiesModalBtn: document.getElementById("close-trophies-modal-btn"),
+    closeTrophiesFooterBtn: document.getElementById("close-trophies-footer-btn"),
+    ps5RankTitle: document.getElementById("ps5-rank-title"),
+    ps5XpCurrent: document.getElementById("ps5-xp-current"),
+    ps5TrophiesProgressText: document.getElementById("ps5-trophies-progress-text"),
+    ps5XpFill: document.getElementById("ps5-xp-fill"),
+    countPlatinum: document.getElementById("count-platinum"),
+    countGold: document.getElementById("count-gold"),
+    countSilver: document.getElementById("count-silver"),
+    countBronze: document.getElementById("count-bronze"),
+    trophiesGrid: document.getElementById("trophies-grid"),
+    toastStack: document.getElementById("toast-stack"),
 
     openFichaBtn: document.getElementById("open-ficha-btn"),
     stripFichaLink: document.getElementById("strip-ficha-link"),
@@ -278,6 +306,8 @@
       localStorage.setItem(STORAGE_KEYS.THEME, state.theme);
       localStorage.setItem(STORAGE_KEYS.STEPS_DONE, JSON.stringify(Array.from(state.stepsDone)));
       localStorage.setItem(STORAGE_KEYS.USER_VIDEOS, JSON.stringify(state.userVideos));
+      localStorage.setItem(STORAGE_KEYS.UNLOCKED_TROPHIES, JSON.stringify(Array.from(state.unlockedTrophies)));
+      localStorage.setItem(STORAGE_KEYS.SIM_STATS, JSON.stringify(state.simStats));
     } catch (err) {
       // Ignorar errores de almacenamiento
     }
@@ -365,7 +395,8 @@
 
   function toggleStepDone(topicId, tabId) {
     const key = stepKey(topicId, tabId);
-    if (state.stepsDone.has(key)) {
+    const wasDone = state.stepsDone.has(key);
+    if (wasDone) {
       state.stepsDone.delete(key);
     } else {
       state.stepsDone.add(key);
@@ -382,6 +413,16 @@
     renderModuleTree();
     if (topicId === state.activeTopicId) {
       updateReadButtonState(state.completedTopics.has(topicId));
+    }
+
+    if (!wasDone) {
+      const def = STEP_DEFS[tabId];
+      showMotivationalToast(
+        allDone
+          ? "✔ ¡Tema y 5 sub-pasos completados! Sigue así 💪"
+          : `✔ ¡Paso completado (${def ? def.label : "Sub-paso"})! Sigue así 💪`
+      );
+      evaluateTrophies(true);
     }
   }
 
@@ -456,6 +497,273 @@
     dom.modulesSummaryBadge.textContent = `${totalModules} Módulos · ${totalTopics} Temas`;
 
     updateErrorTrayCounters();
+    updateTrophyHeaderPills();
+  }
+
+  /* ==========================================================================
+     Motor de Gamificación, Toasts Motivacionales, Audio PS5 y 12 Trofeos
+     ========================================================================== */
+
+  const MOTIVATIONAL_PHRASES = [
+    "✔ ¡Clase completada! Sigue así 💪",
+    "✔ ¡Excelente avance hacia tu vacante 5AM-09! Sigue así 💪",
+    "✔ ¡Paso dominado con rigor jurídico! Sigue así 💪",
+    "✔ ¡Cada tema te acerca a la Lista de Elegibles PGN! 💪"
+  ];
+
+  function playPs5TrophySound(tier) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const now = ctx.currentTime;
+
+      const freqs =
+        tier === "platinum"
+          ? [523.25, 659.25, 783.99, 1046.5, 1318.51]
+          : tier === "gold"
+          ? [523.25, 659.25, 783.99, 1046.5]
+          : [440, 554.37, 659.25, 880];
+
+      freqs.forEach((f, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(f, now + idx * 0.085);
+        gain.gain.setValueAtTime(0.0001, now + idx * 0.085);
+        gain.gain.exponentialRampToValueAtTime(0.09, now + idx * 0.085 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.085 + 0.42);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.085);
+        osc.stop(now + idx * 0.085 + 0.45);
+      });
+    } catch (err) {
+      // Silencioso si el navegador restringe audio automático
+    }
+  }
+
+  function showMotivationalToast(customText) {
+    if (!dom.toastStack) return;
+    const msg =
+      customText || MOTIVATIONAL_PHRASES[Math.floor(Math.random() * MOTIVATIONAL_PHRASES.length)];
+
+    const toast = document.createElement("div");
+    toast.className = "motivational-toast";
+    toast.setAttribute("role", "status");
+    toast.innerHTML = `
+      <div class="motivational-toast__content">
+        <span class="motivational-toast__check" aria-hidden="true">✔</span>
+        <span>${escapeHTML(msg.replace(/^✔\s*/, ""))}</span>
+      </div>
+      <button type="button" class="motivational-toast__close" aria-label="Cerrar notificación">×</button>
+    `;
+
+    const dismiss = () => {
+      if (toast.classList.contains("is-leaving")) return;
+      toast.classList.add("is-leaving");
+      setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 260);
+    };
+
+    toast.querySelector(".motivational-toast__close").addEventListener("click", dismiss);
+    dom.toastStack.appendChild(toast);
+    setTimeout(dismiss, 4200);
+  }
+
+  function showPs5TrophyUnlockToast(trophy) {
+    if (!dom.toastStack) return;
+    playPs5TrophySound(trophy.tier);
+
+    const toast = document.createElement("div");
+    toast.className = "ps5-trophy-toast";
+    toast.setAttribute("role", "status");
+    toast.innerHTML = `
+      <div class="ps5-trophy-toast__medal" aria-hidden="true">${escapeHTML(trophy.icon)}</div>
+      <div class="ps5-trophy-toast__body">
+        <div class="ps5-trophy-toast__eyebrow">
+          <span>TROFEO ${escapeHTML(trophy.tierLabel.toUpperCase())} DESBLOQUEADO</span>
+          <span>· +${trophy.xp} XP</span>
+        </div>
+        <div class="ps5-trophy-toast__title">${escapeHTML(trophy.title)}</div>
+        <div class="ps5-trophy-toast__desc">${escapeHTML(trophy.desc)}</div>
+      </div>
+      <button type="button" class="motivational-toast__close" aria-label="Cerrar trofeo">×</button>
+    `;
+
+    const dismiss = () => {
+      if (toast.classList.contains("is-leaving")) return;
+      toast.classList.add("is-leaving");
+      setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 280);
+    };
+
+    toast.querySelector(".motivational-toast__close").addEventListener("click", dismiss);
+    dom.toastStack.appendChild(toast);
+    setTimeout(dismiss, 6200);
+  }
+
+  function isModuleCompleteById(modId) {
+    const mod = COURSE_DATA.modules.find((m) => m.id === modId);
+    if (!mod || !Array.isArray(mod.topics) || mod.topics.length === 0) return false;
+    return mod.topics.every((t) => state.completedTopics.has(t.id));
+  }
+
+  function calculateTotalXP() {
+    let xp = 0;
+    xp += state.completedTopics.size * 50;
+    xp += state.stepsDone.size * 15;
+    xp += state.masteredFlashcards.size * 20;
+    if (typeof TROFEOS_DATA !== "undefined") {
+      TROFEOS_DATA.forEach((tr) => {
+        if (state.unlockedTrophies.has(tr.id)) {
+          xp += tr.xp || 0;
+        }
+      });
+    }
+    return xp;
+  }
+
+  function updateTrophyHeaderPills() {
+    const totalTrophies = typeof TROFEOS_DATA !== "undefined" ? TROFEOS_DATA.length : 12;
+    const unlockedCount = state.unlockedTrophies.size;
+    const xp = calculateTotalXP();
+
+    if (dom.trophiesCountPill) {
+      dom.trophiesCountPill.textContent = `${unlockedCount}/${totalTrophies}`;
+    }
+    if (dom.xpTotalPill) {
+      dom.xpTotalPill.textContent = `${xp} XP`;
+    }
+  }
+
+  function evaluateTrophies(notifyNew) {
+    if (typeof TROFEOS_DATA === "undefined") return;
+
+    const conditions = {
+      "tr-primer-radicado": state.completedTopics.size >= 1,
+      "tr-archivista-experto": isModuleCompleteById("mod-gestion-documental"),
+      "tr-redactor-gtc185": isModuleCompleteById("mod-documentos-oficina"),
+      "tr-vocacion-servicio": isModuleCompleteById("mod-atencion-usuario"),
+      "tr-custodio-almacen": isModuleCompleteById("mod-inventarios"),
+      "tr-guardian-ministerio":
+        isModuleCompleteById("mod-institucional-pgn") && isModuleCompleteById("mod-ofimatica-seguridad"),
+      "tr-conducta-ejemplar": isModuleCompleteById("mod-comportamentales-pgn"),
+      "tr-memoria-fotografica": state.masteredFlashcards.size >= 25,
+      "tr-aduana-superada": Boolean(state.simStats && state.simStats.passed65),
+      "tr-cero-errores": Boolean(state.simStats && state.simStats.cleanedErrors),
+      "tr-lista-elegibles": Boolean(state.simStats && state.simStats.passed80)
+    };
+
+    const newlyUnlocked = [];
+
+    TROFEOS_DATA.forEach((tr) => {
+      if (tr.id === "tr-platino-5am09") return;
+      if (conditions[tr.id] && !state.unlockedTrophies.has(tr.id)) {
+        state.unlockedTrophies.add(tr.id);
+        newlyUnlocked.push(tr);
+      }
+    });
+
+    // Evaluar Trofeo Platino #12 (todos los 11 anteriores + 100% de los temas)
+    const nonPlatinumIds = TROFEOS_DATA.filter((t) => t.id !== "tr-platino-5am09").map((t) => t.id);
+    const allElevenUnlocked = nonPlatinumIds.every((id) => state.unlockedTrophies.has(id));
+    const allTopicsDone = allTopicsFlat.length > 0 && state.completedTopics.size >= allTopicsFlat.length;
+
+    if (allElevenUnlocked && allTopicsDone && !state.unlockedTrophies.has("tr-platino-5am09")) {
+      const platObj = TROFEOS_DATA.find((t) => t.id === "tr-platino-5am09");
+      if (platObj) {
+        state.unlockedTrophies.add(platObj.id);
+        newlyUnlocked.push(platObj);
+      }
+    }
+
+    if (newlyUnlocked.length > 0) {
+      saveState();
+      updateTrophyHeaderPills();
+      if (notifyNew) {
+        newlyUnlocked.forEach((tr, idx) => {
+          if (idx === 0) {
+            showPs5TrophyUnlockToast(tr);
+          } else {
+            setTimeout(() => showPs5TrophyUnlockToast(tr), idx * 650);
+          }
+        });
+      }
+    } else {
+      updateTrophyHeaderPills();
+    }
+
+    if (dom.trophiesModal && !dom.trophiesModal.hidden) {
+      renderTrophiesModal();
+    }
+  }
+
+  function renderTrophiesModal() {
+    if (typeof TROFEOS_DATA === "undefined" || !dom.trophiesGrid) return;
+
+    const total = TROFEOS_DATA.length;
+    const unlocked = state.unlockedTrophies.size;
+    const pct = total > 0 ? Math.round((unlocked / total) * 100) : 0;
+    const xp = calculateTotalXP();
+
+    let rankTitle = "Aspirante Admitido · En Formación (#230688)";
+    if (state.unlockedTrophies.has("tr-platino-5am09")) {
+      rankTitle = "🏆 Auxiliar Administrativo 5AM-09 Nombrado (Platino)";
+    } else if (unlocked >= 8) {
+      rankTitle = "🥇 Elegible Destacado del Ministerio Público";
+    } else if (unlocked >= 4) {
+      rankTitle = "🥈 Analista Operativo y Documental PGN";
+    } else if (unlocked >= 1) {
+      rankTitle = "🥉 Auxiliar en Entrenamiento Activo";
+    }
+
+    dom.ps5RankTitle.textContent = rankTitle;
+    dom.ps5XpCurrent.textContent = `${xp} XP acumulados`;
+    dom.ps5TrophiesProgressText.textContent = `${unlocked} de ${total} Trofeos (${pct}%)`;
+    dom.ps5XpFill.style.width = `${pct}%`;
+
+    const countByTier = (tier) => {
+      const allInTier = TROFEOS_DATA.filter((t) => t.tier === tier);
+      const doneInTier = allInTier.filter((t) => state.unlockedTrophies.has(t.id));
+      return `${doneInTier.length}/${allInTier.length}`;
+    };
+
+    dom.countPlatinum.textContent = countByTier("platinum");
+    dom.countGold.textContent = countByTier("gold");
+    dom.countSilver.textContent = countByTier("silver");
+    dom.countBronze.textContent = countByTier("bronze");
+
+    dom.trophiesGrid.innerHTML = "";
+    TROFEOS_DATA.forEach((tr) => {
+      const isUnlocked = state.unlockedTrophies.has(tr.id);
+      const card = document.createElement("article");
+      card.className = `trophy-card trophy-card--${tr.tier} ${isUnlocked ? "is-unlocked" : "is-locked"}`;
+      card.innerHTML = `
+        <div class="trophy-card__icon" aria-hidden="true">${escapeHTML(tr.icon)}</div>
+        <div class="trophy-card__body">
+          <div class="trophy-card__meta">
+            <span>${escapeHTML(tr.tierLabel)} · +${tr.xp} XP</span>
+            <span class="trophy-card__status">${isUnlocked ? "Desbloqueado ✓" : "Bloqueado 🔒"}</span>
+          </div>
+          <h3 class="trophy-card__title">${escapeHTML(tr.title)}</h3>
+          <p class="trophy-card__desc">${escapeHTML(tr.desc)}</p>
+        </div>
+      `;
+      dom.trophiesGrid.appendChild(card);
+    });
+  }
+
+  function openTrophiesModal() {
+    evaluateTrophies(false);
+    renderTrophiesModal();
+    dom.trophiesModal.hidden = false;
+  }
+
+  function closeTrophiesModal() {
+    dom.trophiesModal.hidden = true;
   }
 
   function updateErrorTrayCounters() {
@@ -1361,11 +1669,16 @@
         // Actualizar Bandeja de Errores en localStorage
         if (parsed.letter !== correctLetter) {
           state.failedSimIds.add(qKey);
+          if (state.simStats) state.simStats.hadErrorsBefore = true;
         } else {
           state.failedSimIds.delete(qKey);
+          if (state.simStats && state.simStats.hadErrorsBefore && state.failedSimIds.size === 0) {
+            state.simStats.cleanedErrors = true;
+          }
         }
         saveState();
         updateErrorTrayCounters();
+        evaluateTrophies(true);
         renderSimQuestion();
       });
 
@@ -1412,6 +1725,28 @@
 
     const percentage = total > 0 ? Math.round((correctCount / total) * 100) : 0;
     const isPassed = percentage >= 65;
+
+    if (!state.simStats) {
+      state.simStats = { bestScore: 0, passed65: false, passed80: false, cleanedErrors: false, hadErrorsBefore: false };
+    }
+    if (percentage > (state.simStats.bestScore || 0)) {
+      state.simStats.bestScore = percentage;
+    }
+    if (isPassed) {
+      state.simStats.passed65 = true;
+    }
+    if (percentage >= 80) {
+      state.simStats.passed80 = true;
+    }
+    if (state.failedSimIds.size === 0 && (percentage === 100 || state.simStats.hadErrorsBefore)) {
+      state.simStats.cleanedErrors = true;
+    }
+    saveState();
+
+    if (isPassed) {
+      showMotivationalToast(`✔ ¡Simulacro superado con ${percentage}%! Sigue así 💪`);
+    }
+    evaluateTrophies(true);
 
     dom.simScorePercent.textContent = `${percentage}%`;
     dom.simScoreDetail.textContent = `Obtuviste ${correctCount} de ${total} aciertos (${
@@ -1528,7 +1863,8 @@
   }
 
   function toggleTopicCompletion(topicId) {
-    if (state.completedTopics.has(topicId)) {
+    const wasDone = state.completedTopics.has(topicId);
+    if (wasDone) {
       state.completedTopics.delete(topicId);
     } else {
       state.completedTopics.add(topicId);
@@ -1537,6 +1873,11 @@
     saveState();
     updateGlobalProgress();
     renderModuleTree();
+
+    if (!wasDone) {
+      showMotivationalToast("✔ ¡Clase completada! Sigue así 💪");
+      evaluateTrophies(true);
+    }
 
     if (topicId === state.activeTopicId) {
       updateReadButtonState(state.completedTopics.has(topicId));
@@ -1573,7 +1914,7 @@
       });
     });
 
-    // 2. Modal de Mi Convocatoria (Cargo 5AM-09)
+    // 2. Modal de Mi Convocatoria (Cargo 5AM-09) y Sala de Trofeos PS5
     dom.openFichaBtn.addEventListener("click", openConvocatoriaModal);
     dom.stripFichaLink.addEventListener("click", openConvocatoriaModal);
     dom.closeFichaModalBtn.addEventListener("click", closeConvocatoriaModal);
@@ -1582,6 +1923,23 @@
         closeConvocatoriaModal();
       }
     });
+
+    if (dom.openTrophiesBtn) {
+      dom.openTrophiesBtn.addEventListener("click", openTrophiesModal);
+    }
+    if (dom.closeTrophiesModalBtn) {
+      dom.closeTrophiesModalBtn.addEventListener("click", closeTrophiesModal);
+    }
+    if (dom.closeTrophiesFooterBtn) {
+      dom.closeTrophiesFooterBtn.addEventListener("click", closeTrophiesModal);
+    }
+    if (dom.trophiesModal) {
+      dom.trophiesModal.addEventListener("click", (e) => {
+        if (e.target === dom.trophiesModal) {
+          closeTrophiesModal();
+        }
+      });
+    }
 
     dom.modalOpenFuncionesPdf.addEventListener("click", () => {
       closeConvocatoriaModal();
@@ -1612,7 +1970,12 @@
     });
 
     dom.completeAndNextBtn.addEventListener("click", () => {
+      const wasDone = state.completedTopics.has(state.activeTopicId);
       state.completedTopics.add(state.activeTopicId);
+      if (!wasDone) {
+        showMotivationalToast("✔ ¡Clase completada! Sigue así 💪");
+      }
+      evaluateTrophies(true);
       const currentIndex = allTopicsFlat.findIndex((t) => t.id === state.activeTopicId);
       if (currentIndex < allTopicsFlat.length - 1) {
         selectTopic(allTopicsFlat[currentIndex + 1].id);
@@ -1714,10 +2077,15 @@
       const deck = getActiveFlashcardDeck();
       const card = deck[state.fcCurrentIndex];
       if (!card) return;
+      const wasMastered = state.masteredFlashcards.has(card.id);
       state.masteredFlashcards.add(card.id);
       state.reviewFlashcards.delete(card.id);
       saveState();
       updateGlobalProgress();
+      if (!wasMastered) {
+        showMotivationalToast("✔ ¡Flashcard dominada (+20 XP)! Sigue así 💪");
+      }
+      evaluateTrophies(true);
       state.fcCurrentIndex += 1;
       state.fcIsFlipped = false;
       renderFlashcardStage();
@@ -1859,6 +2227,8 @@
       state.masteredFlashcards.clear();
       state.reviewFlashcards.clear();
       state.failedSimIds.clear();
+      state.unlockedTrophies.clear();
+      state.simStats = { bestScore: 0, passed65: false, passed80: false, cleanedErrors: false, hadErrorsBefore: false };
       saveState();
       updateGlobalProgress();
       renderModuleTree();
@@ -1880,6 +2250,7 @@
     state.expandedTopics.add(state.activeTopicId);
     populateConvocatoriaModal();
     bindEvents();
+    evaluateTrophies(false);
     updateGlobalProgress();
     renderModuleTree();
     renderActiveLesson();

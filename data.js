@@ -509,54 +509,63 @@ const COURSE_DATA = {
         {
           id: "gd-103",
           code: "1.3",
-          title: "Comunicaciones Oficiales, Radicación y Ventanilla Única (Acuerdo 060 de 2001)",
-          duration: "14 min",
-          priority: "Alta",
-          normativa: ["Acuerdo AGN 060 de 2001", "Ley 1437 de 2011 (CPACA)", "Ley 527 de 1999"],
+          title: "Ventanilla Única (Acuerdo 060/2001), PGD y los 8 Procesos Archivísticos",
+          duration: "18 min",
+          priority: "Esencial",
+          normativa: ["Acuerdo AGN 060 de 2001", "Decreto 1080 de 2015", "Acuerdo AGN 001 de 2024"],
           summary:
-            "Lineamientos obligatorios para la recepción, radicación, numeración consecutiva, distribución y control de las comunicaciones oficiales enviadas y recibidas.",
+            "Lineamientos obligatorios para la recepción, radicación, numeración consecutiva y control de las comunicaciones oficiales en Ventanilla Única, articulados con el Programa de Gestión Documental (PGD) y los 8 procesos técnicos archivísticos.",
           trampaExamen: {
-            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Reserva de Números y Correspondencia Privada",
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Reserva de Números y las 3 Fases de Organización",
             alerta:
-              "Si el caso plantea que un jefe o procurador pide 'guardar o reservar 3 números de radicado del viernes para usarlos el lunes' o 'ponerle número BIS a un oficio', la respuesta SIEMPRE es que está PROHIBIDO por el Art. 5 del Acuerdo 060 de 2001. Además, los sobres privados/personales dirigidos a un servidor NO se abren ni se radican como comunicación oficial."
+              "1) Si el caso plantea que un jefe pide 'reservar números de radicado del viernes para el lunes' o 'ponerle sufijo BIS', está PROHIBIDO por el Art. 5 del Acuerdo 060 de 2001. 2) No confundas 'Organización Documental' con 'Ordenación': recuerda la ecuación exacta: ORGANIZACIÓN = 1º Clasificación (agrupar por serie/CCD) + 2º Ordenación (secuencia cronológica y foliación) + 3º Descripción (inventario FUID y metadatos)."
           },
           aplicacionCargo5AM09: {
-            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #1 y #9)",
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #1, #2, #3 y #9)",
             descripcion:
-              "La Función #1 del cargo 5AM-09 consiste precisamente en recibir, radicar, clasificar y distribuir las comunicaciones oficiales en el sistema SIGDEA/SIM. Debes verificar que todo oficio de salida lleve la firma autorizada antes de asignarle consecutivo de radicación."
+              "Como Auxiliar Administrativo 5AM-09 aplicas a diario la recepción y radicación en SIGDEA/SIM (Gestión y Trámite), la Organización en carpetas (clasificar, ordenar cronológicamente, foliar y describir en el FUID) y la preparación de transferencias primarias hacia el Archivo Central."
           },
           sections: [
             {
-              heading: "1. Comunicaciones Oficiales vs. Correspondencia Personal",
+              heading: "1. Comunicaciones Oficiales vs. Correspondencia Personal (Acuerdo 060 de 2001)",
               body: "El Acuerdo 060 de 2001 del Archivo General de la Nación establece una diferenciación estricta para el manejo documental en las unidades de correspondencia:",
               bullets: [
-                "Comunicaciones Oficiales: Todas aquellas recibidas o producidas en desarrollo de las funciones asignadas legalmente a la entidad, independientemente del medio utilizado (físico, electrónico, sede electrónica). Son objeto de radicación y control.",
-                "Correspondencia (Privada/Personal): Comunicaciones de carácter privado que llegan a la entidad a nombre de los funcionarios. NO se radican ni se abren por la Ventanilla Única; se entregan directamente a su destinatario."
+                "Comunicaciones Oficiales: Todas aquellas recibidas o producidas en desarrollo de las funciones asignadas legalmente a la entidad, independientemente del medio utilizado (físico o electrónico). Son objeto de radicación y control.",
+                "Correspondencia (Privada/Personal): Comunicaciones de carácter privado que llegan a la entidad a nombre de los funcionarios. NO se radican ni se abren por la Ventanilla Única; se entregan directamente a su destinatario.",
+                "Prohibición de Reserva de Números (Art. 5): La numeración inicia el 1 de enero de cada año fiscal y es estrictamente secuencial. Está prohibido reservar números, dejar espacios en blanco, repetir números o usar sufijos (bis, A, B)."
               ]
             },
             {
-              heading: "2. Reglas Técnicas de Radicación",
-              body: "La radicación es el procedimiento por medio del cual las entidades asignan un número consecutivo a las comunicaciones recibidas o producidas, dejando constancia de la fecha y hora de recibo o de envío:",
-              bullets: [
-                "Consecutivo Anual: La numeración de los actos administrativos y comunicaciones oficiales debe iniciarse al comienzo de cada año fiscal (1 de enero) y ser estrictamente secuencial.",
-                "Prohibición de Reserva de Números: Está expresamente prohibido reservar números de radicación o numeración, dejar espacios en blanco, repetir números o utilizar numeración con sufijos (bis, A, B).",
-                "Corrección de Errores: Cuando se presenten errores en la radicación y sea necesario anular un número, debe dejarse constancia por escrito con la justificación y firma del jefe de la unidad de correspondencia."
-              ]
+              heading: "2. Los 8 Procesos de la Gestión Documental (Decreto 1080 de 2015)",
+              body: "El Programa de Gestión Documental (PGD) se desarrolla a través de ocho (8) procesos interrelacionados que abarcan todo el ciclo vital:",
+              table: {
+                headers: ["#", "Proceso Técnico", "Objetivo Principal en la Entidad"],
+                rows: [
+                  ["1", "Planeación", "Diseño de formas, formularios, metadatos y creación/actualización de series antes de producir documentos."],
+                  ["2", "Producción", "Generación o recepción de documentos conforme a formatos institucionales, soportes y medios definidos."],
+                  ["3", "Gestión y Trámite", "Registro, radicación, vinculación a un trámite, distribución, seguimiento y control de tiempos de respuesta."],
+                  ["4", "Organización", "Conjunto de operaciones técnicas compuestas por: 1º Clasificación, 2º Ordenación y 3º Descripción documental."],
+                  ["5", "Transferencia", "Remisión de expedientes del Archivo de Gestión al Central (primaria) o del Central al Histórico (secundaria)."],
+                  ["6", "Disposición de Documentos", "Selección, eliminación técnica o conservación total según lo dictaminado en las TRD o TVD."],
+                  ["7", "Preservación a Largo Plazo", "Acciones y estándares para garantizar la durabilidad física y tecnológica (migración, emulación, control ambiental)."],
+                  ["8", "Valoración", "Proceso permanente que determina los valores primarios y secundarios para fijar su permanencia y disposición."]
+                ]
+              }
             },
             {
-              heading: "3. Documento Electrónico de Archivo y Expediente Híbrido",
-              body: "Cuando en un mismo trámite concurren documentos nacidos en soporte físico y documentos nativos electrónicos, se conforma un expediente híbrido. Todos los documentos deben vincularse mediante una Hoja de Control o Índice Electrónico firmado que garantice su autenticidad, integridad, fiabilidad y disponibilidad.",
+              heading: "3. Subprocesos de la Organización Documental y Expediente Híbrido",
+              body: "Dentro del cuarto proceso (Organización), es indispensable dominar el orden de sus tres etapas: 1º Clasificación (según CCD), 2º Ordenación (Orden Original y foliación) y 3º Descripción (FUID e índices).",
               callout: {
                 type: "norma",
-                title: "Firmas Autorizadas en Comunicaciones Oficiales",
-                text: "Toda entidad debe establecer en sus manuales de procedimientos los cargos de los funcionarios autorizados para comprometer a la institución mediante la firma de comunicaciones oficiales enviadas. Ningún documento oficial puede despacharse sin firma autorizada."
+                title: "Firmas Autorizadas y Expediente Híbrido",
+                text: "Ningún documento oficial puede despacharse sin firma autorizada. Cuando concurren documentos físicos y electrónicos en un mismo trámite, se conforma un expediente híbrido vinculado mediante Hoja de Control o Índice Electrónico."
               }
             }
           ],
           keyPoints: [
-            "La radicación asigna fecha y hora ciertas de recepción, lo que activa el cómputo de los términos legales (ej. derechos de petición o recursos).",
+            "La radicación asigna fecha y hora ciertas de recepción, activando el cómputo de los términos legales.",
             "No se pueden reservar números de radicado para comunicaciones futuras bajo ninguna circunstancia.",
-            "En las comunicaciones internas (memorandos) se emplean controles consecutivos internos que identifican la dependencia productora y la destinataria."
+            "Organización Documental = Clasificación + Ordenación + Descripción (en ese orden lógico estricto)."
           ],
           videos: [
             {
@@ -564,6 +573,12 @@ const COURSE_DATA = {
               canal: "Archivo General de la Nación Colombia",
               duracion: "13:50",
               searchUrl: "https://www.youtube.com/results?search_query=Acuerdo+060+de+2001+AGN+comunicaciones+oficiales+radicacion"
+            },
+            {
+              titulo: "Los 8 Procesos de la Gestión Documental (Decreto 1080 de 2015) y el PGD",
+              canal: "Archivo General de la Nación Colombia",
+              duracion: "15:15",
+              searchUrl: "https://www.youtube.com/results?search_query=8+procesos+de+la+gestion+documental+decreto+1080+de+2015+AGN"
             }
           ],
           flashcards: [
@@ -582,81 +597,7 @@ const COURSE_DATA = {
               reverso:
                 "La Comunicación Oficial trata asuntos propios de las funciones de la entidad y se radica; la Correspondencia Privada es de carácter personal del funcionario, NO se abre ni se radica.",
               referencia: "Art. 2 Acuerdo AGN 060 de 2001"
-            }
-          ],
-          caseQuestion: {
-            stem: "El viernes a las 4:50 p. m., un asesor solicita al encargado de la Ventanilla Única de la Procuraduría que le reserve tres números de radicación de salida con fecha del viernes para unos oficios que terminará de redactar y firmar el lunes a primera hora. ¿Cuál debe ser la actuación del funcionario de correspondencia?",
-            options: [
-              "Reservar los tres números dejando anotado en el libro de control que quedan pendientes de entrega física el lunes.",
-              "Negarse a reservar los números, dado que el Acuerdo AGN 060 de 2001 prohíbe taxativamente reservar números de radicación o radicar documentos aún no firmados.",
-              "Asignarles un número provisional con sufijo 'BIS' hasta que el jefe de la dependencia firme los oficios el lunes.",
-              "Radicar los documentos en blanco únicamente si se trata de respuestas a tutelas o requerimientos judiciales."
-            ],
-            correctIndex: 1,
-            explanation: "El artículo 5 del Acuerdo 060 de 2001 del AGN prohíbe expresamente reservar números de radicación, repetirlos o asignar numeración antes de que el documento esté debidamente elaborado y firmado por el funcionario competente."
-          }
-        },
-        {
-          id: "gd-104",
-          code: "1.4",
-          title: "Programa de Gestión Documental (PGD) y los 8 Procesos Archivísticos",
-          duration: "16 min",
-          priority: "Alta",
-          normativa: ["Decreto 1080 de 2015", "Acuerdo AGN 001 de 2024", "Modelo Integrado de Planeación y Gestión (MIPG)"],
-          summary:
-            "Estructura estratégica del Programa de Gestión Documental (PGD) y articulación de los ocho procesos técnicos que rigen el documento desde su planeación hasta su valoración.",
-          trampaExamen: {
-            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Las 3 Fases dentro de 'Organización'",
-            alerta:
-              "Muchos aspirantes confunden el proceso general ('Organización Documental') con una de sus partes ('Ordenación'). Recuerda la ecuación exacta: ORGANIZACIÓN = 1º Clasificación (agrupar por serie/CCD) + 2º Ordenación (secuencia cronológica y foliación) + 3º Descripción (hacer el inventario FUID y metadatos)."
-          },
-          aplicacionCargo5AM09: {
-            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #2, #3 y #9)",
-            descripcion:
-              "En tu puesto de Auxiliar Administrativo 5AM-09 aplicas a diario el proceso #3 (Gestión y Trámite al radicar y distribuir), el proceso #4 (Organización al clasificar en carpetas, ordenar cronológicamente y describir en el FUID) y el proceso #5 (Transferencia primaria hacia el Archivo Central)."
-          },
-          sections: [
-            {
-              heading: "1. Los 8 Procesos de la Gestión Documental (Decreto 1080 de 2015)",
-              body: "La gestión documental en las entidades públicas se desarrolla a través de ocho (8) procesos interrelacionados que abarcan la totalidad del ciclo vital:",
-              table: {
-                headers: ["#", "Proceso Técnico", "Objetivo Principal en la Entidad"],
-                rows: [
-                  ["1", "Planeación", "Diseño de formas, formularios, metadatos y creación/actualización de series antes de producir documentos."],
-                  ["2", "Producción", "Generación o recepción de documentos conforme a formatos institucionales, soportes y medios definidos."],
-                  ["3", "Gestión y Trámite", "Registro, radicación, vinculación a un trámite, distribución, seguimiento y control de tiempos de respuesta."],
-                  ["4", "Organización", "Conjunto de operaciones técnicas compuestas por: Clasificación, Ordenación y Descripción documental."],
-                  ["5", "Transferencia", "Remisión de expedientes del Archivo de Gestión al Central (primaria) o del Central al Histórico (secundaria)."],
-                  ["6", "Disposición de Documentos", "Selección, eliminación técnica o conservación total según lo dictaminado en las TRD o TVD."],
-                  ["7", "Preservación a Largo Plazo", "Acciones y estándares para garantizar la durabilidad física y tecnológica (migración, emulación, control ambiental)."],
-                  ["8", "Valoración", "Proceso permanente que determina los valores primarios y secundarios para fijar su permanencia y disposición."]
-                ]
-              }
             },
-            {
-              heading: "2. Subprocesos de la Organización Documental",
-              body: "Dentro del cuarto proceso (Organización), es indispensable dominar el orden y significado de sus tres etapas técnicas:",
-              bullets: [
-                "1º Clasificación: Identificar y agrupar los documentos por fondo, sección, subsección, serie y subserie según el Cuadro de Clasificación Documental (CCD).",
-                "2º Ordenación: Disponer físicamente los documentos dentro de cada carpeta o expediente siguiendo el orden cronológico del trámite (Principio de Orden Original) y realizar la foliación en la esquina superior derecha en el sentido del texto.",
-                "3º Descripción: Elaborar instrumentos de consulta y control (inventarios FUID, índices electrónicos, rótulos de carpeta y caja) para facilitar la localización y recuperación de la información."
-              ]
-            }
-          ],
-          keyPoints: [
-            "Organización Documental = Clasificación + Ordenación + Descripción (en ese orden lógico estricto).",
-            "La foliación se realiza en la esquina superior derecha de la cara recta del folio, de manera consecutiva, sin omitir ni repetir números.",
-            "El PGD debe estar alineado con la Dimensión de Gestión del Conocimiento y la Dimensión de Información y Comunicación del MIPG."
-          ],
-          videos: [
-            {
-              titulo: "Los 8 Procesos de la Gestión Documental (Decreto 1080 de 2015) y el PGD",
-              canal: "Archivo General de la Nación Colombia",
-              duracion: "15:15",
-              searchUrl: "https://www.youtube.com/results?search_query=8+procesos+de+la+gestion+documental+decreto+1080+de+2015+AGN"
-            }
-          ],
-          flashcards: [
             {
               id: "fc-gd104-1",
               categoria: "Organización Documental",
@@ -675,29 +616,380 @@ const COURSE_DATA = {
             }
           ],
           caseQuestion: {
-            stem: "Dentro del proceso técnico de Organización Documental, cuando un servidor público elabora el Formato Único de Inventario Documental (FUID) y diligencia los metadatos e índices de búsqueda para localizar rápidamente los expedientes de una serie, está ejecutando específicamente la fase de:",
+            stem: "El viernes a las 4:50 p. m., un asesor solicita al encargado de la Ventanilla Única de la Procuraduría que le reserve tres números de radicación de salida con fecha del viernes para unos oficios que terminará de redactar y firmar el lunes a primera hora. ¿Cuál debe ser la actuación del funcionario de correspondencia?",
             options: [
-              "Clasificación documental.",
-              "Ordenación documental.",
-              "Descripción documental.",
-              "Valoración secundaria."
+              "Reservar los tres números dejando anotado en el libro de control que quedan pendientes de entrega física el lunes.",
+              "Negarse a reservar los números, dado que el Acuerdo AGN 060 de 2001 prohíbe taxativamente reservar números de radicación o radicar documentos aún no firmados.",
+              "Asignarles un número provisional con sufijo 'BIS' hasta que el jefe de la dependencia firme los oficios el lunes.",
+              "Radicar los documentos en blanco únicamente si se trata de respuestas a tutelas o requerimientos judiciales."
             ],
-            correctIndex: 2,
-            explanation: "La Descripción es la fase de la organización documental que consiste en analizar los documentos y registrar sus atributos en instrumentos de control y consulta (como el FUID, índices o catálogos) para permitir su localización y recuperación."
+            correctIndex: 1,
+            explanation: "El artículo 5 del Acuerdo 060 de 2001 del AGN prohíbe expresamente reservar números de radicación, repetirlos o asignar numeración antes de que el documento esté debidamente elaborado y firmado por el funcionario competente."
+          }
+        }
+      ]
+    },
+    {
+      id: "mod-documentos-oficina",
+      code: "MÓDULO II",
+      title: "Elaboración de Documentos de Oficina y Trámite Administrativo (GTC 185)",
+      subtitle: "Oficios, memorandos, circulares, actas, órdenes de pedido, órdenes de trabajo y cuentas de cobro",
+      icon: "file-text",
+      topics: [
+        {
+          id: "doc-201",
+          code: "2.1",
+          title: "Guía GTC 185: Estructura de la Comunicación Escrita y el Oficio (Carta)",
+          duration: "16 min",
+          priority: "Esencial",
+          normativa: ["GTC 185 (ICONTEC)", "Acuerdo AGN 060 de 2001", "Ley 594 de 2000"],
+          summary:
+            "La Guía Técnica Colombiana GTC 185 del ICONTEC orienta cómo se elaboran los documentos de oficina. Este tema cubre los elementos que debe tener un oficio (carta externa), su orden y la identificación de quién proyecta, revisa y firma.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Oficio vs. Memorando",
+            alerta:
+              "Las preguntas suelen mezclar los tipos de comunicación. El OFICIO (carta) va hacia el EXTERIOR de la entidad; el MEMORANDO circula únicamente ENTRE dependencias de la MISMA entidad. Otra trampa frecuente: creer que el 'asunto' es opcional o que el número de radicado lo puede asignar el auxiliar a su gusto; el consecutivo lo asigna el sistema/ventanilla de correspondencia."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones de proyección y trámite documental)",
+            descripcion:
+              "Cuando tu jefe te pide proyectar la respuesta a una petición, debes armar el oficio con todos sus elementos (fecha, destinatario completo, asunto, texto, despedida, firma, anexos y la línea de quién proyectó/revisó), revisarlo ortográficamente y radicarlo de salida por la ventanilla antes de enviarlo."
+          },
+          sections: [
+            {
+              heading: "1. ¿Qué es la GTC 185 y cuál es su alcance?",
+              body: "Es una Guía Técnica Colombiana del ICONTEC sobre documentación organizacional y elaboración de documentos de oficina. Es una guía de buenas prácticas que cada entidad adopta e incorpora en su manual o programa de gestión documental para que todos sus documentos tengan una presentación uniforme.",
+              bullets: [
+                "Busca uniformidad: mismos márgenes, ubicación de elementos y lenguaje en toda la entidad.",
+                "Se complementa con las reglas del AGN sobre radicación y comunicaciones oficiales (Acuerdo 060 de 2001).",
+                "Un documento bien elaborado facilita su clasificación, trámite y posterior archivo."
+              ]
+            },
+            {
+              heading: "2. Elementos del oficio o carta (en orden de aparición)",
+              body: "Aunque cada entidad ajusta su formato institucional, el oficio contiene de manera general:",
+              table: {
+                headers: ["Elemento", "Contenido", "Observación práctica"],
+                rows: [
+                  ["Encabezado / membrete", "Nombre de la entidad y dependencia", "Va impreso o en la plantilla institucional"],
+                  ["Código o consecutivo", "Número de radicado de salida asignado por la ventanilla/sistema", "Nunca se reserva ni se inventa"],
+                  ["Lugar y fecha", "Ciudad y fecha de expedición", "Fecha completa, sin abreviaturas ambiguas"],
+                  ["Destinatario", "Nombre, cargo, entidad, dirección y ciudad", "Debe coincidir con el de la petición"],
+                  ["Asunto o referencia", "Resumen en una línea del tema tratado", "Obligatorio: permite clasificar el documento"],
+                  ["Saludo, texto y despedida", "Cuerpo claro, breve y cortés", "Un solo asunto por comunicación"],
+                  ["Firma", "Nombre y cargo de quien tiene competencia para firmar", "El auxiliar proyecta, no firma por el jefe"],
+                  ["Anexos y copias", "Relación de documentos adjuntos y destinatarios de copia", "Se indica el número de folios anexos"],
+                  ["Identificación de elaboración", "Quién proyectó, revisó y/o digitó", "Permite trazabilidad en el archivo"]
+                ]
+              }
+            },
+            {
+              heading: "3. Calidad de la redacción",
+              body: "La comunicación debe ser clara, concisa, cortés y correcta ortográficamente.",
+              callout: {
+                type: "norma",
+                title: "Regla de oro de la redacción administrativa",
+                text: "Un documento = un asunto. Usa lenguaje claro y directo, evita jerga innecesaria, verifica nombres y cifras antes de enviar y deja siempre constancia de los anexos."
+              }
+            }
+          ],
+          keyPoints: [
+            "El oficio es comunicación externa; el memorando es comunicación interna entre dependencias.",
+            "El asunto, la firma de quien tiene competencia y la relación de anexos son elementos básicos del oficio.",
+            "El auxiliar proyecta y tramita; la firma corresponde a quien tiene la competencia."
+          ],
+          videos: [
+            {
+              titulo: "Elaboración de documentos de oficina: oficio, memorando y circular según GTC 185",
+              canal: "Capacitación Gestión Documental Pública",
+              duracion: "12:30",
+              searchUrl: "https://www.youtube.com/results?search_query=GTC+185+elaboracion+de+documentos+de+oficina+oficio+memorando+circular"
+            },
+            {
+              titulo: "Cómo redactar una carta o oficio institucional paso a paso",
+              canal: "Secretariado y Gestión Administrativa",
+              duracion: "10:05",
+              searchUrl: "https://www.youtube.com/results?search_query=como+redactar+un+oficio+institucional+partes+de+una+carta+oficial+colombia"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-doc201-1",
+              categoria: "GTC 185",
+              frente: "¿Qué es la GTC 185 y para qué se usa en una entidad?",
+              reverso: "Es la Guía Técnica Colombiana del ICONTEC sobre elaboración de documentos de oficina; la entidad la adopta para que sus comunicaciones tengan una presentación uniforme.",
+              referencia: "GTC 185 · ICONTEC"
+            },
+            {
+              id: "fc-doc201-2",
+              categoria: "Tipos de comunicación",
+              frente: "¿Cuál es la diferencia entre oficio y memorando?",
+              reverso: "El oficio (carta) se dirige a destinatarios externos de la entidad. El memorando circula entre dependencias de la misma entidad.",
+              referencia: "GTC 185"
+            },
+            {
+              id: "fc-doc201-3",
+              categoria: "Elementos del oficio",
+              frente: "Menciona 5 elementos básicos de un oficio.",
+              reverso: "Consecutivo/radicado, lugar y fecha, destinatario, asunto, texto con saludo y despedida, firma, anexos y copias, e identificación de quien proyectó.",
+              referencia: "GTC 185"
+            },
+            {
+              id: "fc-doc201-4",
+              categoria: "Trámite",
+              frente: "¿Quién asigna el número de radicado de salida de un oficio?",
+              reverso: "La ventanilla o sistema de correspondencia de la entidad; el auxiliar no lo reserva ni lo inventa.",
+              referencia: "Acuerdo AGN 060 de 2001"
+            }
+          ],
+          caseQuestion: {
+            stem: "Un auxiliar proyecta la respuesta a una petición ciudadana. El texto está correcto, pero omitió el asunto y no relacionó los anexos que adjuntó. Según las buenas prácticas de la GTC 185, ¿qué debe hacer antes de pasar el documento a firma?",
+            options: [
+              "Enviarlo así, porque el asunto y los anexos son opcionales si el texto es claro.",
+              "Completar el asunto y la relación de anexos, y dejar identificada la elaboración, antes de radicarlo de salida.",
+              "Cambiar el oficio por un memorando para evitar incluir el asunto.",
+              "Firmarlo él mismo para agilizar el trámite."
+            ],
+            correctIndex: 1,
+            explanation: "El asunto y la relación de anexos son elementos básicos del oficio; permiten clasificar el documento y dejar constancia de lo enviado. El auxiliar proyecta, no firma por quien tiene la competencia."
+          }
+        },
+        {
+          id: "doc-202",
+          code: "2.2",
+          title: "Memorandos, Circulares y Actas de Reunión",
+          duration: "15 min",
+          priority: "Esencial",
+          normativa: ["GTC 185 (ICONTEC)", "Ley 594 de 2000"],
+          summary:
+            "Los documentos internos de la oficina tienen reglas propias: el memorando comunica entre dependencias, la circular difunde instrucciones a varios destinatarios y el acta deja constancia de lo tratado y decidido en una reunión.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Circular vs. Memorando y contenido del Acta",
+            alerta:
+              "La CIRCULAR se dirige a VARIOS destinatarios (información o instrucciones generales) y se numera consecutivamente; el MEMORANDO suele tener un destinatario específico dentro de la entidad. En el ACTA no se registra todo lo que se dijo palabra por palabra: se consignan los puntos tratados, las decisiones y los compromisos con responsable y fecha."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Apoyo a reuniones y comunicaciones internas)",
+            descripcion:
+              "Si debes apoyar una reunión del despacho, preparas la lista de asistencia y el orden del día, tomas notas de las decisiones y compromisos, proyectas el acta y la pasas a firma de quien presidió y de quien actuó como secretario; luego la archivas en la serie documental correspondiente."
+          },
+          sections: [
+            {
+              heading: "1. Memorando y circular",
+              bullets: [
+                "Memorando: comunicación interna entre dependencias o funcionarios de la misma entidad; incluye PARA, DE, ASUNTO y FECHA, y un texto breve y directo.",
+                "Circular: comunicación con información o instrucciones de interés general dirigida a varios destinatarios; se numera y se fecha.",
+                "Ambos se radican y se archivan según la TRD de la dependencia."
+              ]
+            },
+            {
+              heading: "2. Estructura del acta de reunión",
+              body: "El acta es el documento que da fe de lo ocurrido en una reunión. Sus partes generales son:",
+              table: {
+                headers: ["Parte del acta", "Qué se consigna"],
+                rows: [
+                  ["Identificación", "Número consecutivo, nombre del comité o reunión, lugar, fecha, hora de inicio y fin"],
+                  ["Asistentes", "Nombres y cargos de asistentes, invitados y ausentes (con excusa)"],
+                  ["Orden del día", "Temas previstos para tratar"],
+                  ["Desarrollo", "Resumen de lo discutido y de las decisiones adoptadas"],
+                  ["Compromisos", "Actividad, responsable y fecha límite"],
+                  ["Firmas", "Quien preside y quien actúa como secretario"]
+                ]
+              }
+            },
+            {
+              heading: "3. Buenas prácticas con el acta",
+              callout: {
+                type: "alerta",
+                title: "Evita estos errores",
+                text: "No se firman actas en blanco, no se corrigen con enmendaduras y no se modifican decisiones después de firmadas. Cualquier ajuste se hace mediante una nueva acta o una constancia debidamente soportada."
+              }
+            }
+          ],
+          keyPoints: [
+            "La circular va dirigida a varios destinatarios; el memorando circula entre dependencias.",
+            "El acta consigna decisiones y compromisos con responsable y plazo, no una transcripción literal.",
+            "Se firma por quien preside y por el secretario; nunca en blanco."
+          ],
+          videos: [
+            {
+              titulo: "Cómo elaborar un acta de reunión: partes y ejemplo",
+              canal: "Gestión Administrativa Pública",
+              duracion: "09:40",
+              searchUrl: "https://www.youtube.com/results?search_query=como+elaborar+un+acta+de+reunion+partes+del+acta+ejemplo"
+            },
+            {
+              titulo: "Diferencias entre memorando, circular y oficio",
+              canal: "Capacitación Gestión Documental Pública",
+              duracion: "08:15",
+              searchUrl: "https://www.youtube.com/results?search_query=diferencia+entre+memorando+circular+y+oficio+comunicaciones+oficiales"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-doc202-1",
+              categoria: "Circular",
+              frente: "¿A quién se dirige una circular?",
+              reverso: "A varios destinatarios, con información o instrucciones de interés general; se numera consecutivamente.",
+              referencia: "GTC 185"
+            },
+            {
+              id: "fc-doc202-2",
+              categoria: "Memorando",
+              frente: "¿Qué campos básicos tiene un memorando?",
+              reverso: "PARA, DE, ASUNTO y FECHA, seguidos de un texto breve; circula dentro de la misma entidad.",
+              referencia: "GTC 185"
+            },
+            {
+              id: "fc-doc202-3",
+              categoria: "Acta",
+              frente: "¿Qué debe contener un acta de reunión?",
+              reverso: "Número, lugar, fecha y hora, asistentes, orden del día, desarrollo y decisiones, compromisos (responsable y plazo) y firmas.",
+              referencia: "GTC 185"
+            },
+            {
+              id: "fc-doc202-4",
+              categoria: "Acta",
+              frente: "¿Quién firma el acta?",
+              reverso: "Quien preside la reunión y quien actúa como secretario; no se firma en blanco ni se corrige con enmendaduras.",
+              referencia: "Buenas prácticas documentales"
+            }
+          ],
+          caseQuestion: {
+            stem: "Tras un comité, el jefe te pide el acta. Algunos asistentes sugieren transcribir cada intervención y dejar los compromisos 'para después'. ¿Cuál es la actuación correcta?",
+            options: [
+              "Transcribir toda la reunión palabra por palabra y omitir los compromisos.",
+              "Consignar los temas tratados, las decisiones y los compromisos con responsable y fecha, y pasarla a firma de quien presidió y del secretario.",
+              "Dejar el acta firmada en blanco para completarla luego.",
+              "Reemplazar el acta por un memorando informal."
+            ],
+            correctIndex: 1,
+            explanation: "El acta resume lo tratado y decidido y deja los compromisos con responsable y plazo; la firman quien preside y el secretario. Nunca se firma en blanco."
+          }
+        },
+        {
+          id: "doc-203",
+          code: "2.3",
+          title: "Órdenes de Pedido, Órdenes de Trabajo y Cuentas de Cobro: Trámite y Control",
+          duration: "15 min",
+          priority: "Importante",
+          normativa: ["GTC 185 (ICONTEC)", "Acuerdo AGN 060 de 2001", "Normas internas de almacén y contratación"],
+          summary:
+            "Los documentos de soporte administrativo (órdenes de pedido, órdenes de trabajo y cuentas de cobro) permiten pedir bienes, ordenar servicios y reclamar pagos con trazabilidad. Aprende sus elementos y el flujo de trámite y control.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: No confundas el pedido con la orden de trabajo",
+            alerta:
+              "La ORDEN DE PEDIDO (o requisición) SOLICITA bienes o suministros a almacén o compras; la ORDEN DE TRABAJO INSTRUYE la ejecución de un servicio (por ejemplo, un mantenimiento) a una dependencia o proveedor. La CUENTA DE COBRO es el documento con el que quien presta un servicio y no está obligado a facturar solicita su pago, siempre con soportes."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Apoyo logístico y administrativo)",
+            descripcion:
+              "Cuando el despacho necesita resmas de papel, diligencias la orden de pedido a almacén con cantidades y justificación; si falla un aire acondicionado, solicitas la orden de trabajo de mantenimiento; y si te llega una cuenta de cobro, verificas que tenga los soportes y la remites con el visto bueno de quien supervisa."
+          },
+          sections: [
+            {
+              heading: "1. Elementos de cada documento",
+              table: {
+                headers: ["Documento", "Para qué sirve", "Elementos mínimos"],
+                rows: [
+                  ["Orden de pedido / requisición", "Solicitar bienes o suministros", "Fecha, dependencia, descripción y cantidad, justificación, firma de quien autoriza"],
+                  ["Orden de trabajo", "Ordenar la ejecución de un servicio o mantenimiento", "Consecutivo, descripción del servicio, ubicación, responsable, fecha de ejecución, constancia de recibo"],
+                  ["Cuenta de cobro", "Reclamar el pago de un servicio prestado", "Nombre y documento del cobrador, concepto, valor, fecha, firma y soportes (por ejemplo, informe de actividades)"]
+                ]
+              }
+            },
+            {
+              heading: "2. Flujo de trámite y control",
+              bullets: [
+                "Elaborar el documento completo, sin espacios en blanco ni enmendaduras.",
+                "Obtener la autorización o el visto bueno de quien tiene la competencia.",
+                "Radicar o registrar el consecutivo y enviar al área responsable (almacén, mantenimiento, contabilidad o tesorería).",
+                "Verificar la entrega o ejecución y dejar constancia de recibo a satisfacción.",
+                "Archivar copia en el expediente que corresponda según la TRD."
+              ]
+            },
+            {
+              heading: "3. Control y trazabilidad",
+              callout: {
+                type: "norma",
+                title: "Sin soporte no hay trámite",
+                text: "Todo pedido, orden o cuenta debe poder rastrearse: quién lo solicitó, quién lo autorizó, qué se entregó o ejecutó y cuándo. Esto protege al servidor y a la entidad ante controles internos y de órganos de control."
+              }
+            }
+          ],
+          keyPoints: [
+            "Orden de pedido = solicitar bienes; orden de trabajo = ordenar un servicio; cuenta de cobro = reclamar un pago.",
+            "Cada documento requiere autorización de quien tiene la competencia y soportes.",
+            "Se deja constancia de recibo a satisfacción y se archiva según la TRD."
+          ],
+          videos: [
+            {
+              titulo: "Requisición, orden de pedido y orden de trabajo en la gestión administrativa",
+              canal: "Gestión Administrativa Pública",
+              duracion: "11:10",
+              searchUrl: "https://www.youtube.com/results?search_query=orden+de+pedido+requisicion+orden+de+trabajo+gestion+administrativa+entidad+publica"
+            },
+            {
+              titulo: "Cuenta de cobro: qué es, partes y soportes",
+              canal: "Contabilidad y Finanzas Básicas",
+              duracion: "07:50",
+              searchUrl: "https://www.youtube.com/results?search_query=cuenta+de+cobro+que+es+partes+y+soportes+colombia"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-doc203-1",
+              categoria: "Orden de pedido",
+              frente: "¿Para qué sirve la orden de pedido o requisición?",
+              reverso: "Para solicitar bienes o suministros a almacén o compras, con cantidades, justificación y autorización.",
+              referencia: "Trámite administrativo"
+            },
+            {
+              id: "fc-doc203-2",
+              categoria: "Orden de trabajo",
+              frente: "¿Qué ordena una orden de trabajo?",
+              reverso: "La ejecución de un servicio (por ejemplo, un mantenimiento), con descripción, ubicación, responsable y constancia de recibo.",
+              referencia: "Trámite administrativo"
+            },
+            {
+              id: "fc-doc203-3",
+              categoria: "Cuenta de cobro",
+              frente: "¿Qué es una cuenta de cobro?",
+              reverso: "Documento con el que quien presta un servicio y no está obligado a facturar solicita su pago, adjuntando soportes.",
+              referencia: "Trámite administrativo"
+            },
+            {
+              id: "fc-doc203-4",
+              categoria: "Control",
+              frente: "¿Qué se debe verificar antes de remitir una cuenta de cobro?",
+              reverso: "Que tenga los datos del cobrador, concepto, valor, firma y soportes, y el visto bueno de quien supervisa el servicio.",
+              referencia: "Control interno"
+            }
+          ],
+          caseQuestion: {
+            stem: "Se dañó el sistema de aire del despacho y el jefe te pide 'resolverlo hoy'. ¿Qué documento debes tramitar para que se ejecute el mantenimiento con trazabilidad?",
+            options: [
+              "Una orden de pedido a almacén de resmas de papel.",
+              "Una orden de trabajo de mantenimiento, con la autorización correspondiente y constancia de recibo del servicio.",
+              "Una circular dirigida a todas las dependencias.",
+              "Una cuenta de cobro a nombre propio."
+            ],
+            correctIndex: 1,
+            explanation: "La orden de trabajo instruye la ejecución de un servicio como el mantenimiento y deja trazabilidad (autorización, ejecución y recibo a satisfacción)."
           }
         }
       ]
     },
     {
       id: "mod-atencion-usuario",
-      code: "MÓDULO II",
+      code: "MÓDULO III",
       title: "Atención al Usuario, PQRSDF y Servicio al Ciudadano",
       subtitle: "Ley 1755 de 2015, términos legales, canales de atención y enfoque diferencial",
       icon: "users-check",
       topics: [
         {
           id: "au-201",
-          code: "2.1",
+          code: "3.1",
           title: "Derecho Fundamental de Petición y Términos Legales (Ley 1755 de 2015)",
           duration: "18 min",
           priority: "Esencial",
@@ -821,7 +1113,7 @@ const COURSE_DATA = {
         },
         {
           id: "au-202",
-          code: "2.2",
+          code: "3.2",
           title: "Tipología de Solicitudes en la PGN: PQRSDF y Quejas Disciplinarias",
           duration: "15 min",
           priority: "Esencial",
@@ -920,7 +1212,7 @@ const COURSE_DATA = {
         },
         {
           id: "au-203",
-          code: "2.3",
+          code: "3.3",
           title: "Protocolos de Atención, Enfoque Diferencial y Transparencia (Ley 1712 de 2014)",
           duration: "14 min",
           priority: "Alta",
@@ -1017,15 +1309,15 @@ const COURSE_DATA = {
     },
     {
       id: "mod-inventarios",
-      code: "MÓDULO III",
+      code: "MÓDULO IV",
       title: "Administración de Inventarios, Bienes y Almacén Público",
       subtitle: "Bienes devolutivos vs. consumo, custodia, responsabilidad fiscal/disciplinaria y bajas",
       icon: "boxes",
       topics: [
         {
           id: "inv-301",
-          code: "3.1",
-          title: "Clasificación de Bienes Públicos: Devolutivos, Consumo y Movimientos de Almacén",
+          code: "4.1",
+          title: "Clasificación de Bienes (Consumo vs. Devolutivos), Salidas de Almacén y Métodos PEPS/Kardex",
           duration: "16 min",
           priority: "Esencial",
           normativa: ["Marco Normativo Contaduría General de la Nación (NICSP)", "Manual de Administración de Bienes PGN", "Ley 80 de 1993"],
@@ -1084,7 +1376,7 @@ const COURSE_DATA = {
           keyPoints: [
             "Ningún bien adquirido por la entidad puede entregarse directamente del proveedor al usuario final sin surtir previamente el registro de Entrada y Salida de Almacén.",
             "El plaqueteo (asignación de placa única de identificación) es obligatorio para todo bien devolutivo antes de su puesta en servicio.",
-            "El Comprobante de Salida de Almacén firmado formaliza la entrega y asunción de responsabilidad sobre los bienes."
+            "El Comprobante de Salida de Almacén firmado formaliza la entrega; en bodega, las existencias se controlan con tarjetas Kardex y métodos como PEPS (Primeras en Entrar, Primeras en Salir) o Promedio Ponderado para evitar vencimiento o deterioro de insumos."
           ],
           videos: [
             {
@@ -1126,7 +1418,7 @@ const COURSE_DATA = {
         },
         {
           id: "inv-302",
-          code: "3.2",
+          code: "4.2",
           title: "Custodia, Responsabilidad Disciplinaria y Fiscal sobre los Bienes Asignados",
           duration: "15 min",
           priority: "Esencial",
@@ -1200,7 +1492,7 @@ const COURSE_DATA = {
         },
         {
           id: "inv-303",
-          code: "3.3",
+          code: "4.3",
           title: "Toma Física de Inventarios, Conciliación Contable y Baja de Bienes",
           duration: "15 min",
           priority: "Alta",
@@ -1292,14 +1584,123 @@ const COURSE_DATA = {
     },
     {
       id: "mod-institucional-pgn",
-      code: "MÓDULO IV",
-      title: "Estructura de la Procuraduría y Régimen Disciplinario",
+      code: "MÓDULO V",
+      title: "Estructura de la Procuraduría y Gestión Pública del Estado",
       subtitle: "Decreto Ley 262 de 2000, funciones misionales y Código General Disciplinario",
       icon: "scale",
       topics: [
         {
+          id: "pgn-400",
+          code: "5.1",
+          title: "Ramas del Poder Público, Órganos de Control y Ministerio Público (Constitución de 1991)",
+          duration: "16 min",
+          priority: "Esencial",
+          normativa: ["Constitución Política de 1991", "Decreto Ley 262 de 2000", "Ley 489 de 1998"],
+          summary:
+            "El Estado colombiano se organiza en ramas del poder público y órganos autónomos de control. La Procuraduría General de la Nación hace parte del Ministerio Público; conocer dónde se ubica y quién la dirige es base para todo el módulo.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: La Procuraduría NO es una rama del poder",
+            alerta:
+              "Las ramas del poder público son tres: legislativa, ejecutiva y judicial. La Procuraduría y la Contraloría son ÓRGANOS DE CONTROL autónomos e independientes (no pertenecen a ninguna rama). El Ministerio Público lo ejercen el Procurador General de la Nación, el Defensor del Pueblo, los procuradores delegados y agentes, y los personeros municipales; la Contraloría NO hace parte del Ministerio Público."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Orientación al ciudadano)",
+            descripcion:
+              "Si un ciudadano pregunta por una queja contra un alcalde o contra un funcionario, debes saber que la PGN ejerce control disciplinario sobre servidores públicos (con las excepciones constitucionales), mientras que el control fiscal corresponde a la Contraloría. Con esa claridad lo orientas a la dependencia o entidad correcta."
+          },
+          sections: [
+            {
+              heading: "1. Ramas del poder y órganos autónomos",
+              bullets: [
+                "Ramas del poder público (art. 113 C.P.): legislativa, ejecutiva y judicial.",
+                "Órganos autónomos e independientes: los de control (Ministerio Público y Contraloría) y los de la organización electoral.",
+                "Los diferentes órganos del Estado tienen funciones separadas pero colaboran armónicamente para realizar sus fines."
+              ]
+            },
+            {
+              heading: "2. El Ministerio Público",
+              body: "Según la Constitución, el Ministerio Público es ejercido por:",
+              bullets: [
+                "El Procurador General de la Nación, supremo director del Ministerio Público.",
+                "El Defensor del Pueblo.",
+                "Los procuradores delegados y los agentes del Ministerio Público ante las autoridades jurisdiccionales.",
+                "Los personeros municipales y los demás funcionarios que determine la ley."
+              ],
+              callout: {
+                type: "norma",
+                title: "Elección del Procurador General (art. 276 C.P.)",
+                text: "Es elegido por el Senado de la República para un período de cuatro años, de terna integrada por candidatos del Presidente de la República, la Corte Suprema de Justicia y el Consejo de Estado."
+              }
+            },
+            {
+              heading: "3. Principios de la función administrativa (art. 209 C.P.)",
+              body: "La función administrativa está al servicio de los intereses generales y se desarrolla con fundamento en los principios de igualdad, moralidad, eficacia, economía, celeridad, imparcialidad y publicidad, mediante la descentralización, la delegación y la desconcentración de funciones."
+            }
+          ],
+          keyPoints: [
+            "Tres ramas del poder: legislativa, ejecutiva y judicial; la PGN y la Contraloría son órganos de control autónomos.",
+            "El Procurador General es el supremo director del Ministerio Público y es elegido por el Senado para un período de cuatro años.",
+            "Principios del art. 209: igualdad, moralidad, eficacia, economía, celeridad, imparcialidad y publicidad."
+          ],
+          videos: [
+            {
+              titulo: "Estructura del Estado colombiano: ramas del poder y órganos de control",
+              canal: "Educación Cívica Colombia",
+              duracion: "13:00",
+              searchUrl: "https://www.youtube.com/results?search_query=estructura+del+estado+colombiano+ramas+del+poder+organos+de+control+ministerio+publico"
+            },
+            {
+              titulo: "Principios de la función administrativa artículo 209 Constitución",
+              canal: "Derecho Administrativo Colombia",
+              duracion: "09:30",
+              searchUrl: "https://www.youtube.com/results?search_query=principios+funcion+administrativa+articulo+209+constitucion+colombia"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-pgn400-1",
+              categoria: "Estructura del Estado",
+              frente: "¿Cuáles son las tres ramas del poder público?",
+              reverso: "Legislativa, ejecutiva y judicial. Los órganos de control y electorales son autónomos e independientes.",
+              referencia: "Art. 113 C.P."
+            },
+            {
+              id: "fc-pgn400-2",
+              categoria: "Ministerio Público",
+              frente: "¿Quiénes ejercen el Ministerio Público?",
+              reverso: "El Procurador General, el Defensor del Pueblo, los procuradores delegados y agentes, y los personeros municipales (entre otros que determine la ley).",
+              referencia: "Art. 118 C.P."
+            },
+            {
+              id: "fc-pgn400-3",
+              categoria: "Procurador General",
+              frente: "¿Quién elige al Procurador General y por cuánto tiempo?",
+              reverso: "El Senado, de terna del Presidente, la Corte Suprema de Justicia y el Consejo de Estado, para un período de 4 años.",
+              referencia: "Art. 276 C.P."
+            },
+            {
+              id: "fc-pgn400-4",
+              categoria: "Función administrativa",
+              frente: "Enumera los principios del artículo 209 de la Constitución.",
+              reverso: "Igualdad, moralidad, eficacia, economía, celeridad, imparcialidad y publicidad.",
+              referencia: "Art. 209 C.P."
+            }
+          ],
+          caseQuestion: {
+            stem: "Una persona pregunta si la Procuraduría General de la Nación pertenece a la rama ejecutiva, ya que 'investiga a los funcionarios del Gobierno'. ¿Cuál es la respuesta correcta?",
+            options: [
+              "Sí, pertenece a la rama ejecutiva porque depende del Presidente.",
+              "No; es un órgano de control autónomo e independiente que hace parte del Ministerio Público.",
+              "Pertenece a la rama judicial porque emite sentencias.",
+              "Pertenece a la rama legislativa porque la elige el Senado."
+            ],
+            correctIndex: 1,
+            explanation: "La Procuraduría es un órgano de control autónomo e independiente; el Ministerio Público no hace parte de las tres ramas del poder. Que el Senado elija al Procurador no la convierte en rama legislativa."
+          }
+        },
+        {
           id: "pgn-401",
-          code: "4.1",
+          code: "5.2",
           title: "Naturaleza Constitucional del Ministerio Público y Decreto Ley 262 de 2000",
           duration: "17 min",
           priority: "Esencial",
@@ -1405,7 +1806,7 @@ const COURSE_DATA = {
         },
         {
           id: "pgn-402",
-          code: "4.2",
+          code: "5.3",
           title: "Código General Disciplinario (Ley 1952 de 2019 y Ley 2094 de 2021)",
           duration: "18 min",
           priority: "Esencial",
@@ -1505,14 +1906,133 @@ const COURSE_DATA = {
     },
     {
       id: "mod-ofimatica-seguridad",
-      code: "MÓDULO V",
-      title: "Ofimática Institucional, Seguridad de la Información y Gobierno Digital",
+      code: "MÓDULO VI",
+      title: "Sistemas de Gestión (MIPG / Calidad) y Ofimática Institucional",
       subtitle: "Política de Gobierno Digital (MIPG), Tríada CID, firmas electrónicas y herramientas ofimáticas",
       icon: "shield-laptop",
       topics: [
         {
+          id: "sg-601",
+          code: "6.1",
+          title: "MIPG, MECI y Sistema de Gestión de Calidad (ISO 9001)",
+          duration: "17 min",
+          priority: "Esencial",
+          normativa: ["Decreto 1499 de 2017", "Decreto 1083 de 2015", "NTC-ISO 9001:2015"],
+          summary:
+            "El Modelo Integrado de Planeación y Gestión (MIPG) es el marco de referencia para dirigir, planear, ejecutar, hacer seguimiento, evaluar y controlar la gestión de las entidades públicas. Incluye siete dimensiones, y en la última se integra el MECI; la ISO 9001 aporta el enfoque de calidad por procesos.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Las 7 dimensiones y el lugar del MECI",
+            alerta:
+              "El MECI NO es una dimensión aparte: se integra en la séptima dimensión de MIPG (Control Interno). Otra confusión típica es cambiar el orden o inventar dimensiones. Memoriza: 1) Talento Humano, 2) Direccionamiento Estratégico y Planeación, 3) Gestión con Valores para Resultados, 4) Evaluación de Resultados, 5) Información y Comunicación, 6) Gestión del Conocimiento y la Innovación, 7) Control Interno."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Procesos y control en la oficina)",
+            descripcion:
+              "Cuando sigues el procedimiento documentado para radicar y archivar, diligencias los formatos oficiales y reportas una falla del proceso, estás aplicando la lógica de calidad y control interno: ejecutas bien tu parte (primera línea de defensa) y dejas evidencia que luego puede revisarse."
+          },
+          sections: [
+            {
+              heading: "1. MIPG: marco y dimensiones",
+              body: "MIPG fue adoptado por el Decreto 1499 de 2017 e integra los sistemas de Desarrollo Administrativo y de Gestión de la Calidad con el Sistema de Control Interno. Opera a través de siete dimensiones articuladas:",
+              table: {
+                headers: ["#", "Dimensión", "Idea central"],
+                rows: [
+                  ["1", "Talento Humano", "Corazón del modelo: personas competentes y motivadas"],
+                  ["2", "Direccionamiento Estratégico y Planeación", "Definir a dónde va la entidad y cómo"],
+                  ["3", "Gestión con Valores para Resultados", "Ejecutar procesos y servir al ciudadano"],
+                  ["4", "Evaluación de Resultados", "Medir avances y resultados"],
+                  ["5", "Información y Comunicación", "Gestión documental, transparencia y comunicación"],
+                  ["6", "Gestión del Conocimiento y la Innovación", "Aprender y mejorar de manera continua"],
+                  ["7", "Control Interno", "Aseguramiento de objetivos y gestión de riesgos"]
+                ]
+              }
+            },
+            {
+              heading: "2. MECI y líneas de defensa",
+              body: "El Modelo Estándar de Control Interno se articula en la séptima dimensión y se estructura en cinco componentes:",
+              bullets: [
+                "Ambiente de control.",
+                "Evaluación del riesgo.",
+                "Actividades de control.",
+                "Información y comunicación.",
+                "Actividades de monitoreo.",
+                "Líneas de defensa: línea estratégica (alta dirección), primera línea (líderes de proceso y sus equipos), segunda línea (planeación, supervisión y coordinación) y tercera línea (control interno)."
+              ]
+            },
+            {
+              heading: "3. Calidad: ISO 9001",
+              body: "La norma ISO 9001 (versión 2015) establece requisitos para un sistema de gestión de la calidad basado en el enfoque por procesos, el pensamiento basado en riesgos y la mejora continua.",
+              callout: {
+                type: "norma",
+                title: "Ciclo PHVA",
+                text: "Planear (definir objetivos y procesos) → Hacer (implementar) → Verificar (hacer seguimiento y medir) → Actuar (tomar acciones de mejora). Es el ciclo que sostiene la mejora continua."
+              }
+            }
+          ],
+          keyPoints: [
+            "MIPG se adopta con el Decreto 1499 de 2017 y tiene 7 dimensiones; Talento Humano es el corazón del modelo.",
+            "El MECI se integra en la séptima dimensión (Control Interno) con 5 componentes.",
+            "ISO 9001 se basa en procesos, riesgos y mejora continua (ciclo PHVA)."
+          ],
+          videos: [
+            {
+              titulo: "MIPG: las 7 dimensiones explicadas",
+              canal: "Función Pública Colombia",
+              duracion: "15:20",
+              searchUrl: "https://www.youtube.com/results?search_query=MIPG+7+dimensiones+modelo+integrado+de+planeacion+y+gestion+funcion+publica"
+            },
+            {
+              titulo: "MECI y líneas de defensa en las entidades públicas",
+              canal: "Función Pública Colombia",
+              duracion: "12:40",
+              searchUrl: "https://www.youtube.com/results?search_query=MECI+componentes+lineas+de+defensa+control+interno+entidades+publicas"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-sg601-1",
+              categoria: "MIPG",
+              frente: "¿Con qué decreto se adopta el MIPG y cuántas dimensiones tiene?",
+              reverso: "Con el Decreto 1499 de 2017; tiene 7 dimensiones articuladas.",
+              referencia: "Decreto 1499 de 2017"
+            },
+            {
+              id: "fc-sg601-2",
+              categoria: "MIPG",
+              frente: "¿Cuál es la dimensión considerada el corazón de MIPG?",
+              reverso: "Talento Humano (primera dimensión).",
+              referencia: "MIPG"
+            },
+            {
+              id: "fc-sg601-3",
+              categoria: "MECI",
+              frente: "¿Cuáles son los 5 componentes del MECI?",
+              reverso: "Ambiente de control, evaluación del riesgo, actividades de control, información y comunicación, y actividades de monitoreo.",
+              referencia: "MIPG · Dimensión 7"
+            },
+            {
+              id: "fc-sg601-4",
+              categoria: "ISO 9001",
+              frente: "¿Qué significa PHVA?",
+              reverso: "Planear, Hacer, Verificar y Actuar: el ciclo de la mejora continua.",
+              referencia: "NTC-ISO 9001:2015"
+            }
+          ],
+          caseQuestion: {
+            stem: "En un taller se afirma que 'el MECI es la octava dimensión de MIPG'. ¿Qué respuesta es la correcta?",
+            options: [
+              "Es correcta: MIPG tiene 8 dimensiones y la última es el MECI.",
+              "Es incorrecta: MIPG tiene 7 dimensiones y el MECI se integra en la séptima, Control Interno.",
+              "Es incorrecta: el MECI reemplaza a la dimensión de Talento Humano.",
+              "Es correcta, pero solo para entidades territoriales."
+            ],
+            correctIndex: 1,
+            explanation: "MIPG tiene siete dimensiones; el MECI no es una dimensión adicional, sino el modelo de control que se articula en la séptima dimensión (Control Interno)."
+          }
+        },
+        {
           id: "ofi-501",
-          code: "5.1",
+          code: "6.2",
           title: "Seguridad de la Información, Gobierno Digital y Validez Electrónica",
           duration: "14 min",
           priority: "Alta",
@@ -1600,7 +2120,7 @@ const COURSE_DATA = {
         },
         {
           id: "ofi-502",
-          code: "5.2",
+          code: "6.3",
           title: "Herramientas Ofimáticas Aplicadas a la Gestión Administrativa y Control de Términos",
           duration: "15 min",
           priority: "Media",
@@ -1695,6 +2215,276 @@ const COURSE_DATA = {
             ],
             correctIndex: 1,
             explanation: "La función DIA.LAB(fecha_inicial; días; [vacaciones/festivos]) devuelve la fecha futura que corresponde a un número determinado de días laborables (hábiles) después de la fecha inicial, descontando automáticamente fines de semana y el rango de festivos indicado."
+          }
+        }
+      ]
+    }
+,
+    {
+      id: "mod-comportamentales-pgn",
+      code: "MÓDULO VII",
+      title: "Competencias Comportamentales PGN · Nivel Asistencial (Peso 20%)",
+      subtitle: "Orientación al Usuario (Nivel B), Organización del Trabajo (Nivel C), Responsabilidad (Nivel C), Gestión de Recursos (Nivel D) y Cumplimiento (Nivel D)",
+      icon: "award",
+      topics: [
+        {
+          id: "comp-701",
+          code: "7.1",
+          title: "Orientación al Usuario y al Ciudadano (Nivel B) y Servicio con Enfoque Diferencial",
+          duration: "16 min",
+          priority: "Esencial",
+          normativa: ["Manual de Funciones PGN · Código 5AM-09", "Resolución PGN Competencias Comportamentales", "Ley 1755 de 2015"],
+          summary:
+            "Evalúa la disposición del Auxiliar Administrativo 5AM-09 para atender de forma oportuna, respetuosa, empática e imparcial a los ciudadanos y usuarios internos, aplicando un lenguaje claro y garantizando siempre la radicación y orientación sobre los trámites sin extralimitarse en sus funciones.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Empatía mal entendida vs. Deber Funcional",
+            alerta:
+              "En las pruebas situacionales de Competencias Comportamentales (20%), los distractores suelen presentar dos extremos erróneos: 1) La indiferencia o rechazo ('no recibir la queja porque falta un anexo o porque está alterada la persona') y 2) El exceso de confianza o extralimitación ('prometerle al ciudadano que la Procuraduría sancionará al implicado' o 'adelantar conceptos jurídicos'). La respuesta correcta siempre combina TRATO RESPETUOSO + RADICACIÓN INMEDIATA + ORIENTACIÓN CLARA DENTRO DE SU COMPETENCIA ASISTENCIAL."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #1, #5 y #7)",
+            descripcion:
+              "Cuando un ciudadano acude alterado o confundido a la Procuraduría Regional o Provincial, tu conducta observable Nivel B consiste en escuchar activamente sin confrontar, explicarle en lenguaje sencillo el paso a paso del trámite, radicar su solicitud entregándole constancia y canalizarlo con el profesional competente si requiere asesoría jurídica de fondo."
+          },
+          sections: [
+            {
+              heading: "1. Conductas Asociadas a Orientación al Usuario (Nivel B)",
+              body: "El Manual Específico de Funciones y Competencias Laborales de la Procuraduría exige en el Nivel B de Orientación al Usuario las siguientes conductas observables:",
+              bullets: [
+                "Atiende con cordialidad, respeto y prontitud las solicitudes de ciudadanos, quejosos, disciplinados y compañeros de dependencia.",
+                "Suministra información veraz, completa y en lenguaje claro sobre el estado de los trámites autorizados, sin vulnerar la reserva legal.",
+                "Identifica necesidades especiales de atención (adultos mayores, personas con discapacidad, mujeres gestantes, víctimas) y aplica prelación de turno.",
+                "Mantiene el autocontrol emocional ante usuarios difíciles o exaltados, evitando discusiones personales."
+              ]
+            },
+            {
+              heading: "2. Matriz de Juicio Situacional: Qué hacer y qué evitar",
+              body: "En el examen de mérito, analiza cada opción de respuesta bajo esta matriz conductual:",
+              table: {
+                headers: ["Escenario en Ventanilla / Oficina", "Conducta Incorrecta (Penalizada)", "Conducta Nivel B (Respuesta Correcta)"],
+                rows: [
+                  [
+                    "Ciudadano molesto por demora en su trámite",
+                    "Responder en el mismo tono o culpar a otra dependencia de la entidad",
+                    "Escuchar con calma, verificar el estado en el sistema y brindarle información clara y verificable"
+                  ],
+                  [
+                    "Petición verbal o escrita incompleta",
+                    "Negarse a recibirla o devolver al ciudadano sin radicar",
+                    "Recibirla, radicarla e informarle con amabilidad qué documento debe aportar para continuar el trámite"
+                  ],
+                  [
+                    "Solicitud de información con reserva disciplinaria por un tercero",
+                    "Entregar copias informales por 'colaborar' con el ciudadano",
+                    "Explicar respetuosamente la reserva legal (Art. 115 Ley 1952) y orientarlo sobre quiénes están legitimados"
+                  ]
+                ]
+              }
+            }
+          ],
+          keyPoints: [
+            "Las pruebas comportamentales representan el 20% del puntaje total de la convocatoria (carácter clasificatorio).",
+            "En Orientación al Usuario Nivel B jamás se elige una opción que implique rechazar al ciudadano, discutir con él o prometer resultados que dependen del Procurador.",
+            "El trato digno, la escucha activa y el respeto por la reserva legal van siempre de la mano."
+          ],
+          videos: [
+            {
+              titulo: "Competencias Comportamentales en Concursos de Méritos: Orientación al Usuario",
+              canal: "Misión Mérito y Función Pública",
+              duracion: "14:15",
+              searchUrl: "https://www.youtube.com/results?search_query=competencias+comportamentales+orientacion+al+usuario+y+al+ciudadano+juicio+situacional"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-comp701-1",
+              categoria: "Comportamental · 20%",
+              frente: "¿Qué nivel de la competencia 'Orientación al Usuario y al Ciudadano' se evalúa en el cargo Auxiliar Administrativo 5AM-09?",
+              reverso: "Se evalúa en Nivel B: exige trato cordial, información clara y veraz, escucha activa, autocontrol emocional y aplicación de enfoque diferencial.",
+              referencia: "Manual de Funciones 5AM-09"
+            },
+            {
+              id: "fc-comp701-2",
+              categoria: "Juicio Situacional",
+              frente: "¿Cuál es la regla de oro ante un usuario exaltado en una pregunta de juicio situacional?",
+              reverso: "Mantener la calma (autocontrol), escuchar sin interrumpir ni confrontar, radicar o verificar su solicitud en el sistema y darle una orientación objetiva sobre el trámite.",
+              referencia: "Orientación al Usuario Nivel B"
+            }
+          ],
+          caseQuestion: {
+            stem: "Un adulto mayor acude por tercera vez a la ventanilla de la Procuraduría Regional manifestando en voz alta su inconformidad porque no ha recibido respuesta a su queja. Como Auxiliar Administrativo 5AM-09, la actuación que evidencia el Nivel B de Orientación al Usuario es:",
+            options: [
+              "Pedirle que baje la voz y decirle que debe esperar en su domicilio hasta que le llegue el correo certificado.",
+              "Atenderlo con prioridad y respeto, consultar en el sistema el estado actual del radicado y explicarle en lenguaje claro en qué etapa se encuentra su solicitud.",
+              "Informarle que los auxiliares no tienen responsabilidad sobre la demora de los abogados sustanciadores.",
+              "Permitirle hablar directamente con el Procurador Regional sin verificar antes el número de radicado."
+            ],
+            correctIndex: 1,
+            explanation: "El Nivel B de Orientación al Usuario exige trato prioritario al adulto mayor, escucha respetuosa, verificación diligente en el sistema institucional y explicación clara del estado del trámite sin evadir la atención ni culpar a otros funcionarios."
+          }
+        },
+        {
+          id: "comp-702",
+          code: "7.2",
+          title: "Organización del Trabajo (Nivel C) y Responsabilidad con la Organización (Nivel C)",
+          duration: "17 min",
+          priority: "Esencial",
+          normativa: ["Manual de Funciones PGN · Código 5AM-09", "Ley 1952 de 2019", "Ley 594 de 2000"],
+          summary:
+            "Estudia las conductas observables de las dos competencias de Nivel C del empleo 5AM-09: la capacidad para planificar, priorizar y mantener al día los trámites y archivos (Organización del Trabajo) y el compromiso ético con la reserva, veracidad y cuidado de la información institucional (Responsabilidad).",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Urgente vs. Importante y Compañerismo mal entendido",
+            alerta:
+              "En 'Organización del Trabajo Nivel C', nunca elijas atender las tareas por 'orden de amistad' o 'solo por orden de llegada' cuando existe un término legal próximo a vencer (ej. tutela o derecho de petición de información de 10 días). En 'Responsabilidad Nivel C', jamás aceptes ocultar un error propio o de un compañero ('reimprimir un folio sin reportar' o 'prestar tu usuario y clave del sistema SIM/SIGDEA')."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #2, #3, #4 y #8)",
+            descripcion:
+              "Al iniciar tu jornada en la Procuraduría, revisas el cuadro de control de términos y alertas de vencimiento, organizas las notificaciones y radicaciones según prioridad legal, mantienes los expedientes foliados y bloqueas tu sesión de computador cada vez que te levantas del puesto."
+          },
+          sections: [
+            {
+              heading: "1. Organización del Trabajo (Nivel C): Priorización y Método",
+              body: "Esta competencia evalúa la habilidad para ordenar las actividades diarias con criterio técnico y aprovechamiento del tiempo:",
+              bullets: [
+                "Clasifica y prioriza las tareas diarias teniendo en cuenta los plazos legales perentorios (tutelas, derechos de petición, términos disciplinarios).",
+                "Mantiene su puesto de trabajo, los expedientes físicos y las carpetas electrónicas debidamente ordenados, foliados y actualizados según las TRD.",
+                "Utiliza listas de chequeo y hojas de control para evitar olvidos, duplicidad de radicados o vencimiento de términos.",
+                "Informa oportunamente a su superior inmediato cuando una sobrecarga de trabajo puede afectar el cumplimiento de un plazo legal."
+              ]
+            },
+            {
+              heading: "2. Responsabilidad con la Organización (Nivel C): Integridad y Reserva",
+              body: "Evalúa el grado de compromiso del servidor con los deberes institucionales, la confidencialidad y la exactitud de su labor:",
+              bullets: [
+                "Asume las consecuencias de sus actos y reporta de inmediato cualquier error de radicación, foliación o envío para corregirlo por la vía formal.",
+                "Guarda estricta reserva sobre las investigaciones disciplinarias, quejas, datos personales y documentos clasificados o reservados.",
+                "Custodia sus credenciales de acceso (usuario y contraseña) como personales e intransferibles.",
+                "Verifica la exactitud de los datos antes de registrar actuaciones en los sistemas institucionales (SIM / SIGDEA)."
+              ]
+            }
+          ],
+          keyPoints: [
+            "En Organización del Trabajo Nivel C, el criterio rector de priorización es el vencimiento de términos legales y la criticidad misional.",
+            "En Responsabilidad Nivel C, ante un error involuntario, la respuesta correcta siempre es reportarlo de inmediato al jefe inmediato y aplicar el procedimiento técnico de corrección (nunca ocultarlo ni destruir folios).",
+            "Las credenciales de sistemas oficiales jamás se comparten, ni siquiera en casos de urgencia."
+          ],
+          videos: [
+            {
+              titulo: "Casos de Juicio Situacional: Organización del Trabajo y Responsabilidad Pública",
+              canal: "Academia Mérito Estatal",
+              duracion: "15:10",
+              searchUrl: "https://www.youtube.com/results?search_query=juicio+situacional+organizacion+del+trabajo+responsabilidad+concurso+de+meritos"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-comp702-1",
+              categoria: "Organización del Trabajo · Nivel C",
+              frente: "Si tienes al mismo tiempo tres tareas: archivar oficios ya tramitados, organizar papelería y radicar una respuesta de petición cuyo término vence hoy, ¿cuál priorizas?",
+              reverso: "Se prioriza de inmediato la radicación y envío de la respuesta cuyo término legal vence hoy, dejando las labores operativas sin vencimiento fatal para después.",
+              referencia: "Organización del Trabajo Nivel C"
+            },
+            {
+              id: "fc-comp702-2",
+              categoria: "Responsabilidad · Nivel C",
+              frente: "¿Qué debe hacer un Auxiliar Administrativo 5AM-09 si detecta que por error anexó un memorial en un expediente equivocado?",
+              reverso: "Informar de inmediato al superior o profesional a cargo y realizar el desglose/traslado técnico dejando la constancia respectiva, sin arrancar ni ocultar folios.",
+              referencia: "Responsabilidad Nivel C"
+            }
+          ],
+          caseQuestion: {
+            stem: "Faltando 30 minutos para finalizar la jornada laboral, adviertes que por error enviaste por correo electrónico institucional un oficio citatorio a una dirección equivocada. Tu compañero te sugiere borrar el correo de la bandeja de enviados y no comentar nada. ¿Cuál es la actuación acorde con la competencia de Responsabilidad (Nivel C)?",
+            options: [
+              "Seguir el consejo del compañero y reenviar el correo al día siguiente a primera hora.",
+              "Informar de inmediato a tu superior inmediato, enviar la comunicación al destinatario correcto dejando trazabilidad en el expediente y registrar la novedad.",
+              "Culpar a la plataforma de correo institucional indicando que el sistema autocompletó mal el destinatario.",
+              "Esperar a ver si el destinatario correcto reclama antes de tomar cualquier medida."
+            ],
+            correctIndex: 1,
+            explanation: "La competencia de Responsabilidad en Nivel C exige asumir los errores con transparencia, informar oportunamente al superior y subsanar de inmediato la actuación dejando plena trazabilidad en el expediente."
+          }
+        },
+        {
+          id: "comp-703",
+          code: "7.3",
+          title: "Gestión de Recursos (Nivel D) y Cumplimiento de Parámetros Institucionales (Nivel D)",
+          duration: "15 min",
+          priority: "Esencial",
+          normativa: ["Manual de Funciones PGN · Código 5AM-09", "Acuerdo AGN 060 de 2001", "Acuerdo AGN 042 de 2002"],
+          summary:
+            "Completa el estudio del 20% comportamental con las dos competencias de Nivel D del cargo 5AM-09: el uso racional, austero y exclusivo para fines oficiales de los bienes e insumos (Gestión de Recursos) y el apego estricto a las normas, protocolos y procedimientos vigentes (Cumplimiento).",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: 'Favores pequeños' que violan el Cumplimiento y la Gestión de Recursos",
+            alerta:
+              "Los casos situacionales suelen presentar 'pequeñas excepciones' aparentemente inofensivas: reservar un número de radicado para el día siguiente, prestar un portátil institucional el fin de semana para un trabajo universitario, o entregar papelería sin comprobante de salida porque 'es para el jefe'. En Nivel D, TODA excepción a los procedimientos o uso particular de bienes públicos es INCORRECTA."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #6, #9 y #10)",
+            descripcion:
+              "En tu labor diaria verificas que cada entrega de insumos o traslado de equipos quede respaldada por su comprobante o acta en el sistema de inventarios, reutilizas papel borrador cuando no contenga información reservada y aplicas sin excepciones los Acuerdos del AGN y reglamentos de la Procuraduría."
+          },
+          sections: [
+            {
+              heading: "1. Gestión de Recursos (Nivel D): Austeridad y Control de Bienes",
+              body: "Evalúa el cuidado, protección y aprovechamiento eficiente de los recursos físicos y tecnológicos asignados:",
+              bullets: [
+                "Utiliza los insumos de papelería, fotocopiado, impresión y equipos de cómputo exclusivamente para las labores oficiales de la Procuraduría.",
+                "Verifica físicamente las cantidades y el estado de los elementos al recibirlos o entregarlos en el almacén.",
+                "Aplica prácticas de ahorro de energía, papel y consumibles (política de cero papel y austeridad del gasto público).",
+                "Reporta oportunamente cualquier daño, deterioro o necesidad de mantenimiento preventivo de los bienes a su cargo."
+              ]
+            },
+            {
+              heading: "2. Cumplimiento (Nivel D): Apego Estricto a Normas y Procedimientos",
+              body: "Evalúa la disciplina operativa para ceñirse a los lineamientos legales, técnicos y éticos de la entidad:",
+              bullets: [
+                "Acatamiento riguroso de los procedimientos de radicación, foliación, archivo, notificación y atención al usuario.",
+                "Rechazo a prácticas informales como dejar números de radicado en blanco, fechar documentos con retroactividad o entregar expedientes sin registro de préstamo.",
+                "Cumplimiento puntual de los horarios, turnos de atención en ventanilla y entregas asignadas.",
+                "Actualización permanente en las circulares, directivas y manuales expedidos por la Procuraduría General de la Nación."
+              ]
+            }
+          ],
+          keyPoints: [
+            "Las 5 competencias comportamentales del cargo 5AM-09 son: Orientación al Usuario (Nivel B), Organización del Trabajo (Nivel C), Responsabilidad (Nivel C), Gestión de Recursos (Nivel D) y Cumplimiento (Nivel D).",
+            "En Gestión de Recursos Nivel D, ningún bien devolutivo ni de consumo puede destinarse a usos personales ni entregarse sin soporte.",
+            "En Cumplimiento Nivel D, la legalidad y el procedimiento técnico prevalecen siempre sobre las solicitudes informales de compañeros o superiores."
+          ],
+          videos: [
+            {
+              titulo: "Entrenamiento en Juicio Situacional: Cumplimiento de Normas y Gestión de Recursos",
+              canal: "Misión Mérito y Función Pública",
+              duracion: "13:25",
+              searchUrl: "https://www.youtube.com/results?search_query=competencias+comportamentales+cumplimiento+gestion+de+recursos+nivel+asistencial"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-comp703-1",
+              categoria: "Gestión de Recursos · Nivel D",
+              frente: "¿Cuáles son las 5 competencias comportamentales oficiales del cargo Auxiliar Administrativo 5AM-09 y sus niveles?",
+              reverso: "1) Orientación al Usuario (Nivel B), 2) Organización del Trabajo (Nivel C), 3) Responsabilidad (Nivel C), 4) Gestión de Recursos (Nivel D) y 5) Cumplimiento (Nivel D).",
+              referencia: "Manual de Funciones 5AM-09"
+            },
+            {
+              id: "fc-comp703-2",
+              categoria: "Cumplimiento · Nivel D",
+              frente: "Un funcionario te pide apartar tres números de radicado del cierre de hoy para unos oficios que él traerá mañana. ¿Qué dicta la competencia de Cumplimiento (Nivel D)?",
+              reverso: "Negarse respetuosamente explicando que el Acuerdo 060 de 2001 prohíbe reservar o dejar espacios en blanco en la numeración consecutiva de comunicaciones oficiales.",
+              referencia: "Cumplimiento Nivel D · Acuerdo 060/2001"
+            }
+          ],
+          caseQuestion: {
+            stem: "Un profesional de tu dependencia te solicita entregarle de inmediato dos tóners y cinco resmas de papel del armario de suministros sin firmar la planilla de control porque 'tiene mucha prisa y luego regularizan el formato'. De acuerdo con las competencias de Gestión de Recursos y Cumplimiento (Nivel D), tú debes:",
+            options: [
+              "Entregarle los elementos sin soporte para no entorpecer la labor misional del profesional.",
+              "Explicarle con cortesía que la entrega es inmediata pero requiere diligenciar y firmar en ese instante el comprobante de salida para mantener el control de inventario.",
+              "Entregarle solo la mitad de los insumos sin registro para reducir el riesgo.",
+              "Negarte a entregarle cualquier insumo aunque esté dispuesto a firmar el comprobante."
+            ],
+            correctIndex: 1,
+            explanation: "Las competencias de Gestión de Recursos y Cumplimiento en Nivel D exigen combinar agilidad en el servicio con el respeto estricto por los controles de inventario: todo movimiento de bienes requiere soporte firmado en el momento de la entrega."
           }
         }
       ]
@@ -1896,5 +2686,119 @@ const simuladorData = [
     respuesta_correcta: "A",
     justificacion:
       "El comprobante de salida de almacén, al ser firmado por quien recibe, formaliza la entrega y traslada la responsabilidad de la custodia y uso del bien al funcionario correspondiente."
+  }
+];
+
+/**
+ * Catálogo Oficial de 12 Trofeos y Logros (Estilo PS5 · Bronce, Plata, Oro y Platino)
+ */
+const TROFEOS_DATA = [
+  {
+    id: "tr-primer-radicado",
+    tier: "bronze",
+    tierLabel: "Bronce",
+    icon: "🥉",
+    xp: 100,
+    title: "Primer Radicado",
+    desc: "Completar el primer tema de estudio en la Academia PGN."
+  },
+  {
+    id: "tr-archivista-experto",
+    tier: "bronze",
+    tierLabel: "Bronce",
+    icon: "🥉",
+    xp: 200,
+    title: "Archivista Experto",
+    desc: "Completar al 100% el Módulo I (Gestión Documental y Archivo Institucional)."
+  },
+  {
+    id: "tr-redactor-gtc185",
+    tier: "bronze",
+    tierLabel: "Bronce",
+    icon: "🥉",
+    xp: 200,
+    title: "Redactor GTC 185",
+    desc: "Completar al 100% el Módulo II (Elaboración de Documentos de Oficina y Trámite)."
+  },
+  {
+    id: "tr-vocacion-servicio",
+    tier: "bronze",
+    tierLabel: "Bronce",
+    icon: "🥉",
+    xp: 200,
+    title: "Vocación de Servicio",
+    desc: "Completar al 100% el Módulo III (Atención al Usuario, PQRSDF y Servicio al Ciudadano)."
+  },
+  {
+    id: "tr-custodio-almacen",
+    tier: "silver",
+    tierLabel: "Plata",
+    icon: "🥈",
+    xp: 300,
+    title: "Custodio del Almacén",
+    desc: "Completar al 100% el Módulo IV (Administración de Inventarios, Bienes y Almacén)."
+  },
+  {
+    id: "tr-guardian-ministerio",
+    tier: "silver",
+    tierLabel: "Plata",
+    icon: "🥈",
+    xp: 400,
+    title: "Guardián del Ministerio Público",
+    desc: "Completar al 100% los Módulos V (Estructura PGN) y VI (MIPG y Ofimática)."
+  },
+  {
+    id: "tr-conducta-ejemplar",
+    tier: "silver",
+    tierLabel: "Plata",
+    icon: "🥈",
+    xp: 350,
+    title: "Conducta Ejemplar (20%)",
+    desc: "Completar al 100% el Módulo VII (Competencias Comportamentales PGN)."
+  },
+  {
+    id: "tr-memoria-fotografica",
+    tier: "silver",
+    tierLabel: "Plata",
+    icon: "🥈",
+    xp: 350,
+    title: "Memoria Fotográfica",
+    desc: "Dominar al menos 25 Flashcards 3D en el Laboratorio Activo."
+  },
+  {
+    id: "tr-aduana-superada",
+    tier: "gold",
+    tierLabel: "Oro",
+    icon: "🥇",
+    xp: 500,
+    title: "Aduana Superada (≥65%)",
+    desc: "Superar el 65% eliminatorio en el Simulador de Juicio Situacional."
+  },
+  {
+    id: "tr-cero-errores",
+    tier: "gold",
+    tierLabel: "Oro",
+    icon: "🥇",
+    xp: 500,
+    title: "Cero Errores",
+    desc: "Limpiar por completo la Bandeja de Errores del simulador (o aprobar un simulacro con 0 fallos)."
+  },
+  {
+    id: "tr-lista-elegibles",
+    tier: "gold",
+    tierLabel: "Oro",
+    icon: "🥇",
+    xp: 600,
+    title: "Puntaje de Lista de Elegibles (≥80%)",
+    desc: "Obtener un puntaje igual o superior al 80% en un simulacro completo."
+  },
+  {
+    id: "tr-platino-5am09",
+    tier: "platinum",
+    tierLabel: "Platino",
+    icon: "🏆",
+    xp: 1500,
+    title: "Auxiliar Administrativo 5AM-09 Nombrado",
+    desc: "Desbloquear todos los trofeos anteriores y alcanzar el 100% de los 21 temas del curso."
   }
 ];

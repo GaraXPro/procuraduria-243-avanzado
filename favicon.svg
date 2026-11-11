@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>PGN · Academia 5AM-09</title>
+  <path d="M32 3 56 11v19c0 15.5-10.2 26.6-24 31C18.2 56.6 8 45.5 8 30V11L32 3Z" fill="#14233C" stroke="#D4AF37" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M32 8 51.5 14.3V30c0 12.6-8.2 21.7-19.5 25.6C20.700 51.700 12.500 42.600 12.500 30V14.300L32 8Z" fill="none" stroke="#D4AF37" stroke-opacity=".45" stroke-width="1"/>
+  <!-- Balanza -->
+  <g stroke="#D4AF37" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <line x1="32" y1="12.500" x2="32" y2="26"/>
+    <line x1="20" y1="16" x2="44" y2="16"/>
+    <path d="M20 16 15.500 24.500h9L20 16Z"/>
+    <path d="M44 16 39.500 24.500h9L44 16Z"/>
+    <line x1="27" y1="26" x2="37" y2="26"/>
+  </g>
+  <!-- Check -->
+  <circle cx="32" cy="32.500" r="0" fill="#D4AF37"/>
+  <path d="m27.500 33 3 3 6-6.500" fill="none" stroke="#4ADE80" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Siglas -->
+  <text x="32" y="48.500" text-anchor="middle" font-family="Inter, Arial, Helvetica, sans-serif" font-size="11.500" font-weight="800" letter-spacing="1" fill="#D4AF37">PGN</text>
+</svg>
