@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Procuraduría 243-2026 | Plataforma Corporativa de Estudio</title>
+  <meta name="description" content="Plataforma de estudio por competencias para el Concurso de Méritos de la Procuraduría General de la Nación (Convocatoria 243-2026)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Cabecera Institucional Superior -->
+  <header class="topbar" role="banner">
+    <div class="topbar__brand">
+      <button id="sidebar-toggle" class="icon-btn mobile-only" aria-label="Alternar panel de módulos" title="Mostrar/Ocultar temario">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div class="brand-emblem" aria-hidden="true">
+        <span>PGN</span>
+      </div>
+      <div class="brand-text">
+        <div class="brand-text__eyebrow">CONCURSO DE MÉRITOS · CONVOCATORIA 243 - 2026</div>
+        <h1 class="brand-text__title">Academia de Preparación Procuraduría</h1>
+      </div>
+    </div>
+
+    <!-- Barra de Progreso Visual General -->
+    <div class="topbar__progress" aria-live="polite">
+      <div class="progress-meta">
+        <span class="progress-meta__label">Progreso General del Curso</span>
+        <div class="progress-meta__stats">
+          <span id="global-progress-count" class="progress-count">0 de 0 temas leídos</span>
+          <span id="global-progress-percent" class="progress-percent">0%</span>
+        </div>
+      </div>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="global-progressbar">
+        <div id="global-progress-fill" class="progress-fill" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Controles Corporativos Rápidos -->
+    <div class="topbar__actions">
+      <button id="theme-toggle" class="action-chip" type="button" title="Alternar modo de lectura (Claro / Oscuro)">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+        <span id="theme-label">Modo Nocturno</span>
+      </button>
+      <button id="reset-progress-btn" class="action-chip action-chip--subtle" type="button" title="Reiniciar todo el progreso de lectura">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal (Modo Curso) -->
+  <div class="workspace">
+    <!-- Panel Lateral: Árbol de Módulos -->
+    <aside id="sidebar" class="sidebar" aria-label="Árbol de módulos de estudio">
+      <div class="sidebar__header">
+        <div class="sidebar__title-row">
+          <h2 class="sidebar__heading">Árbol de Módulos</h2>
+          <span id="modules-summary-badge" class="badge-pill">5 Módulos</span>
+        </div>
+
+        <!-- Buscador Instantáneo -->
+        <div class="search-box">
+          <svg class="search-box__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="search"
+            id="topic-search"
+            class="search-box__input"
+            placeholder="Filtrar por tema, ley o concepto..."
+            aria-label="Filtrar temas por palabra clave o norma"
+          />
+        </div>
+
+        <!-- Filtros de Estado -->
+        <div class="filter-tabs" role="tablist" aria-label="Filtrar temas por estado de lectura">
+          <button type="button" class="filter-tab is-active" data-filter="all" role="tab" aria-selected="true">Todos</button>
+          <button type="button" class="filter-tab" data-filter="pending" role="tab" aria-selected="false">Pendientes</button>
+          <button type="button" class="filter-tab" data-filter="completed" role="tab" aria-selected="false">Leídos</button>
+        </div>
+      </div>
+
+      <!-- Contenedor Dinámico del Árbol de Módulos -->
+      <nav id="module-tree" class="module-tree" aria-label="Temario oficial por módulos"></nav>
+
+      <!-- Pie del Panel Lateral -->
+      <div class="sidebar__footer">
+        <div class="sidebar-stat-grid">
+          <div class="sidebar-stat">
+            <span class="sidebar-stat__value" id="stat-completed-modules">0/5</span>
+            <span class="sidebar-stat__label">Módulos al 100%</span>
+          </div>
+          <div class="sidebar-stat">
+            <span class="sidebar-stat__value" id="stat-cases-solved">0/12</span>
+            <span class="sidebar-stat__label">Casos resueltos</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Superficie de Lectura y Estudio -->
+    <main id="main-content" class="course-reader" tabindex="-1">
+      <!-- Barra Contextual Fija del Tema Actual -->
+      <div class="reader-toolbar">
+        <div class="reader-breadcrumb">
+          <span id="crumb-module" class="crumb-module">MÓDULO I</span>
+          <span class="crumb-sep" aria-hidden="true">/</span>
+          <span id="crumb-topic-code" class="crumb-code">Tema 1.1</span>
+        </div>
+
+        <div class="reader-toolbar__right">
+          <span id="topic-duration" class="meta-tag" title="Tiempo estimado de estudio">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>15 min</span>
+          </span>
+          <span id="topic-priority" class="priority-badge">Esencial</span>
+
+          <button id="toggle-read-btn" type="button" class="btn-mark-read">
+            <span class="btn-mark-read__icon" aria-hidden="true"></span>
+            <span id="toggle-read-label">Marcar como leído</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Artículo Principal del Tema -->
+      <article class="lesson-container">
+        <header class="lesson-header">
+          <div id="lesson-normativa" class="normativa-list" aria-label="Marco normativo de referencia"></div>
+          <h2 id="lesson-title" class="lesson-title">Cargando tema...</h2>
+          <p id="lesson-summary" class="lesson-summary"></p>
+        </header>
+
+        <!-- Cuerpo Estructurado de la Lección -->
+        <div id="lesson-body" class="lesson-body"></div>
+
+        <!-- Síntesis: Puntos Clave de Examen -->
+        <section class="key-points-card" aria-labelledby="keypoints-heading">
+          <div class="key-points-card__header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+            <h3 id="keypoints-heading">Puntos Clave de Examen (Síntesis de Repaso)</h3>
+          </div>
+          <ul id="lesson-keypoints" class="key-points-list"></ul>
+        </section>
+
+        <!-- Caso Situacional Tipo Concurso PGN -->
+        <section class="case-study-card" aria-labelledby="case-heading">
+          <div class="case-study-card__header">
+            <span class="case-badge">APLICACIÓN CASUÍSTICA · JUICIO SITUACIONAL</span>
+            <h3 id="case-heading">Caso Práctico Evaluativo</h3>
+          </div>
+          <p id="case-stem" class="case-stem"></p>
+          <div id="case-options" class="case-options" role="radiogroup" aria-labelledby="case-heading"></div>
+          <div id="case-feedback" class="case-feedback" hidden></div>
+        </section>
+
+        <!-- Apuntes Personales por Tema -->
+        <section class="notes-card" aria-labelledby="notes-heading">
+          <div class="notes-card__header">
+            <div>
+              <h3 id="notes-heading">Apuntes Personales del Tema</h3>
+              <p class="notes-subtitle">Tus anotaciones se guardan automáticamente en este navegador para este tema.</p>
+            </div>
+            <span id="notes-status" class="notes-status">Guardado local</span>
+          </div>
+          <textarea
+            id="topic-notes"
+            class="notes-textarea"
+            rows="3"
+            placeholder="Escribe aquí nemotecnias, artículos clave o recordatorios personales sobre este tema..."
+          ></textarea>
+        </section>
+
+        <!-- Navegación Inferior del Curso -->
+        <footer class="lesson-footer">
+          <button id="prev-topic-btn" type="button" class="nav-step-btn nav-step-btn--prev">
+            <span class="nav-step-btn__dir">← Tema Anterior</span>
+            <strong id="prev-topic-title" class="nav-step-btn__title">Inicio del curso</strong>
+          </button>
+
+          <button id="complete-and-next-btn" type="button" class="btn-primary-advance">
+            <span>Marcar Leído y Avanzar</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+
+          <button id="next-topic-btn" type="button" class="nav-step-btn nav-step-btn--next">
+            <span class="nav-step-btn__dir">Siguiente Tema →</span>
+            <strong id="next-topic-title" class="nav-step-btn__title">Siguiente</strong>
+          </button>
+        </footer>
+      </article>
+    </main>
+  </div>
+
+  <!-- Scripts (Sin dependencias externas) -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
