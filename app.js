@@ -1,6 +1,6 @@
 /**
- * Lógica Principal de la Plataforma de Estudio - Procuraduría 243-2026
- * Arquitectura Vanilla JS sin dependencias externas (Compatible 100% con GitHub Pages)
+ * Motor Interactivo Principal - Academia Procuraduría 243-2026 (Cargo Auxiliar Administrativo 5AM-09)
+ * Arquitectura 5 Pestañas en Vanilla JS + Persistencia Completa en localStorage
  */
 
 (function () {
@@ -9,13 +9,19 @@
   const STORAGE_KEYS = {
     COMPLETED: "pgn243_completed_topics_v1",
     ACTIVE_TOPIC: "pgn243_active_topic_v1",
+    ACTIVE_TAB: "pgn243_active_tab_v1",
     SOLVED_CASES: "pgn243_solved_cases_v1",
     NOTES: "pgn243_topic_notes_v1",
+    MASTERED_FC: "pgn243_mastered_fc_v1",
+    REVIEW_FC: "pgn243_review_fc_v1",
+    FAILED_SIM_IDS: "pgn243_failed_sim_ids_v1",
     THEME: "pgn243_theme_v1"
   };
 
   // Aplanar listado de temas para navegación secuencial rápida
   const allTopicsFlat = [];
+  const allFlashcardsFlat = [...(typeof FLASHCARDS_COMPORTAMENTALES_5AM09 !== "undefined" ? FLASHCARDS_COMPORTAMENTALES_5AM09 : [])];
+
   COURSE_DATA.modules.forEach((mod) => {
     mod.topics.forEach((topic) => {
       allTopicsFlat.push({
@@ -24,6 +30,14 @@
         moduleCode: mod.code,
         moduleTitle: mod.title
       });
+      if (Array.isArray(topic.flashcards)) {
+        topic.flashcards.forEach((fc) => {
+          allFlashcardsFlat.push({
+            ...fc,
+            topicId: topic.id
+          });
+        });
+      }
     });
   });
 
@@ -31,18 +45,40 @@
   const state = {
     completedTopics: new Set(loadJSON(STORAGE_KEYS.COMPLETED, [])),
     activeTopicId: localStorage.getItem(STORAGE_KEYS.ACTIVE_TOPIC) || allTopicsFlat[0].id,
+    activeTabId: localStorage.getItem(STORAGE_KEYS.ACTIVE_TAB) || "tab-lectura",
     solvedCases: loadJSON(STORAGE_KEYS.SOLVED_CASES, {}),
     topicNotes: loadJSON(STORAGE_KEYS.NOTES, {}),
+    masteredFlashcards: new Set(loadJSON(STORAGE_KEYS.MASTERED_FC, [])),
+    reviewFlashcards: new Set(loadJSON(STORAGE_KEYS.REVIEW_FC, [])),
+    failedSimIds: new Set(loadJSON(STORAGE_KEYS.FAILED_SIM_IDS, [])),
     collapsedModules: new Set(),
     filterStatus: "all", // 'all' | 'pending' | 'completed'
     searchQuery: "",
-    theme: localStorage.getItem(STORAGE_KEYS.THEME) || "light"
+    theme: localStorage.getItem(STORAGE_KEYS.THEME) || "light",
+
+    // Estado Pestaña 3 (Biblioteca PDF)
+    activePdfDocId: "doc-funciones-5am09",
+
+    // Estado Pestaña 4 (Flashcards 3D)
+    fcDeckFilter: "topic", // 'topic' | 'comportamentales' | 'all' | 'review'
+    fcCurrentIndex: 0,
+    fcIsFlipped: false
   };
 
-  // Validar que el activeTopicId exista
   if (!allTopicsFlat.some((t) => t.id === state.activeTopicId)) {
     state.activeTopicId = allTopicsFlat[0].id;
   }
+
+  // Estado interno del Simulador (Pestaña 5) y su Cronómetro
+  const simSession = {
+    mode: "all", // 'all' | 'errors'
+    questions: [],
+    currentIndex: 0,
+    answers: {}, // { [questionId]: 'A' | 'B' | 'C' | 'D' }
+    elapsedSeconds: 0,
+    timerRunning: false,
+    timerInterval: null
+  };
 
   // Referencias al DOM
   const dom = {
@@ -59,7 +95,16 @@
     globalProgressbar: document.getElementById("global-progressbar"),
 
     statCompletedModules: document.getElementById("stat-completed-modules"),
-    statCasesSolved: document.getElementById("stat-cases-solved"),
+    statFlashcardsMastered: document.getElementById("stat-flashcards-mastered"),
+
+    openFichaBtn: document.getElementById("open-ficha-btn"),
+    stripFichaLink: document.getElementById("strip-ficha-link"),
+    convocatoriaModal: document.getElementById("convocatoria-modal"),
+    closeFichaModalBtn: document.getElementById("close-ficha-modal-btn"),
+    modalCompetenciasList: document.getElementById("modal-competencias-list"),
+    modalFuncionesList: document.getElementById("modal-funciones-list"),
+    modalOpenFuncionesPdf: document.getElementById("modal-open-funciones-pdf"),
+    modalOpenComprobantePdf: document.getElementById("modal-open-comprobante-pdf"),
 
     themeToggle: document.getElementById("theme-toggle"),
     themeLabel: document.getElementById("theme-label"),
@@ -73,37 +118,87 @@
     toggleReadBtn: document.getElementById("toggle-read-btn"),
     toggleReadLabel: document.getElementById("toggle-read-label"),
 
+    // Navegación 5 Pestañas
+    studyTabs: document.querySelectorAll(".study-tab"),
+    tabPanels: document.querySelectorAll(".tab-panel"),
+    errorTrayPill: document.getElementById("error-tray-pill"),
+
+    // Pestaña 1: Lectura Ejecutiva y Trampas
     lessonNormativa: document.getElementById("lesson-normativa"),
     lessonTitle: document.getElementById("lesson-title"),
     lessonSummary: document.getElementById("lesson-summary"),
+    trapHeading: document.getElementById("trap-heading"),
+    trapBody: document.getElementById("trap-body"),
+    cargoAppHeading: document.getElementById("cargo-app-heading"),
+    cargoAppBody: document.getElementById("cargo-app-body"),
     lessonBody: document.getElementById("lesson-body"),
     lessonKeypoints: document.getElementById("lesson-keypoints"),
-
     caseStem: document.getElementById("case-stem"),
     caseOptions: document.getElementById("case-options"),
     caseFeedback: document.getElementById("case-feedback"),
-
-    topicNotes: document.getElementById("topic-notes"),
-    notesStatus: document.getElementById("notes-status"),
-
+    goTabVideoBtn: document.getElementById("go-tab-video-btn"),
+    openSimuladorBtn: document.getElementById("open-simulador-btn"),
     prevTopicBtn: document.getElementById("prev-topic-btn"),
     prevTopicTitle: document.getElementById("prev-topic-title"),
     nextTopicBtn: document.getElementById("next-topic-btn"),
     nextTopicTitle: document.getElementById("next-topic-title"),
     completeAndNextBtn: document.getElementById("complete-and-next-btn"),
 
-    // Referencias del Motor de Simulacros
-    lessonView: document.getElementById("lesson-view"),
-    simuladorView: document.getElementById("simulador-view"),
-    openSimuladorBtn: document.getElementById("open-simulador-btn"),
-    closeSimuladorBtn: document.getElementById("close-simulador-btn"),
-    simModuleBadge: document.getElementById("sim-module-badge"),
+    // Pestaña 2: Videoclases y Apuntes Inteligentes
+    videoTabTitle: document.getElementById("video-tab-title"),
+    activeVideoTitle: document.getElementById("active-video-title"),
+    activeVideoYtLink: document.getElementById("active-video-yt-link"),
+    videoIframe: document.getElementById("video-iframe"),
+    videoCardsList: document.getElementById("video-cards-list"),
+    notesTopicIndicator: document.getElementById("notes-topic-indicator"),
+    notesStatus: document.getElementById("notes-status"),
+    topicNotes: document.getElementById("topic-notes"),
+    quickNoteBtns: document.querySelectorAll(".quick-note-btn"),
+    downloadTopicNotesBtn: document.getElementById("download-topic-notes-btn"),
+    downloadAllNotesBtn: document.getElementById("download-all-notes-btn"),
+
+    // Pestaña 3: Biblioteca y Visor PDF
+    pdfCardsGrid: document.getElementById("pdf-cards-grid"),
+    pdfViewerContainer: document.getElementById("pdf-viewer-container"),
+    pdfActiveCategory: document.getElementById("pdf-active-category"),
+    pdfActiveTitle: document.getElementById("pdf-active-title"),
+    pdfExternalBtn: document.getElementById("pdf-external-btn"),
+    pdfFullscreenBtn: document.getElementById("pdf-fullscreen-btn"),
+    pdfArticlesSummary: document.getElementById("pdf-articles-summary"),
+    pdfEmbedViewer: document.getElementById("pdf-embed-viewer"),
+
+    // Pestaña 4: Flashcards 3D
+    fcFilterBtns: document.querySelectorAll(".fc-filter-btn"),
+    fcMasteryCounter: document.getElementById("fc-mastery-counter"),
+    flashcard3d: document.getElementById("flashcard-3d"),
+    fcFrontCategory: document.getElementById("fc-front-category"),
+    fcFrontStatus: document.getElementById("fc-front-status"),
+    fcFrontText: document.getElementById("fc-front-text"),
+    fcCounterLabel: document.getElementById("fc-counter-label"),
+    fcBackRef: document.getElementById("fc-back-ref"),
+    fcBackText: document.getElementById("fc-back-text"),
+    fcPrevBtn: document.getElementById("fc-prev-btn"),
+    fcNextBtn: document.getElementById("fc-next-btn"),
+    fcReviewLaterBtn: document.getElementById("fc-review-later-btn"),
+    fcMasteredBtn: document.getElementById("fc-mastered-btn"),
+
+    // Pestaña 5: Simulador Situacional + Bandeja de Errores + Cronómetro
+    simModeAllBtn: document.getElementById("sim-mode-all-btn"),
+    simModeErrorsBtn: document.getElementById("sim-mode-errors-btn"),
+    simErrorsCountBadge: document.getElementById("sim-errors-count-badge"),
+    simTimerDisplay: document.getElementById("sim-timer-display"),
+    simTimerToggleBtn: document.getElementById("sim-timer-toggle-btn"),
+    simTimerResetBtn: document.getElementById("sim-timer-reset-btn"),
     simTitle: document.getElementById("sim-title"),
     simDescription: document.getElementById("sim-description"),
     simQuestionCounter: document.getElementById("sim-question-counter"),
     simProgressFill: document.getElementById("sim-progress-fill"),
     simQuestionCard: document.getElementById("sim-question-card"),
     simQBadge: document.getElementById("sim-q-badge"),
+    simQModuloTag: document.getElementById("sim-q-modulo-tag"),
+    simQPesoTag: document.getElementById("sim-q-peso-tag"),
+    simQCompTag: document.getElementById("sim-q-comp-tag"),
+    simCaseContext: document.getElementById("sim-case-context"),
     simQuestionText: document.getElementById("sim-question-text"),
     simOptionsGrid: document.getElementById("sim-options-grid"),
     simJustificationBox: document.getElementById("sim-justification-box"),
@@ -112,23 +207,18 @@
     simActionHint: document.getElementById("sim-action-hint"),
     simNextBtn: document.getElementById("sim-next-btn"),
     simNextLabel: document.getElementById("sim-next-label"),
+    simEmptyErrorsCard: document.getElementById("sim-empty-errors-card"),
+    simReturnFullBtn: document.getElementById("sim-return-full-btn"),
     simResultsCard: document.getElementById("sim-results-card"),
     simScoreCircle: document.getElementById("sim-score-circle"),
     simScorePercent: document.getElementById("sim-score-percent"),
     simScoreDetail: document.getElementById("sim-score-detail"),
+    simTimeDetail: document.getElementById("sim-time-detail"),
     simEvalBanner: document.getElementById("sim-eval-banner"),
     simReviewList: document.getElementById("sim-review-list"),
     simRetryBtn: document.getElementById("sim-retry-btn"),
+    simPracticeMistakesBtn: document.getElementById("sim-practice-mistakes-btn"),
     simBackReadingBtn: document.getElementById("sim-back-reading-btn")
-  };
-
-  // Estado interno de la sesión activa del Simulador
-  const simSession = {
-    isActive: false,
-    moduleId: null,
-    questions: [],
-    currentIndex: 0,
-    answers: {} // { [questionId]: 'A' | 'B' | 'C' | 'D' }
   };
 
   /* ==========================================================================
@@ -148,22 +238,76 @@
     try {
       localStorage.setItem(STORAGE_KEYS.COMPLETED, JSON.stringify(Array.from(state.completedTopics)));
       localStorage.setItem(STORAGE_KEYS.ACTIVE_TOPIC, state.activeTopicId);
+      localStorage.setItem(STORAGE_KEYS.ACTIVE_TAB, state.activeTabId);
       localStorage.setItem(STORAGE_KEYS.SOLVED_CASES, JSON.stringify(state.solvedCases));
       localStorage.setItem(STORAGE_KEYS.NOTES, JSON.stringify(state.topicNotes));
+      localStorage.setItem(STORAGE_KEYS.MASTERED_FC, JSON.stringify(Array.from(state.masteredFlashcards)));
+      localStorage.setItem(STORAGE_KEYS.REVIEW_FC, JSON.stringify(Array.from(state.reviewFlashcards)));
+      localStorage.setItem(STORAGE_KEYS.FAILED_SIM_IDS, JSON.stringify(Array.from(state.failedSimIds)));
       localStorage.setItem(STORAGE_KEYS.THEME, state.theme);
     } catch (err) {
-      // Ignorar errores de cuota de almacenamiento local
+      // Ignorar errores de almacenamiento
     }
   }
 
   function escapeHTML(str) {
     const div = document.createElement("div");
-    div.textContent = str;
+    div.textContent = str == null ? "" : String(str);
     return div.innerHTML;
   }
 
+  function formatTimeMMSS(totalSeconds) {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  }
+
   /* ==========================================================================
-     Cálculo y Actualización de la Barra de Progreso Visual General
+     Navegación de las 5 Pestañas Guiadas
+     ========================================================================== */
+
+  function switchTab(tabId) {
+    state.activeTabId = tabId;
+    saveState();
+
+    dom.studyTabs.forEach((btn) => {
+      const isMatch = btn.getAttribute("data-tab") === tabId;
+      btn.classList.toggle("is-active", isMatch);
+      btn.setAttribute("aria-selected", String(isMatch));
+    });
+
+    dom.tabPanels.forEach((panel) => {
+      const isMatch = panel.id === tabId;
+      if (isMatch) {
+        panel.classList.remove("is-hidden");
+      } else {
+        panel.classList.add("is-hidden");
+      }
+    });
+
+    if (tabId === "tab-simulador") {
+      if (simSession.questions.length === 0) {
+        initSimuladorSession("all");
+      } else {
+        startSimTimer();
+      }
+    } else {
+      pauseSimTimer();
+    }
+
+    if (tabId === "tab-flashcards") {
+      renderFlashcardStage();
+    }
+
+    if (tabId === "tab-pdf") {
+      renderPdfLibrary();
+    }
+
+    dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ==========================================================================
+     Cálculo y Actualización de Progreso General y Estadísticas
      ========================================================================== */
 
   function updateGlobalProgress() {
@@ -176,7 +320,6 @@
     dom.globalProgressFill.style.width = `${percentage}%`;
     dom.globalProgressbar.setAttribute("aria-valuenow", String(percentage));
 
-    // Estadísticas del pie del árbol de módulos
     const totalModules = COURSE_DATA.modules.length;
     let completedModulesCount = 0;
 
@@ -187,11 +330,22 @@
       }
     });
 
-    const solvedCasesCount = Object.keys(state.solvedCases).length;
-
     dom.statCompletedModules.textContent = `${completedModulesCount}/${totalModules}`;
-    dom.statCasesSolved.textContent = `${solvedCasesCount}/${totalTopics}`;
+    dom.statFlashcardsMastered.textContent = `${state.masteredFlashcards.size}/${allFlashcardsFlat.length}`;
     dom.modulesSummaryBadge.textContent = `${totalModules} Módulos · ${totalTopics} Temas`;
+
+    updateErrorTrayCounters();
+  }
+
+  function updateErrorTrayCounters() {
+    const errCount = state.failedSimIds.size;
+    dom.simErrorsCountBadge.textContent = String(errCount);
+    if (errCount > 0) {
+      dom.errorTrayPill.hidden = false;
+      dom.errorTrayPill.textContent = String(errCount);
+    } else {
+      dom.errorTrayPill.hidden = true;
+    }
   }
 
   /* ==========================================================================
@@ -235,7 +389,6 @@
       const moduleEl = document.createElement("section");
       moduleEl.className = `module-node${isModComplete ? " is-module-complete" : ""}${isCollapsed ? " is-collapsed" : ""}`;
 
-      // Cabecera del Módulo
       const headerBtn = document.createElement("button");
       headerBtn.type = "button";
       headerBtn.className = "module-node__header";
@@ -265,7 +418,6 @@
         renderModuleTree();
       });
 
-      // Lista de Temas del Módulo
       const topicsList = document.createElement("ul");
       topicsList.className = "module-node__topics";
 
@@ -276,7 +428,6 @@
         const li = document.createElement("li");
         li.className = `topic-item${isActive ? " is-active" : ""}${isCompleted ? " is-completed" : ""}`;
 
-        // Botón Check directo para marcar/desmarcar leído desde el árbol
         const checkBtn = document.createElement("button");
         checkBtn.type = "button";
         checkBtn.className = "topic-item__check-btn";
@@ -298,7 +449,6 @@
           toggleTopicCompletion(topic.id);
         });
 
-        // Botón para abrir el tema en el lector principal
         const selectBtn = document.createElement("button");
         selectBtn.type = "button";
         selectBtn.className = "topic-item__select-btn";
@@ -332,7 +482,7 @@
   }
 
   /* ==========================================================================
-     Renderizado del Tema Activo en el Lector Principal
+     PESTAÑA 1: Renderizado de Lectura Ejecutiva, Trampas y Aplicación 5AM-09
      ========================================================================== */
 
   function renderActiveLesson() {
@@ -355,7 +505,17 @@
     dom.lessonTitle.textContent = `${topic.code}. ${topic.title}`;
     dom.lessonSummary.textContent = topic.summary;
 
-    // 3. Secciones estructuradas del tema
+    // 3. Cajas destacadas: Trampa del Examen y Aplicación Práctica Cargo 5AM-09
+    if (topic.trampaExamen) {
+      dom.trapHeading.textContent = topic.trampaExamen.titulo;
+      dom.trapBody.textContent = topic.trampaExamen.alerta;
+    }
+    if (topic.aplicacionCargo5AM09) {
+      dom.cargoAppHeading.textContent = topic.aplicacionCargo5AM09.titulo;
+      dom.cargoAppBody.textContent = topic.aplicacionCargo5AM09.descripcion;
+    }
+
+    // 4. Secciones estructuradas del tema
     dom.lessonBody.innerHTML = "";
     topic.sections.forEach((sec) => {
       const secEl = document.createElement("section");
@@ -404,19 +564,23 @@
       dom.lessonBody.appendChild(secEl);
     });
 
-    // 4. Puntos Clave de Examen
+    // 5. Puntos Clave de Examen
     dom.lessonKeypoints.innerHTML = topic.keyPoints
       .map((pt) => `<li><span>${escapeHTML(pt)}</span></li>`)
       .join("");
 
-    // 5. Caso Práctico Evaluativo
+    // 6. Caso Práctico Evaluativo del Tema
     renderCaseStudy(topic);
 
-    // 6. Notas Personales del Tema
-    dom.topicNotes.value = state.topicNotes[topic.id] || "";
-    dom.notesStatus.textContent = "Sincronizado localmente";
+    // 7. Sincronizar Pestaña 2 (Videoclases y Apuntes del Tema)
+    renderVideoAndNotesTab(topic);
 
-    // 7. Botones de navegación inferior (Anterior / Siguiente)
+    // 8. Sincronizar Pestaña 4 (Flashcards del Tema)
+    state.fcCurrentIndex = 0;
+    state.fcIsFlipped = false;
+    renderFlashcardStage();
+
+    // 9. Botones de navegación inferior (Anterior / Siguiente)
     const prevTopic = currentIndex > 0 ? allTopicsFlat[currentIndex - 1] : null;
     const nextTopic = currentIndex < allTopicsFlat.length - 1 ? allTopicsFlat[currentIndex + 1] : null;
 
@@ -443,10 +607,6 @@
       dom.toggleReadLabel.textContent = "Marcar como leído";
     }
   }
-
-  /* ==========================================================================
-     Renderizado e Interacción del Caso Práctico Situacional
-     ========================================================================== */
 
   function renderCaseStudy(topic) {
     const cq = topic.caseQuestion;
@@ -501,7 +661,210 @@
   }
 
   /* ==========================================================================
-     Motor de Simulacros Oficial (60% Peso Eliminatorio - Umbral 65%)
+     PESTAÑA 2: Videoclases y Apuntes Inteligentes (Con exportación .txt)
+     ========================================================================== */
+
+  function renderVideoAndNotesTab(topic) {
+    dom.videoTabTitle.textContent = `Videoclases y Apuntes · Tema ${topic.code}: ${topic.title}`;
+    dom.notesTopicIndicator.textContent = `Apuntes asociados a: Tema ${topic.code} (${topic.title})`;
+    dom.topicNotes.value = state.topicNotes[topic.id] || "";
+    dom.notesStatus.textContent = "Sincronizado en localStorage ✓";
+
+    const videos = Array.isArray(topic.videos) && topic.videos.length > 0 ? topic.videos : [];
+    dom.videoCardsList.innerHTML = "";
+
+    if (videos.length > 0) {
+      loadVideoInPlayer(videos[0], 0, videos);
+    }
+
+    videos.forEach((vid, idx) => {
+      const card = document.createElement("div");
+      card.className = `video-card-item${idx === 0 ? " is-active" : ""}`;
+      card.innerHTML = `
+        <div>
+          <div class="video-card-item__title">▶ ${escapeHTML(vid.titulo)}</div>
+          <div class="video-card-item__meta">${escapeHTML(vid.canal)} · Duración: ${escapeHTML(vid.duracion)}</div>
+        </div>
+        <a href="${escapeHTML(vid.searchUrl)}" target="_blank" rel="noopener noreferrer" class="btn-yt-external" onclick="event.stopPropagation();">
+          Abrir en YouTube ↗
+        </a>
+      `;
+      card.addEventListener("click", () => {
+        loadVideoInPlayer(vid, idx, videos);
+      });
+      dom.videoCardsList.appendChild(card);
+    });
+  }
+
+  function loadVideoInPlayer(vid, activeIdx) {
+    dom.activeVideoTitle.textContent = vid.titulo;
+    dom.activeVideoYtLink.href = vid.searchUrl;
+    dom.videoIframe.src = vid.embedUrl;
+
+    const allCards = dom.videoCardsList.querySelectorAll(".video-card-item");
+    allCards.forEach((c, i) => {
+      c.classList.toggle("is-active", i === activeIdx);
+    });
+  }
+
+  function downloadTextFile(filename, content) {
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function exportCurrentTopicNotes() {
+    const topic = allTopicsFlat.find((t) => t.id === state.activeTopicId) || allTopicsFlat[0];
+    const notes = (state.topicNotes[topic.id] || "").trim();
+    const header = [
+      "======================================================================",
+      "PROCURADURÍA GENERAL DE LA NACIÓN · CONVOCATORIA 243 - 2026",
+      "EMPLEO: AUXILIAR ADMINISTRATIVO (CÓDIGO 5AM-09) · RADICADO #230688",
+      `MÓDULO: ${topic.moduleCode} - ${topic.moduleTitle}`,
+      `TEMA ${topic.code}: ${topic.title}`,
+      `NORMATIVA: ${topic.normativa.join(", ")}`,
+      "======================================================================",
+      "",
+      notes || "(Sin apuntes registrados todavía para este tema.)",
+      ""
+    ].join("\r\n");
+
+    downloadTextFile(`Apuntes_PGN243_Tema_${topic.code.replace(".", "_")}.txt`, header);
+  }
+
+  function exportAllCourseNotes() {
+    const lines = [
+      "======================================================================",
+      "CUADERNO INTEGRAL DE APUNTES · CONVOCATORIA PROCURADURÍA 243 - 2026",
+      "CARGO: AUXILIAR ADMINISTRATIVO (5AM-09) · RADICADO #230688 (ADMITIDO)",
+      "======================================================================",
+      ""
+    ];
+
+    allTopicsFlat.forEach((t) => {
+      const note = (state.topicNotes[t.id] || "").trim();
+      lines.push(`----------------------------------------------------------------------`);
+      lines.push(`[${t.moduleCode}] TEMA ${t.code}: ${t.title}`);
+      lines.push(`----------------------------------------------------------------------`);
+      lines.push(note || "(Sin apuntes registrados en este tema)");
+      lines.push("");
+    });
+
+    downloadTextFile("Cuaderno_Completo_Procuraduria_243_2026_5AM09.txt", lines.join("\r\n"));
+  }
+
+  /* ==========================================================================
+     PESTAÑA 3: Biblioteca Oficial y Visor PDF Integrado (Normograma)
+     ========================================================================== */
+
+  function renderPdfLibrary() {
+    if (typeof BIBLIOTECA_NORMOGRAMA === "undefined") return;
+    dom.pdfCardsGrid.innerHTML = "";
+
+    const activeDoc =
+      BIBLIOTECA_NORMOGRAMA.find((d) => d.id === state.activePdfDocId) || BIBLIOTECA_NORMOGRAMA[0];
+
+    BIBLIOTECA_NORMOGRAMA.forEach((doc) => {
+      const isSelected = doc.id === activeDoc.id;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `pdf-doc-card${isSelected ? " is-active" : ""}`;
+      btn.innerHTML = `
+        <div>
+          <span class="pdf-doc-card__cat">${escapeHTML(doc.categoria)}</span>
+          <h3 class="pdf-doc-card__title">${escapeHTML(doc.titulo)}</h3>
+          <p class="pdf-doc-card__desc">${escapeHTML(doc.descripcion)}</p>
+        </div>
+        <div class="pdf-doc-card__footer">
+          <span>${escapeHTML(doc.subtitulo)}</span>
+          <span>Cargar en Visor →</span>
+        </div>
+      `;
+      btn.addEventListener("click", () => {
+        state.activePdfDocId = doc.id;
+        renderPdfLibrary();
+      });
+      dom.pdfCardsGrid.appendChild(btn);
+    });
+
+    // Actualizar el visor activo
+    dom.pdfActiveCategory.textContent = activeDoc.categoria;
+    dom.pdfActiveTitle.textContent = activeDoc.titulo;
+    dom.pdfExternalBtn.href = activeDoc.urlExterna || activeDoc.url;
+    dom.pdfEmbedViewer.src = activeDoc.url;
+
+    if (Array.isArray(activeDoc.resumenArticulos) && activeDoc.resumenArticulos.length > 0) {
+      dom.pdfArticlesSummary.hidden = false;
+      dom.pdfArticlesSummary.innerHTML = `
+        <strong>Artículos Clave Evaluables en el Concurso:</strong>
+        <ul class="content-bullets" style="margin-top: 0.45rem;">
+          ${activeDoc.resumenArticulos.map((a) => `<li>${escapeHTML(a)}</li>`).join("")}
+        </ul>
+      `;
+    } else {
+      dom.pdfArticlesSummary.hidden = true;
+    }
+  }
+
+  /* ==========================================================================
+     PESTAÑA 4: Laboratorio Activo de Flashcards 3D
+     ========================================================================== */
+
+  function getActiveFlashcardDeck() {
+    if (state.fcDeckFilter === "comportamentales") {
+      return FLASHCARDS_COMPORTAMENTALES_5AM09;
+    }
+    if (state.fcDeckFilter === "topic") {
+      const topic = allTopicsFlat.find((t) => t.id === state.activeTopicId) || allTopicsFlat[0];
+      return Array.isArray(topic.flashcards) && topic.flashcards.length > 0
+        ? topic.flashcards
+        : allFlashcardsFlat;
+    }
+    if (state.fcDeckFilter === "review") {
+      const reviewList = allFlashcardsFlat.filter(
+        (fc) => state.reviewFlashcards.has(fc.id) || !state.masteredFlashcards.has(fc.id)
+      );
+      return reviewList.length > 0 ? reviewList : allFlashcardsFlat;
+    }
+    return allFlashcardsFlat;
+  }
+
+  function renderFlashcardStage() {
+    const deck = getActiveFlashcardDeck();
+    if (deck.length === 0) return;
+
+    if (state.fcCurrentIndex >= deck.length) {
+      state.fcCurrentIndex = 0;
+    }
+    if (state.fcCurrentIndex < 0) {
+      state.fcCurrentIndex = deck.length - 1;
+    }
+
+    const currentCard = deck[state.fcCurrentIndex];
+    const isMastered = state.masteredFlashcards.has(currentCard.id);
+
+    dom.flashcard3d.classList.toggle("is-flipped", state.fcIsFlipped);
+    dom.fcFrontCategory.textContent = currentCard.categoria;
+    dom.fcFrontStatus.textContent = isMastered ? "Dominada ✓" : "Por dominar";
+    dom.fcFrontStatus.className = `fc-status-tag${isMastered ? " is-mastered" : ""}`;
+    dom.fcFrontText.textContent = currentCard.frente;
+    dom.fcCounterLabel.textContent = `Tarjeta ${state.fcCurrentIndex + 1} de ${deck.length}`;
+
+    dom.fcBackRef.textContent = currentCard.referencia;
+    dom.fcBackText.textContent = currentCard.reverso;
+
+    const masteredInDeck = deck.filter((c) => state.masteredFlashcards.has(c.id)).length;
+    dom.fcMasteryCounter.textContent = `${masteredInDeck} de ${deck.length} dominadas en este mazo`;
+  }
+
+  /* ==========================================================================
+     PESTAÑA 5: Simulador de Juicio Situacional + Cronómetro + Bandeja de Errores
      ========================================================================== */
 
   function parseOptionString(rawOption, index) {
@@ -519,60 +882,64 @@
     };
   }
 
-  function openSimulador() {
-    if (typeof simuladorData === "undefined" || !Array.isArray(simuladorData) || simuladorData.length === 0) {
+  function startSimTimer() {
+    if (simSession.timerRunning) return;
+    simSession.timerRunning = true;
+    dom.simTimerToggleBtn.textContent = "Pausar";
+    simSession.timerInterval = setInterval(() => {
+      simSession.elapsedSeconds += 1;
+      dom.simTimerDisplay.textContent = formatTimeMMSS(simSession.elapsedSeconds);
+    }, 1000);
+  }
+
+  function pauseSimTimer() {
+    simSession.timerRunning = false;
+    dom.simTimerToggleBtn.textContent = "Reanudar";
+    if (simSession.timerInterval) {
+      clearInterval(simSession.timerInterval);
+      simSession.timerInterval = null;
+    }
+  }
+
+  function resetSimTimer() {
+    pauseSimTimer();
+    simSession.elapsedSeconds = 0;
+    dom.simTimerDisplay.textContent = "00:00";
+  }
+
+  function initSimuladorSession(mode) {
+    simSession.mode = mode;
+    dom.simModeAllBtn.classList.toggle("is-active", mode === "all");
+    dom.simModeErrorsBtn.classList.toggle("is-active", mode === "errors");
+
+    const baseQuestions = Array.isArray(simuladorData) ? simuladorData : [];
+
+    if (mode === "errors") {
+      simSession.questions = baseQuestions.filter((q, idx) => {
+        const qKey = q.id || `sim-q${idx + 1}`;
+        return state.failedSimIds.has(qKey);
+      });
+    } else {
+      simSession.questions = [...baseQuestions];
+    }
+
+    simSession.currentIndex = 0;
+    simSession.answers = {};
+    resetSimTimer();
+
+    if (simSession.questions.length === 0 && mode === "errors") {
+      dom.simQuestionCard.hidden = true;
+      dom.simResultsCard.hidden = true;
+      dom.simEmptyErrorsCard.hidden = false;
       return;
     }
 
-    simSession.isActive = true;
-    simSession.questions = simuladorData;
-    simSession.currentIndex = 0;
-    simSession.answers = {};
-
-    dom.simModuleBadge.textContent = "SIMULACRO OFICIAL INTEGRAL · PESO ELIMINATORIO 60%";
-    dom.simTitle.textContent = "Evaluación Oficial de Conocimientos (10 Preguntas)";
-    dom.simDescription.textContent =
-      "Banco oficial de preguntas sobre Gestión Documental, Atención al Usuario, Inventarios y Estructura PGN. Puntaje mínimo aprobatorio: 65%.";
-
+    dom.simEmptyErrorsCard.hidden = true;
     dom.simResultsCard.hidden = true;
     dom.simQuestionCard.hidden = false;
 
+    startSimTimer();
     renderSimQuestion();
-
-    // Transición suave: ocultar lectura teórica y mostrar simulador
-    dom.lessonView.classList.add("is-fading-out");
-    setTimeout(() => {
-      dom.lessonView.classList.add("is-hidden");
-      dom.simuladorView.classList.remove("is-hidden");
-      dom.simuladorView.classList.add("is-fading-out");
-      requestAnimationFrame(() => {
-        dom.simuladorView.classList.remove("is-fading-out");
-      });
-      dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
-    }, 220);
-  }
-
-  function closeSimulador(immediate) {
-    if (!simSession.isActive) return;
-    simSession.isActive = false;
-
-    if (immediate) {
-      dom.simuladorView.classList.add("is-hidden");
-      dom.simuladorView.classList.remove("is-fading-out");
-      dom.lessonView.classList.remove("is-hidden", "is-fading-out");
-      return;
-    }
-
-    dom.simuladorView.classList.add("is-fading-out");
-    setTimeout(() => {
-      dom.simuladorView.classList.add("is-hidden");
-      dom.lessonView.classList.remove("is-hidden");
-      dom.lessonView.classList.add("is-fading-out");
-      requestAnimationFrame(() => {
-        dom.lessonView.classList.remove("is-fading-out");
-      });
-      dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
-    }, 220);
   }
 
   function renderSimQuestion() {
@@ -581,17 +948,26 @@
     const qObj = simSession.questions[idx];
     if (!qObj) return;
 
+    const qKey = qObj.id || `sim-q${idx + 1}`;
     const progressPct = Math.round(((idx + 1) / total) * 100);
+
     dom.simQuestionCounter.textContent = `Pregunta ${idx + 1} de ${total}`;
     dom.simProgressFill.style.width = `${progressPct}%`;
-    dom.simQBadge.textContent = `PREGUNTA ${idx + 1} DE ${total} · EJE: ${qObj.modulo.toUpperCase()}`;
+    dom.simQBadge.textContent = `ÍTEM SITUACIONAL ${idx + 1} DE ${total}`;
+    dom.simQModuloTag.textContent = `Módulo: ${qObj.modulo}`;
+    dom.simQPesoTag.textContent = qObj.peso_evaluado || "Conocimientos (60% · Eliminatorio)";
+    dom.simQCompTag.textContent = qObj.competencia_asociada || "Competencia Funcional 5AM-09";
+
+    dom.simCaseContext.textContent =
+      qObj.caso_situacional ||
+      "En el ejercicio diario de sus funciones como Auxiliar Administrativo 5AM-09 en la Procuraduría General de la Nación, se presenta la siguiente situación administrativa:";
     dom.simQuestionText.textContent = qObj.pregunta;
 
     dom.simOptionsGrid.innerHTML = "";
     dom.simJustificationBox.hidden = true;
     dom.simJustificationBox.className = "sim-justification-box";
 
-    const selectedLetter = simSession.answers[idx];
+    const selectedLetter = simSession.answers[qKey];
     const correctLetter = String(qObj.respuesta_correcta).toUpperCase();
 
     qObj.opciones.forEach((rawOpt, optIdx) => {
@@ -614,8 +990,17 @@
       }
 
       btn.addEventListener("click", () => {
-        if (simSession.answers[idx]) return; // Respuesta ya registrada en esta pregunta
-        simSession.answers[idx] = parsed.letter;
+        if (simSession.answers[qKey]) return;
+        simSession.answers[qKey] = parsed.letter;
+
+        // Actualizar Bandeja de Errores en localStorage
+        if (parsed.letter !== correctLetter) {
+          state.failedSimIds.add(qKey);
+        } else {
+          state.failedSimIds.delete(qKey);
+        }
+        saveState();
+        updateErrorTrayCounters();
         renderSimQuestion();
       });
 
@@ -628,23 +1013,24 @@
       dom.simJustificationBox.classList.add(isCorrect ? "is-correct" : "is-wrong");
       dom.simJustificationStatus.textContent = isCorrect
         ? `✓ ¡Respuesta Correcta! (Opción ${correctLetter})`
-        : `✕ Respuesta Incorrecta. Seleccionaste ${selectedLetter} y la opción correcta es la ${correctLetter}.`;
+        : `✕ Respuesta Incorrecta. Seleccionaste ${selectedLetter} y la opción correcta es la ${correctLetter}. (Agregada a tu Bandeja de Errores)`;
       dom.simJustificationText.textContent = qObj.justificacion;
 
       dom.simNextBtn.disabled = false;
       dom.simActionHint.textContent =
         idx < total - 1
-          ? "Revisa la justificación normativa y avanza a la siguiente pregunta."
-          : "Has respondido las 10 preguntas. Haz clic para ver tu puntaje final y justificaciones.";
-      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Ver Puntaje";
+          ? "Analiza la justificación normativa y avanza al siguiente caso situacional."
+          : "Has completado todos los ítems. Haz clic para calcular tu puntaje final.";
+      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Calificar";
     } else {
       dom.simNextBtn.disabled = true;
-      dom.simActionHint.textContent = "Selecciona una de las 4 opciones (A, B, C o D) para validar tu respuesta.";
-      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Ver Puntaje";
+      dom.simActionHint.textContent = "Selecciona una opción (A, B, C o D) para validar el caso situacional.";
+      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Calificar";
     }
   }
 
   function renderSimResults() {
+    pauseSimTimer();
     dom.simQuestionCard.hidden = true;
     dom.simResultsCard.hidden = false;
 
@@ -652,7 +1038,8 @@
     let correctCount = 0;
 
     simSession.questions.forEach((q, idx) => {
-      const userAns = simSession.answers[idx];
+      const qKey = q.id || `sim-q${idx + 1}`;
+      const userAns = simSession.answers[qKey];
       if (userAns === String(q.respuesta_correcta).toUpperCase()) {
         correctCount += 1;
       }
@@ -662,7 +1049,10 @@
     const isPassed = percentage >= 65;
 
     dom.simScorePercent.textContent = `${percentage}%`;
-    dom.simScoreDetail.textContent = `Obtuviste ${correctCount} de ${total} respuestas correctas en el simulacro oficial (Umbral mínimo exigido: 65%).`;
+    dom.simScoreDetail.textContent = `Obtuviste ${correctCount} de ${total} aciertos (${
+      simSession.mode === "errors" ? "Modo Repaso de Errores" : "Simulacro Oficial de 10 Preguntas"
+    } · Umbral mínimo aprobatorio: 65%).`;
+    dom.simTimeDetail.textContent = `Tiempo total empleado: ${formatTimeMMSS(simSession.elapsedSeconds)}`;
 
     dom.simScoreCircle.className = `sim-score-circle ${isPassed ? "is-passed" : "is-failed"}`;
 
@@ -673,19 +1063,26 @@
     if (isPassed) {
       dom.simEvalBanner.innerHTML = `
         <div class="sim-eval-banner__title">✓ ¡Simulacro Aprobado Satisfactoriamente! (${percentage}% de aciertos)</div>
-        <p>Has alcanzado o superado el puntaje mínimo aprobatorio del <strong>65%</strong> exigido para la prueba eliminatoria de conocimientos de la Convocatoria Procuraduría 243-2026.</p>
+        <p>Has alcanzado o superado el puntaje mínimo aprobatorio del <strong>65%</strong> exigido para la prueba eliminatoria de Conocimientos (60%) y estás en ruta hacia el <strong>70% ponderado para Lista de Elegibles</strong>.</p>
       `;
     } else {
       dom.simEvalBanner.innerHTML = `
         <div class="sim-eval-banner__title">⚠ Alerta de Refuerzo Académico (${percentage}% de aciertos)</div>
-        <p>Tu porcentaje de aciertos es inferior al umbral mínimo del <strong>65%</strong>. Te recomendamos revisar las justificaciones normativas a continuación, repasar los módulos teóricos e intentar nuevamente el simulacro.</p>
+        <p>Tu porcentaje de aciertos es inferior al umbral mínimo del <strong>65%</strong>. Revisa la fundamentación de cada caso situacional abajo y usa el botón <strong>"Repasar Mis Errores"</strong> para entrenar únicamente las preguntas falladas.</p>
       `;
+    }
+
+    // Mostrar botón de repasar errores si hay preguntas en la bandeja de errores
+    dom.simPracticeMistakesBtn.hidden = state.failedSimIds.size === 0;
+    if (state.failedSimIds.size > 0) {
+      dom.simPracticeMistakesBtn.textContent = `Repasar Mis Errores (${state.failedSimIds.size})`;
     }
 
     // Listado de revisión pregunta por pregunta con su justificación
     dom.simReviewList.innerHTML = "";
     simSession.questions.forEach((q, i) => {
-      const userAns = simSession.answers[i] || "Sin responder";
+      const qKey = q.id || `sim-q${i + 1}`;
+      const userAns = simSession.answers[qKey] || "Sin responder";
       const correctLetter = String(q.respuesta_correcta).toUpperCase();
       const ok = userAns === correctLetter;
       const correctOptionFull =
@@ -694,11 +1091,13 @@
       const item = document.createElement("div");
       item.className = "sim-review-item";
       item.innerHTML = `
-        <div class="sim-review-item__q">${i + 1}. [${escapeHTML(q.modulo)}] ${escapeHTML(q.pregunta)}</div>
+        <div class="sim-review-item__q">${i + 1}. [${escapeHTML(q.modulo)} · ${escapeHTML(
+          q.peso_evaluado || "60%"
+        )}] ${escapeHTML(q.pregunta)}</div>
         <div class="sim-review-item__ans ${ok ? "is-ok" : "is-bad"}">
           Tu respuesta: ${escapeHTML(userAns)} · Respuesta Correcta: ${escapeHTML(correctOptionFull)}
         </div>
-        <div class="sim-review-item__just"><strong>Justificación:</strong> ${escapeHTML(q.justificacion)}</div>
+        <div class="sim-review-item__just"><strong>Justificación Oficial:</strong> ${escapeHTML(q.justificacion)}</div>
       `;
       dom.simReviewList.appendChild(item);
     });
@@ -707,16 +1106,46 @@
   }
 
   /* ==========================================================================
-     Acciones de Usuario y Eventos
+     Modal Oficial "Mi Convocatoria · Cargo 5AM-09"
+     ========================================================================== */
+
+  function populateConvocatoriaModal() {
+    if (typeof CONVOCATORIA_FICHA === "undefined") return;
+
+    dom.modalCompetenciasList.innerHTML = CONVOCATORIA_FICHA.competenciasComportamentales
+      .map(
+        (c) => `
+        <div class="comp-item-card">
+          <div class="comp-item-card__top">
+            <span class="comp-item-card__name">${escapeHTML(c.nombre)}</span>
+            <span class="comp-item-card__level">${escapeHTML(c.nivel)}</span>
+          </div>
+          <p class="comp-item-card__desc">${escapeHTML(c.ConductaClave)}</p>
+        </div>
+      `
+      )
+      .join("");
+
+    dom.modalFuncionesList.innerHTML = CONVOCATORIA_FICHA.funcionesOficiales
+      .map((fn) => `<li>${escapeHTML(fn)}</li>`)
+      .join("");
+  }
+
+  function openConvocatoriaModal() {
+    dom.convocatoriaModal.hidden = false;
+  }
+
+  function closeConvocatoriaModal() {
+    dom.convocatoriaModal.hidden = true;
+  }
+
+  /* ==========================================================================
+     Acciones Generales de Usuario y Eventos
      ========================================================================== */
 
   function selectTopic(topicId) {
-    if (simSession.isActive) {
-      closeSimulador(true);
-    }
     state.activeTopicId = topicId;
 
-    // Asegurar que el módulo del tema activo esté expandido
     const topicObj = allTopicsFlat.find((t) => t.id === topicId);
     if (topicObj) {
       state.collapsedModules.delete(topicObj.moduleId);
@@ -727,7 +1156,6 @@
     renderActiveLesson();
     dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
 
-    // Cerrar panel lateral en vista móvil tras seleccionar
     if (window.innerWidth <= 980) {
       dom.sidebar.classList.remove("is-open");
     }
@@ -771,12 +1199,50 @@
   }
 
   function bindEvents() {
-    // Alternar estado de lectura del tema actual
+    // 1. Pestañas de Secuencia Guiada (1 a 5)
+    dom.studyTabs.forEach((tabBtn) => {
+      tabBtn.addEventListener("click", () => {
+        const targetTab = tabBtn.getAttribute("data-tab");
+        switchTab(targetTab);
+      });
+    });
+
+    // 2. Modal de Mi Convocatoria (Cargo 5AM-09)
+    dom.openFichaBtn.addEventListener("click", openConvocatoriaModal);
+    dom.stripFichaLink.addEventListener("click", openConvocatoriaModal);
+    dom.closeFichaModalBtn.addEventListener("click", closeConvocatoriaModal);
+    dom.convocatoriaModal.addEventListener("click", (e) => {
+      if (e.target === dom.convocatoriaModal) {
+        closeConvocatoriaModal();
+      }
+    });
+
+    dom.modalOpenFuncionesPdf.addEventListener("click", () => {
+      closeConvocatoriaModal();
+      state.activePdfDocId = "doc-funciones-5am09";
+      switchTab("tab-pdf");
+    });
+
+    dom.modalOpenComprobantePdf.addEventListener("click", () => {
+      closeConvocatoriaModal();
+      state.activePdfDocId = "doc-comprobante-230688";
+      switchTab("tab-pdf");
+    });
+
+    // 3. Eventos de Pestaña 1 (Lectura Ejecutiva)
     dom.toggleReadBtn.addEventListener("click", () => {
       toggleTopicCompletion(state.activeTopicId);
     });
 
-    // Botón primario: Marcar como leído y avanzar al siguiente tema
+    dom.goTabVideoBtn.addEventListener("click", () => {
+      switchTab("tab-video");
+    });
+
+    dom.openSimuladorBtn.addEventListener("click", () => {
+      initSimuladorSession("all");
+      switchTab("tab-simulador");
+    });
+
     dom.completeAndNextBtn.addEventListener("click", () => {
       state.completedTopics.add(state.activeTopicId);
       const currentIndex = allTopicsFlat.findIndex((t) => t.id === state.activeTopicId);
@@ -790,7 +1256,6 @@
       }
     });
 
-    // Navegación Anterior / Siguiente
     dom.prevTopicBtn.addEventListener("click", () => {
       const currentIndex = allTopicsFlat.findIndex((t) => t.id === state.activeTopicId);
       if (currentIndex > 0) {
@@ -805,27 +1270,7 @@
       }
     });
 
-    // Búsqueda en vivo en el Árbol de Módulos
-    dom.topicSearch.addEventListener("input", (e) => {
-      state.searchQuery = e.target.value;
-      renderModuleTree();
-    });
-
-    // Pestañas de filtro (Todos / Pendientes / Leídos)
-    dom.filterTabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        dom.filterTabs.forEach((t) => {
-          t.classList.remove("is-active");
-          t.setAttribute("aria-selected", "false");
-        });
-        tab.classList.add("is-active");
-        tab.setAttribute("aria-selected", "true");
-        state.filterStatus = tab.getAttribute("data-filter");
-        renderModuleTree();
-      });
-    });
-
-    // Guardado automático de apuntes por tema
+    // 4. Eventos de Pestaña 2 (Videoclases y Apuntes Inteligentes)
     let notesTimeout = null;
     dom.topicNotes.addEventListener("input", (e) => {
       dom.notesStatus.textContent = "Guardando...";
@@ -833,45 +1278,120 @@
       clearTimeout(notesTimeout);
       notesTimeout = setTimeout(() => {
         saveState();
-        dom.notesStatus.textContent = "Guardado en navegador ✓";
-      }, 350);
+        dom.notesStatus.textContent = "Autoguardado en localStorage ✓";
+      }, 300);
     });
 
-    // Modo Nocturno / Claro
-    dom.themeToggle.addEventListener("click", () => {
-      applyTheme(state.theme === "dark" ? "light" : "dark");
+    dom.quickNoteBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const snippet = btn.getAttribute("data-snippet") || "";
+        const currentVal = dom.topicNotes.value;
+        const prefix = currentVal.length > 0 && !currentVal.endsWith("\n") ? "\n" : "";
+        dom.topicNotes.value = `${currentVal}${prefix}${snippet}`;
+        state.topicNotes[state.activeTopicId] = dom.topicNotes.value;
+        saveState();
+        dom.notesStatus.textContent = "Etiqueta insertada ✓";
+        dom.topicNotes.focus();
+      });
     });
 
-    // Reiniciar Progreso
-    dom.resetProgressBtn.addEventListener("click", () => {
-      const confirmReset = window.confirm(
-        "¿Deseas reiniciar el progreso de temas leídos y respuestas de casos prácticos? (Tus apuntes personales se conservarán)."
-      );
-      if (!confirmReset) return;
-      state.completedTopics.clear();
-      state.solvedCases = {};
+    dom.downloadTopicNotesBtn.addEventListener("click", exportCurrentTopicNotes);
+    dom.downloadAllNotesBtn.addEventListener("click", exportAllCourseNotes);
+
+    // 5. Eventos de Pestaña 3 (Visor PDF Pantalla Completa)
+    dom.pdfFullscreenBtn.addEventListener("click", () => {
+      if (dom.pdfViewerContainer.requestFullscreen) {
+        dom.pdfViewerContainer.requestFullscreen();
+      }
+    });
+
+    // 6. Eventos de Pestaña 4 (Flashcards 3D)
+    dom.flashcard3d.addEventListener("click", () => {
+      state.fcIsFlipped = !state.fcIsFlipped;
+      dom.flashcard3d.classList.toggle("is-flipped", state.fcIsFlipped);
+    });
+
+    dom.flashcard3d.addEventListener("keydown", (e) => {
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        state.fcIsFlipped = !state.fcIsFlipped;
+        dom.flashcard3d.classList.toggle("is-flipped", state.fcIsFlipped);
+      }
+    });
+
+    dom.fcFilterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        dom.fcFilterBtns.forEach((b) => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        state.fcDeckFilter = btn.getAttribute("data-deck");
+        state.fcCurrentIndex = 0;
+        state.fcIsFlipped = false;
+        renderFlashcardStage();
+      });
+    });
+
+    dom.fcPrevBtn.addEventListener("click", () => {
+      state.fcCurrentIndex -= 1;
+      state.fcIsFlipped = false;
+      renderFlashcardStage();
+    });
+
+    dom.fcNextBtn.addEventListener("click", () => {
+      state.fcCurrentIndex += 1;
+      state.fcIsFlipped = false;
+      renderFlashcardStage();
+    });
+
+    dom.fcMasteredBtn.addEventListener("click", () => {
+      const deck = getActiveFlashcardDeck();
+      const card = deck[state.fcCurrentIndex];
+      if (!card) return;
+      state.masteredFlashcards.add(card.id);
+      state.reviewFlashcards.delete(card.id);
       saveState();
       updateGlobalProgress();
-      renderModuleTree();
-      renderActiveLesson();
+      state.fcCurrentIndex += 1;
+      state.fcIsFlipped = false;
+      renderFlashcardStage();
     });
 
-    // Menú lateral en pantallas móviles
-    dom.sidebarToggle.addEventListener("click", () => {
-      dom.sidebar.classList.toggle("is-open");
+    dom.fcReviewLaterBtn.addEventListener("click", () => {
+      const deck = getActiveFlashcardDeck();
+      const card = deck[state.fcCurrentIndex];
+      if (!card) return;
+      state.reviewFlashcards.add(card.id);
+      state.masteredFlashcards.delete(card.id);
+      saveState();
+      updateGlobalProgress();
+      state.fcCurrentIndex += 1;
+      state.fcIsFlipped = false;
+      renderFlashcardStage();
     });
 
-    // Eventos del Motor de Simulacros (60% Peso Eliminatorio)
-    dom.openSimuladorBtn.addEventListener("click", () => {
-      openSimulador();
+    // 7. Eventos de Pestaña 5 (Simulador Situacional + Bandeja de Errores + Cronómetro)
+    dom.simModeAllBtn.addEventListener("click", () => {
+      initSimuladorSession("all");
     });
 
-    dom.closeSimuladorBtn.addEventListener("click", () => {
-      closeSimulador(false);
+    dom.simModeErrorsBtn.addEventListener("click", () => {
+      initSimuladorSession("errors");
     });
 
-    dom.simBackReadingBtn.addEventListener("click", () => {
-      closeSimulador(false);
+    dom.simReturnFullBtn.addEventListener("click", () => {
+      initSimuladorSession("all");
+    });
+
+    dom.simTimerToggleBtn.addEventListener("click", () => {
+      if (simSession.timerRunning) {
+        pauseSimTimer();
+      } else {
+        startSimTimer();
+      }
+    });
+
+    dom.simTimerResetBtn.addEventListener("click", () => {
+      resetSimTimer();
+      startSimTimer();
     });
 
     dom.simNextBtn.addEventListener("click", () => {
@@ -886,12 +1406,60 @@
     });
 
     dom.simRetryBtn.addEventListener("click", () => {
-      simSession.currentIndex = 0;
-      simSession.answers = {};
-      dom.simResultsCard.hidden = true;
-      dom.simQuestionCard.hidden = false;
-      renderSimQuestion();
-      dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
+      initSimuladorSession("all");
+    });
+
+    dom.simPracticeMistakesBtn.addEventListener("click", () => {
+      initSimuladorSession("errors");
+    });
+
+    dom.simBackReadingBtn.addEventListener("click", () => {
+      switchTab("tab-lectura");
+    });
+
+    // 8. Búsqueda y Filtros del Árbol de Módulos
+    dom.topicSearch.addEventListener("input", (e) => {
+      state.searchQuery = e.target.value;
+      renderModuleTree();
+    });
+
+    dom.filterTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        dom.filterTabs.forEach((t) => {
+          t.classList.remove("is-active");
+          t.setAttribute("aria-selected", "false");
+        });
+        tab.classList.add("is-active");
+        tab.setAttribute("aria-selected", "true");
+        state.filterStatus = tab.getAttribute("data-filter");
+        renderModuleTree();
+      });
+    });
+
+    // 9. Modo Nocturno y Reinicio General
+    dom.themeToggle.addEventListener("click", () => {
+      applyTheme(state.theme === "dark" ? "light" : "dark");
+    });
+
+    dom.resetProgressBtn.addEventListener("click", () => {
+      const confirmReset = window.confirm(
+        "¿Deseas reiniciar el progreso de temas leídos, flashcards dominadas y bandeja de errores? (Tus apuntes personales se conservarán)."
+      );
+      if (!confirmReset) return;
+      state.completedTopics.clear();
+      state.solvedCases = {};
+      state.masteredFlashcards.clear();
+      state.reviewFlashcards.clear();
+      state.failedSimIds.clear();
+      saveState();
+      updateGlobalProgress();
+      renderModuleTree();
+      renderActiveLesson();
+      initSimuladorSession("all");
+    });
+
+    dom.sidebarToggle.addEventListener("click", () => {
+      dom.sidebar.classList.toggle("is-open");
     });
   }
 
@@ -901,10 +1469,15 @@
 
   function init() {
     applyTheme(state.theme);
+    populateConvocatoriaModal();
     bindEvents();
     updateGlobalProgress();
     renderModuleTree();
     renderActiveLesson();
+    renderPdfLibrary();
+    initSimuladorSession("all");
+    pauseSimTimer();
+    switchTab(state.activeTabId);
   }
 
   init();

@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Procuraduría 243-2026 | Plataforma Corporativa de Estudio</title>
-  <meta name="description" content="Plataforma de estudio por competencias para el Concurso de Méritos de la Procuraduría General de la Nación (Convocatoria 243-2026)." />
+  <title>Procuraduría 243-2026 | Academia Interactiva Auxiliar Administrativo 5AM-09</title>
+  <meta name="description" content="Plataforma interactiva de estudio para el Concurso de Méritos de la Procuraduría General de la Nación (Convocatoria 243-2026 · Cargo Auxiliar Administrativo 5AM-09)." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -25,8 +25,8 @@
         <span>PGN</span>
       </div>
       <div class="brand-text">
-        <div class="brand-text__eyebrow">CONCURSO DE MÉRITOS · CONVOCATORIA 243 - 2026</div>
-        <h1 class="brand-text__title">Academia de Preparación Procuraduría</h1>
+        <div class="brand-text__eyebrow">CONVOCATORIA 243 - 2026 · CÓDIGO 5AM-09</div>
+        <h1 class="brand-text__title">Academia Auxiliar Administrativo PGN</h1>
       </div>
     </div>
 
@@ -35,7 +35,7 @@
       <div class="progress-meta">
         <span class="progress-meta__label">Progreso General del Curso</span>
         <div class="progress-meta__stats">
-          <span id="global-progress-count" class="progress-count">0 de 0 temas leídos</span>
+          <span id="global-progress-count" class="progress-count">0 de 12 temas leídos</span>
           <span id="global-progress-percent" class="progress-percent">0%</span>
         </div>
       </div>
@@ -44,8 +44,19 @@
       </div>
     </div>
 
-    <!-- Controles Corporativos Rápidos -->
+    <!-- Controles Corporativos y Ficha del Cargo -->
     <div class="topbar__actions">
+      <button id="open-ficha-btn" class="action-chip action-chip--gold" type="button" title="Ver Ficha Oficial del Empleo 5AM-09 y Radicado #230688">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span>Mi Convocatoria · 5AM-09</span>
+        <span class="admitido-pill">ADMITIDO</span>
+      </button>
+
       <button id="theme-toggle" class="action-chip" type="button" title="Alternar modo de lectura (Claro / Oscuro)">
         <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="4"></circle>
@@ -53,7 +64,8 @@
         </svg>
         <span id="theme-label">Modo Nocturno</span>
       </button>
-      <button id="reset-progress-btn" class="action-chip action-chip--subtle" type="button" title="Reiniciar todo el progreso de lectura">
+
+      <button id="reset-progress-btn" class="action-chip action-chip--subtle" type="button" title="Reiniciar progreso de estudio">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
           <path d="M3 3v5h5"></path>
@@ -63,14 +75,30 @@
     </div>
   </header>
 
-  <!-- Contenedor Principal (Modo Curso) -->
+  <!-- Cinta Ejecutiva del Empleo (Resumen Permanente del Cargo 5AM-09) -->
+  <div class="job-strip" role="region" aria-label="Resumen oficial del cargo inscrito">
+    <div class="job-strip__items">
+      <span class="job-strip__item"><strong>Cargo:</strong> Auxiliar Administrativo (Código 5AM-09)</span>
+      <span class="job-strip__sep">·</span>
+      <span class="job-strip__item"><strong>Asignación:</strong> $4.565.448</span>
+      <span class="job-strip__sep">·</span>
+      <span class="job-strip__item"><strong>Vacantes:</strong> 26 (Incluye Regional Atlántico)</span>
+      <span class="job-strip__sep">·</span>
+      <span class="job-strip__item"><strong>Radicado #230688:</strong> <span class="job-strip__status">ADMITIDO</span></span>
+      <span class="job-strip__sep">·</span>
+      <span class="job-strip__item"><strong>Pesos:</strong> Conocimientos 60% (Eliminatorio ≥65/100) | Comportamentales 20% | Antecedentes 20% (Lista Elegibles ≥70%)</span>
+    </div>
+    <button type="button" id="strip-ficha-link" class="job-strip__btn">Ver Ficha y Funciones →</button>
+  </div>
+
+  <!-- Contenedor Principal (Modo Curso + Academia 5 Pestañas) -->
   <div class="workspace">
     <!-- Panel Lateral: Árbol de Módulos -->
     <aside id="sidebar" class="sidebar" aria-label="Árbol de módulos de estudio">
       <div class="sidebar__header">
         <div class="sidebar__title-row">
           <h2 class="sidebar__heading">Árbol de Módulos</h2>
-          <span id="modules-summary-badge" class="badge-pill">5 Módulos</span>
+          <span id="modules-summary-badge" class="badge-pill">5 Módulos · 12 Temas</span>
         </div>
 
         <!-- Buscador Instantáneo -->
@@ -107,14 +135,14 @@
             <span class="sidebar-stat__label">Módulos al 100%</span>
           </div>
           <div class="sidebar-stat">
-            <span class="sidebar-stat__value" id="stat-cases-solved">0/12</span>
-            <span class="sidebar-stat__label">Casos resueltos</span>
+            <span class="sidebar-stat__value" id="stat-flashcards-mastered">0/20</span>
+            <span class="sidebar-stat__label">Flashcards dominadas</span>
           </div>
         </div>
       </div>
     </aside>
 
-    <!-- Superficie de Lectura y Estudio -->
+    <!-- Superficie Principal Interactiva -->
     <main id="main-content" class="course-reader" tabindex="-1">
       <!-- Barra Contextual Fija del Tema Actual -->
       <div class="reader-toolbar">
@@ -141,13 +169,59 @@
         </div>
       </div>
 
-      <!-- Artículo Principal del Tema (Zona de Lectura Teórica) -->
-      <article id="lesson-view" class="lesson-container">
+      <!-- Barra de Secuencia Guiada en 5 Pestañas (Tabs) -->
+      <nav class="study-tabs-bar" role="tablist" aria-label="Secuencia guiada de aprendizaje en 5 pestañas">
+        <button type="button" class="study-tab is-active" role="tab" aria-selected="true" data-tab="tab-lectura">
+          <span class="study-tab__step">1</span>
+          <span class="study-tab__label">Lectura Ejecutiva y Trampas</span>
+        </button>
+        <button type="button" class="study-tab" role="tab" aria-selected="false" data-tab="tab-video">
+          <span class="study-tab__step">2</span>
+          <span class="study-tab__label">Videoclases y Apuntes</span>
+        </button>
+        <button type="button" class="study-tab" role="tab" aria-selected="false" data-tab="tab-pdf">
+          <span class="study-tab__step">3</span>
+          <span class="study-tab__label">Biblioteca y Visor PDF</span>
+        </button>
+        <button type="button" class="study-tab" role="tab" aria-selected="false" data-tab="tab-flashcards">
+          <span class="study-tab__step">4</span>
+          <span class="study-tab__label">Flashcards 3D</span>
+        </button>
+        <button type="button" class="study-tab" role="tab" aria-selected="false" data-tab="tab-simulador">
+          <span class="study-tab__step">5</span>
+          <span class="study-tab__label">Simulador Situacional</span>
+          <span id="error-tray-pill" class="tab-error-pill" hidden>0</span>
+        </button>
+      </nav>
+
+      <!-- ====================================================================
+           PESTAÑA 1: LECTURA EJECUTIVA, TRAMPAS DE EXAMEN Y APLICACIÓN 5AM-09
+           ==================================================================== -->
+      <article id="tab-lectura" class="tab-panel lesson-container" role="tabpanel">
         <header class="lesson-header">
           <div id="lesson-normativa" class="normativa-list" aria-label="Marco normativo de referencia"></div>
           <h2 id="lesson-title" class="lesson-title">Cargando tema...</h2>
           <p id="lesson-summary" class="lesson-summary"></p>
         </header>
+
+        <!-- Cajas Destacadas: Trampa del Examen + Aplicación Práctica Cargo 5AM-09 -->
+        <div class="executive-highlights-grid">
+          <section id="trampa-examen-card" class="highlight-box highlight-box--trap" aria-labelledby="trap-heading">
+            <div class="highlight-box__header">
+              <span class="highlight-box__badge">⚠️ OJO CON LA TRAMPA DEL EXAMEN</span>
+              <h3 id="trap-heading" class="highlight-box__title">Error frecuente en pruebas de mérito</h3>
+            </div>
+            <p id="trap-body" class="highlight-box__text"></p>
+          </section>
+
+          <section id="aplicacion-cargo-card" class="highlight-box highlight-box--cargo" aria-labelledby="cargo-app-heading">
+            <div class="highlight-box__header">
+              <span class="highlight-box__badge">🏛️ APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09</span>
+              <h3 id="cargo-app-heading" class="highlight-box__title">Conexión con las 10 Funciones del Manual</h3>
+            </div>
+            <p id="cargo-app-body" class="highlight-box__text"></p>
+          </section>
+        </div>
 
         <!-- Cuerpo Estructurado de la Lección -->
         <div id="lesson-body" class="lesson-body"></div>
@@ -163,10 +237,10 @@
           <ul id="lesson-keypoints" class="key-points-list"></ul>
         </section>
 
-        <!-- Caso Situacional Tipo Concurso PGN -->
+        <!-- Caso Situacional Rápido del Tema -->
         <section class="case-study-card" aria-labelledby="case-heading">
           <div class="case-study-card__header">
-            <span class="case-badge">APLICACIÓN CASUÍSTICA · JUICIO SITUACIONAL</span>
+            <span class="case-badge">APLICACIÓN CASUÍSTICA · JUICIO SITUACIONAL DEL TEMA</span>
             <h3 id="case-heading">Caso Práctico Evaluativo</h3>
           </div>
           <p id="case-stem" class="case-stem"></p>
@@ -174,39 +248,27 @@
           <div id="case-feedback" class="case-feedback" hidden></div>
         </section>
 
-        <!-- Apuntes Personales por Tema -->
-        <section class="notes-card" aria-labelledby="notes-heading">
-          <div class="notes-card__header">
-            <div>
-              <h3 id="notes-heading">Apuntes Personales del Tema</h3>
-              <p class="notes-subtitle">Tus anotaciones se guardan automáticamente en este navegador para este tema.</p>
-            </div>
-            <span id="notes-status" class="notes-status">Guardado local</span>
-          </div>
-          <textarea
-            id="topic-notes"
-            class="notes-textarea"
-            rows="3"
-            placeholder="Escribe aquí nemotecnias, artículos clave o recordatorios personales sobre este tema..."
-          ></textarea>
-        </section>
-
-        <!-- Bloque de Transición al Motor de Simulacros (60% Peso Concurso) -->
+        <!-- Bloque de Transición al Motor de Simulacros (Pestaña 5) -->
         <section class="simulador-cta-card" aria-labelledby="sim-cta-heading">
           <div class="simulador-cta-card__info">
-            <span class="simulador-cta-card__eyebrow">PRUEBA DE CONOCIMIENTOS · PESO ELIMINATORIO 60%</span>
-            <h3 id="sim-cta-heading" class="simulador-cta-card__title">¿Listo para poner a prueba este módulo?</h3>
+            <span class="simulador-cta-card__eyebrow">SECUENCIA GUIADA · PRUEBA DE CONOCIMIENTOS (60%) Y COMPORTAMENTAL (20%)</span>
+            <h3 id="sim-cta-heading" class="simulador-cta-card__title">¿Listo para evaluar tus conocimientos en el Simulador Situacional?</h3>
             <p class="simulador-cta-card__desc">
-              Resuelve el simulacro oficial de selección múltiple (A, B, C, D) de este módulo. Necesitas un mínimo de <strong>65% de aciertos</strong> para superar el umbral aprobatorio.
+              Pon a prueba tu lectura con las 10 preguntas oficiales en formato de Juicio Situacional con cronómetro y bandeja de errores, o avanza a las Videoclases (Pestaña 2).
             </p>
           </div>
-          <button id="open-simulador-btn" type="button" class="btn-evaluar-conocimientos">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 11l3 3L22 4"></path>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
-            <span>Evaluar Conocimientos</span>
-          </button>
+          <div class="simulador-cta-card__buttons">
+            <button id="go-tab-video-btn" type="button" class="btn-secondary-gold">
+              <span>Ir a Videoclases (Paso 2) →</span>
+            </button>
+            <button id="open-simulador-btn" type="button" class="btn-evaluar-conocimientos">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span>Evaluar Conocimientos</span>
+            </button>
+          </div>
         </section>
 
         <!-- Navegación Inferior del Curso -->
@@ -230,35 +292,289 @@
         </footer>
       </article>
 
-      <!-- Panel del Motor de Simulacros por Módulo (Oculto por defecto, transición suave) -->
-      <section id="simulador-view" class="simulador-container is-hidden" aria-label="Simulador de Evaluación por Módulo">
+      <!-- ====================================================================
+           PESTAÑA 2: VIDEOCLASES Y APUNTES INTELIGENTES (CON DESCARGA .TXT)
+           ==================================================================== -->
+      <section id="tab-video" class="tab-panel lesson-container is-hidden" role="tabpanel">
+        <header class="lesson-header">
+          <span class="case-badge">PESTAÑA 2 · MULTIMEDIA Y SÍNTESIS PERSONAL</span>
+          <h2 class="lesson-title" id="video-tab-title">Videoclases y Apuntes Inteligentes</h2>
+          <p class="lesson-summary">
+            Visualiza las clases de refuerzo sobre la normativa del tema actual o abre las listas directas en YouTube mientras registras tus apuntes en tiempo real.
+          </p>
+        </header>
+
+        <div class="video-notes-layout">
+          <!-- Columna Izquierda: Reproductor y Galería de Videos -->
+          <div class="video-gallery-col">
+            <div class="video-player-card">
+              <div class="video-player-card__top">
+                <span id="active-video-title" class="video-player-card__title">Videoclase del Tema</span>
+                <a id="active-video-yt-link" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="btn-yt-external">
+                  Buscar / Abrir en YouTube ↗
+                </a>
+              </div>
+              <div class="video-Aspect-16x9">
+                <iframe
+                  id="video-iframe"
+                  title="Reproductor de videoclase"
+                  src="about:blank"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <p class="video-player-card__hint">
+                Si algún canal institucional restringe la reproducción embebida, usa el botón <strong>"Buscar / Abrir en YouTube ↗"</strong> o las tarjetas inferiores para acceder directamente.
+              </p>
+            </div>
+
+            <div class="video-selector-section">
+              <h3 class="sub-heading">Recursos de Video Recomendados para este Tema y Módulo</h3>
+              <div id="video-cards-list" class="video-cards-list"></div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Panel de Apuntes Inteligentes -->
+          <aside class="smart-notes-col" aria-labelledby="notes-heading">
+            <div class="notes-card notes-card--tall">
+              <div class="notes-card__header">
+                <div>
+                  <h3 id="notes-heading">Mis Apuntes del Tema</h3>
+                  <p class="notes-subtitle" id="notes-topic-indicator">Autoguardado instantáneo en localStorage</p>
+                </div>
+                <span id="notes-status" class="notes-status">Guardado local ✓</span>
+              </div>
+
+              <!-- Plantillas Rápidas de Inserción -->
+              <div class="notes-quick-tags">
+                <button type="button" class="quick-note-btn" data-snippet="📌 PLAZO LEGAL CLAVE: ">+ Plazo Legal</button>
+                <button type="button" class="quick-note-btn" data-snippet="⚠️ TRAMPA DE EXAMEN: ">+ Trampa Examen</button>
+                <button type="button" class="quick-note-btn" data-snippet="⚖️ ARTÍCULO / NORMA: ">+ Articulado</button>
+                <button type="button" class="quick-note-btn" data-snippet="🏛️ FUNCIÓN 5AM-09: ">+ Función 5AM-09</button>
+              </div>
+
+              <textarea
+                id="topic-notes"
+                class="notes-textarea notes-textarea--tall"
+                rows="12"
+                placeholder="Escribe aquí tus apuntes de la videoclase, nemotecnias, artículos clave o resúmenes personales..."
+              ></textarea>
+
+              <div class="notes-actions-bar">
+                <button type="button" id="download-topic-notes-btn" class="btn-evaluar-conocimientos btn-sm">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>Descargar Apuntes (.txt)</span>
+                </button>
+                <button type="button" id="download-all-notes-btn" class="btn-back-reading">
+                  Descargar Cuaderno Completo (.txt)
+                </button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PESTAÑA 3: BIBLIOTECA Y VISOR PDF INTEGRADO (NORMOGRAMA)
+           ==================================================================== -->
+      <section id="tab-pdf" class="tab-panel lesson-container is-hidden" role="tabpanel">
+        <header class="lesson-header">
+          <span class="case-badge">PESTAÑA 3 · DOCUMENTOS OFICIALES Y NORMOGRAMA PGN</span>
+          <h2 class="lesson-title">Biblioteca Oficial y Visor de Documentos PDF</h2>
+          <p class="lesson-summary">
+            Consulta tus documentos oficiales en la carpeta <code>docs/</code> (Manual de Funciones 5AM-09 y Comprobante #230688) y las leyes troncales del concurso directamente en el visor integrado.
+          </p>
+        </header>
+
+        <!-- Tarjetas de Selección de Documento -->
+        <div id="pdf-cards-grid" class="pdf-cards-grid"></div>
+
+        <!-- Visor Integrado (<embed> / <iframe>) con Botón Pantalla Completa -->
+        <div id="pdf-viewer-container" class="pdf-viewer-shell">
+          <div class="pdf-viewer-toolbar">
+            <div class="pdf-viewer-toolbar__info">
+              <span class="pdf-viewer-badge" id="pdf-active-category">DOCUMENTO ACTIVO</span>
+              <strong id="pdf-active-title" class="pdf-viewer-title">Manual de Funciones 5AM-09 (docs/PROCURADURIA_FUNCIONES.pdf)</strong>
+            </div>
+            <div class="pdf-viewer-toolbar__actions">
+              <a id="pdf-external-btn" href="docs/PROCURADURIA_FUNCIONES.pdf" target="_blank" rel="noopener noreferrer" class="btn-back-reading">
+                Abrir en Pestaña / Descargar ↗
+              </a>
+              <button type="button" id="pdf-fullscreen-btn" class="btn-evaluar-conocimientos btn-sm">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                </svg>
+                <span>Pantalla Completa</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="pdf-articles-summary" class="pdf-articles-summary" hidden></div>
+
+          <div class="pdf-embed-frame-wrap">
+            <iframe
+              id="pdf-embed-viewer"
+              class="pdf-embed-viewer"
+              src="docs/PROCURADURIA_FUNCIONES.pdf"
+              title="Visor de Documentos Oficiales y Normograma"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PESTAÑA 4: LABORATORIO ACTIVO (FLASHCARDS 3D INTERACTIVAS)
+           ==================================================================== -->
+      <section id="tab-flashcards" class="tab-panel lesson-container is-hidden" role="tabpanel">
+        <header class="lesson-header">
+          <span class="case-badge">PESTAÑA 4 · ENTRENAMIENTO DE MEMORIA ACTIVA (ACTIVE RECALL)</span>
+          <h2 class="lesson-title">Laboratorio de Flashcards 3D</h2>
+          <p class="lesson-summary">
+            Memoriza plazos legales, artículos clave y las 5 Competencias Comportamentales del cargo Auxiliar Administrativo 5AM-09 (Niveles B, C y D). Haz clic sobre la tarjeta para girarla en 3D.
+          </p>
+        </header>
+
+        <!-- Barra de Filtros de Mazo y Progreso de Dominio -->
+        <div class="fc-controls-bar">
+          <div class="fc-deck-filters" role="group" aria-label="Seleccionar mazo de tarjetas">
+            <button type="button" class="fc-filter-btn is-active" data-deck="topic">Del Tema Actual</button>
+            <button type="button" class="fc-filter-btn" data-deck="comportamentales">Competencias 5AM-09 (Niveles B, C, D)</button>
+            <button type="button" class="fc-filter-btn" data-deck="all">Todas las Tarjetas</button>
+            <button type="button" class="fc-filter-btn" data-deck="review">Por Repasar</button>
+          </div>
+          <div class="fc-stats-pill">
+            <span id="fc-mastery-counter">0 de 0 dominadas</span>
+          </div>
+        </div>
+
+        <!-- Escenario 3D de la Flashcard -->
+        <div class="fc-stage">
+          <div id="flashcard-3d" class="flashcard-3d" tabindex="0" role="button" aria-label="Tarjeta de estudio interactiva. Haz clic para girar">
+            <div class="flashcard-3d__inner">
+              <!-- Cara Frontal (Pregunta / Concepto) -->
+              <div class="flashcard-3d__face flashcard-3d__face--front">
+                <div class="flashcard-3d__top">
+                  <span id="fc-front-category" class="case-badge">CATEGORÍA</span>
+                  <span id="fc-front-status" class="fc-status-tag">Pendiente</span>
+                </div>
+                <div class="flashcard-3d__center">
+                  <h3 id="fc-front-text" class="flashcard-3d__question">Cargando tarjeta...</h3>
+                </div>
+                <div class="flashcard-3d__bottom">
+                  <span id="fc-counter-label">Tarjeta 1 de 5</span>
+                  <span class="fc-flip-hint">Haz clic para girar 3D ↻</span>
+                </div>
+              </div>
+
+              <!-- Cara Posterior (Respuesta / Norma) -->
+              <div class="flashcard-3d__face flashcard-3d__face--back">
+                <div class="flashcard-3d__top">
+                  <span class="case-badge">RESPUESTA OFICIAL Y FUNDAMENTACIÓN</span>
+                  <span id="fc-back-ref" class="fc-ref-tag">Norma</span>
+                </div>
+                <div class="flashcard-3d__center">
+                  <p id="fc-back-text" class="flashcard-3d__answer"></p>
+                </div>
+                <div class="flashcard-3d__bottom">
+                  <span>Evalúa tu retención abajo</span>
+                  <span class="fc-flip-hint">Volver al frente ↺</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botones de Navegación y Dominio -->
+          <div class="fc-actions-row">
+            <button type="button" id="fc-prev-btn" class="btn-back-reading">← Anterior</button>
+
+            <div class="fc-mastery-btns">
+              <button type="button" id="fc-review-later-btn" class="btn-fc-review">
+                ↻ Repasar luego
+              </button>
+              <button type="button" id="fc-mastered-btn" class="btn-fc-mastered">
+                ✓ Dominada
+              </button>
+            </div>
+
+            <button type="button" id="fc-next-btn" class="btn-back-reading">Siguiente →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PESTAÑA 5: SIMULADOR DE JUICIO SITUACIONAL + CRONÓMETRO + BANDEJA DE ERRORES
+           ==================================================================== -->
+      <section id="tab-simulador" class="tab-panel simulador-container is-hidden" role="tabpanel" aria-label="Simulador de Juicio Situacional">
         <header class="simulador-header">
           <div class="simulador-header__top">
-            <span id="sim-module-badge" class="case-badge">SIMULACRO POR MÓDULO · PESO 60%</span>
-            <button id="close-simulador-btn" type="button" class="btn-back-reading">
-              ← Volver a la Lectura Teórica
-            </button>
+            <div class="sim-mode-pills">
+              <button type="button" id="sim-mode-all-btn" class="sim-mode-btn is-active">
+                Simulacro Oficial (10 Preguntas)
+              </button>
+              <button type="button" id="sim-mode-errors-btn" class="sim-mode-btn">
+                <span>Bandeja de Errores · Repasar mis errores</span>
+                <span id="sim-errors-count-badge" class="error-count-badge">0</span>
+              </button>
+            </div>
+
+            <!-- Cronómetro Integrado -->
+            <div class="sim-timer-box" aria-label="Cronómetro del simulacro">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span id="sim-timer-display" class="sim-timer-display">00:00</span>
+              <button type="button" id="sim-timer-toggle-btn" class="sim-timer-btn" title="Pausar/Reanudar cronómetro">Pausar</button>
+              <button type="button" id="sim-timer-reset-btn" class="sim-timer-btn" title="Reiniciar cronómetro">Reiniciar</button>
+            </div>
           </div>
-          <h2 id="sim-title" class="lesson-title">Simulacro Eliminatorio del Módulo</h2>
-          <p id="sim-description" class="lesson-summary"></p>
+
+          <h2 id="sim-title" class="lesson-title">Simulador de Juicio Situacional · Cargo 5AM-09</h2>
+          <p id="sim-description" class="lesson-summary">
+            Cada ítem presenta un Caso Situacional en Oficina, el Enunciado y 4 opciones, indicando si evalúa Conocimientos (60% Eliminatorio · Mínimo 65%) o Competencias Comportamentales (20% Clasificatorio).
+          </p>
 
           <!-- Barra de Progreso del Simulacro -->
           <div class="sim-progress-bar-wrap">
             <div class="sim-progress-meta">
-              <span id="sim-question-counter">Pregunta 1 de 5</span>
-              <span class="sim-threshold-tag">Umbral mínimo aprobatorio: 65%</span>
+              <span id="sim-question-counter">Pregunta 1 de 10</span>
+              <span class="sim-threshold-tag">Umbral mínimo aprobatorio Conocimientos: 65%</span>
             </div>
             <div class="sim-progress-track">
-              <div id="sim-progress-fill" class="sim-progress-fill" style="width: 20%"></div>
+              <div id="sim-progress-fill" class="sim-progress-fill" style="width: 10%"></div>
             </div>
           </div>
         </header>
 
-        <!-- Vista de Pregunta Activa -->
+        <!-- Vista de Pregunta Situacional Activa -->
         <div id="sim-question-card" class="sim-question-card">
-          <div class="sim-question-card__number" id="sim-q-badge">PREGUNTA 1</div>
-          <p id="sim-question-text" class="sim-question-stem"></p>
+          <div class="sim-question-meta-bar">
+            <span class="sim-question-card__number" id="sim-q-badge">PREGUNTA 1 DE 10</span>
+            <div class="sim-question-tags">
+              <span id="sim-q-modulo-tag" class="norma-chip">Gestión Documental</span>
+              <span id="sim-q-peso-tag" class="sim-peso-pill">Conocimientos (60% · Eliminatorio)</span>
+              <span id="sim-q-comp-tag" class="sim-comp-pill">Organización del Trabajo (Nivel C)</span>
+            </div>
+          </div>
 
+          <!-- Recuadro de CASO SITUACIONAL EN OFICINA -->
+          <div class="sim-office-case-box">
+            <div class="sim-office-case-box__label">📂 CASO SITUACIONAL EN OFICINA (EMPLEO 5AM-09)</div>
+            <p id="sim-case-context" class="sim-office-case-box__text"></p>
+          </div>
+
+          <!-- Recuadro de ENUNCIADO -->
+          <div class="sim-enunciado-box">
+            <div class="sim-enunciado-box__label">🎯 ENUNCIADO EVALUATIVO</div>
+            <p id="sim-question-text" class="sim-question-stem"></p>
+          </div>
+
+          <!-- 4 Opciones de Selección Múltiple -->
           <div id="sim-options-grid" class="sim-options-grid" role="radiogroup" aria-label="Opciones de respuesta"></div>
 
           <!-- Caja de Justificación Normativa -->
@@ -278,7 +594,20 @@
           </div>
         </div>
 
-        <!-- Vista de Evaluación Final del Módulo -->
+        <!-- Estado Vacío cuando no hay errores en la Bandeja de Errores -->
+        <div id="sim-empty-errors-card" class="sim-results-card" hidden>
+          <div class="sim-eval-banner sim-eval-banner--success">
+            <div class="sim-eval-banner__title">🎉 ¡Tu Bandeja de Errores está limpia!</div>
+            <p>Actualmente no tienes preguntas falladas pendientes por repasar. Puedes realizar el Simulacro Oficial Completo de 10 preguntas para seguir entrenando.</p>
+          </div>
+          <div>
+            <button type="button" id="sim-return-full-btn" class="btn-evaluar-conocimientos">
+              Iniciar Simulacro Completo (10 Preguntas)
+            </button>
+          </div>
+        </div>
+
+        <!-- Vista de Evaluación Final -->
         <div id="sim-results-card" class="sim-results-card" hidden>
           <div class="sim-score-header">
             <div id="sim-score-circle" class="sim-score-circle">
@@ -286,8 +615,9 @@
               <span class="sim-score-caption">Puntaje</span>
             </div>
             <div class="sim-score-summary">
-              <h3 class="sim-score-title">Resultado de la Evaluación del Módulo</h3>
-              <p id="sim-score-detail" class="sim-score-detail">Has acertado 0 de 5 preguntas.</p>
+              <h3 class="sim-score-title">Resultado Final del Simulacro</h3>
+              <p id="sim-score-detail" class="sim-score-detail">Has acertado 0 de 10 preguntas.</p>
+              <p id="sim-time-detail" class="sim-time-detail">Tiempo empleado: 00:00</p>
             </div>
           </div>
 
@@ -296,25 +626,128 @@
 
           <!-- Resumen de Respuestas y Justificaciones -->
           <div class="sim-review-section">
-            <h4 class="sim-review-heading">Revisión Detallada de Preguntas y Justificaciones</h4>
+            <h4 class="sim-review-heading">Revisión Detallada de Casos Situacionales y Justificaciones</h4>
             <div id="sim-review-list" class="sim-review-list"></div>
           </div>
 
           <div class="sim-results-footer">
-            <button id="sim-retry-btn" type="button" class="btn-evaluar-conocimientos">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                <path d="M3 3v5h5"></path>
-              </svg>
-              <span>Repetir Simulacro del Módulo</span>
-            </button>
+            <div class="sim-results-footer__left">
+              <button id="sim-retry-btn" type="button" class="btn-evaluar-conocimientos">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+                <span>Repetir Simulacro Completo</span>
+              </button>
+              <button id="sim-practice-mistakes-btn" type="button" class="btn-danger-outline" hidden>
+                Repasar Mis Errores de este Intento
+              </button>
+            </div>
             <button id="sim-back-reading-btn" type="button" class="btn-back-reading btn-back-reading--large">
-              ← Volver a la Zona de Lectura
+              ← Volver a la Lectura Ejecutiva (Pestaña 1)
             </button>
           </div>
         </div>
       </section>
     </main>
+  </div>
+
+  <!-- ====================================================================
+       MODAL OFICIAL: MI CONVOCATORIA · FICHA DEL CARGO 5AM-09 (#230688)
+       ==================================================================== -->
+  <div id="convocatoria-modal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-ficha-title">
+    <div class="modal-card">
+      <header class="modal-card__header">
+        <div>
+          <span class="modal-card__eyebrow">FICHA TÉCNICA OFICIAL DEL EMPLEO · CONVOCATORIA 243 - 2026</span>
+          <h2 id="modal-ficha-title" class="modal-card__title">Auxiliar Administrativo · Código 5AM-09</h2>
+        </div>
+        <button type="button" id="close-ficha-modal-btn" class="modal-close-btn" aria-label="Cerrar ventana">✕</button>
+      </header>
+
+      <div class="modal-card__body">
+        <!-- Tarjetas de Datos Oficiales de Inscripción -->
+        <div class="ficha-kpi-grid">
+          <div class="ficha-kpi">
+            <span class="ficha-kpi__label">Denominación y Código</span>
+            <strong class="ficha-kpi__value">Auxiliar Administrativo (5AM-09)</strong>
+          </div>
+          <div class="ficha-kpi">
+            <span class="ficha-kpi__label">Asignación Básica Mensual</span>
+            <strong class="ficha-kpi__value">$4.565.448</strong>
+          </div>
+          <div class="ficha-kpi">
+            <span class="ficha-kpi__label">Vacantes Ofertadas</span>
+            <strong class="ficha-kpi__value">26 vacantes (Inc. Regional Atlántico)</strong>
+          </div>
+          <div class="ficha-kpi ficha-kpi--admitido">
+            <span class="ficha-kpi__label">Radicado #230688</span>
+            <strong class="ficha-kpi__value">ESTADO: ADMITIDO ✓</strong>
+          </div>
+        </div>
+
+        <!-- Tabla de Pesos del Examen -->
+        <div class="ficha-section">
+          <h3 class="ficha-section__title">Estructura y Ponderación Oficial de Pruebas</h3>
+          <div class="table-wrapper">
+            <table class="study-table">
+              <thead>
+                <tr>
+                  <th>Prueba</th>
+                  <th>Peso en Concurso</th>
+                  <th>Carácter</th>
+                  <th>Puntaje Mínimo Aprobatorio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1. Prueba de Conocimientos</strong></td>
+                  <td><strong>60%</strong></td>
+                  <td><span class="priority-badge">ELIMINATORIO</span></td>
+                  <td><strong>65.00 / 100</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>2. Competencias Comportamentales</strong></td>
+                  <td><strong>20%</strong></td>
+                  <td>Clasificatorio</td>
+                  <td>Clasificatorio</td>
+                </tr>
+                <tr>
+                  <td><strong>3. Valoración de Antecedentes</strong></td>
+                  <td><strong>20%</strong></td>
+                  <td>Clasificatorio</td>
+                  <td>Clasificatorio</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="ficha-elegibles-note">
+            🏆 <strong>Regla para Lista de Elegibles:</strong> Se requiere superar la prueba eliminatoria (≥65/100) y obtener un puntaje total ponderado acumulado <strong>mínimo del 70%</strong>.
+          </p>
+        </div>
+
+        <!-- Las 5 Competencias Comportamentales del Cargo 5AM-09 -->
+        <div class="ficha-section">
+          <h3 class="ficha-section__title">Competencias Comportamentales Evaluadas (20%)</h3>
+          <div id="modal-competencias-list" class="competencias-grid"></div>
+        </div>
+
+        <!-- Las 10 Funciones Oficiales del Manual -->
+        <div class="ficha-section">
+          <h3 class="ficha-section__title">Diez (10) Funciones Esenciales del Manual (Código 5AM-09)</h3>
+          <ul id="modal-funciones-list" class="content-bullets"></ul>
+        </div>
+      </div>
+
+      <footer class="modal-card__footer">
+        <button type="button" id="modal-open-funciones-pdf" class="btn-evaluar-conocimientos btn-sm">
+          Abrir PROCURADURIA_FUNCIONES.pdf en Visor
+        </button>
+        <button type="button" id="modal-open-comprobante-pdf" class="btn-back-reading">
+          Abrir COMPROBANTE_230688.pdf en Visor
+        </button>
+      </footer>
+    </div>
   </div>
 
   <!-- Scripts (Sin dependencias externas) -->

@@ -1686,6 +1686,1062 @@ textarea {
   flex-wrap: wrap;
 }
 
+.sim-results-footer__left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Cinta Ejecutiva del Empleo (5AM-09) y Botón Mi Convocatoria
+   ========================================================================== */
+
+.action-chip--gold {
+  border-color: rgba(212, 175, 55, 0.55);
+  background: rgba(212, 175, 55, 0.14);
+  color: #fef08a;
+}
+
+.action-chip--gold:hover {
+  background: rgba(212, 175, 55, 0.25);
+  border-color: #facc15;
+}
+
+.admitido-pill {
+  background: #15803d;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.job-strip {
+  background-color: var(--bg-topbar-elevated);
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.38rem 1.5rem;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+  z-index: 35;
+}
+
+.job-strip__items {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.job-strip__item strong {
+  color: #f8fafc;
+}
+
+.job-strip__sep {
+  color: #64748b;
+}
+
+.job-strip__status {
+  color: #4ade80;
+  font-weight: 800;
+}
+
+.job-strip__btn {
+  background: transparent;
+  border: none;
+  color: #facc15;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.job-strip__btn:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Barra de Navegación de 5 Pestañas (Secuencia Guiada por Tema)
+   ========================================================================== */
+
+.study-tabs-bar {
+  position: sticky;
+  top: 56px;
+  z-index: 19;
+  background-color: var(--bg-surface-alt);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 2.25rem;
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+  overflow-x: auto;
+}
+
+.study-tab {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0.78rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.81rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.study-tab:hover {
+  color: var(--text-primary);
+  background-color: rgba(197, 155, 39, 0.05);
+}
+
+.study-tab.is-active {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent-gold);
+  background-color: var(--bg-surface);
+  font-weight: 700;
+}
+
+.study-tab__step {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.study-tab.is-active .study-tab__step {
+  background-color: var(--accent-gold);
+  color: #0b192c;
+}
+
+.tab-error-pill {
+  background-color: var(--status-danger);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.05rem 0.42rem;
+  border-radius: 999px;
+}
+
+/* ==========================================================================
+   Pestaña 1: Cajas Destacadas "Ojo con la Trampa" y "Aplicación 5AM-09"
+   ========================================================================== */
+
+.executive-highlights-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.highlight-box {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.6rem;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.highlight-box--trap {
+  border-left: 5px solid var(--status-warning);
+  background: linear-gradient(135deg, var(--status-warning-bg) 0%, var(--bg-surface) 85%);
+}
+
+.highlight-box--cargo {
+  border-left: 5px solid var(--accent-navy);
+  background: linear-gradient(135deg, rgba(16, 42, 76, 0.07) 0%, var(--bg-surface) 85%);
+}
+
+.highlight-box__badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.highlight-box--trap .highlight-box__badge {
+  color: var(--status-warning);
+}
+
+.highlight-box--cargo .highlight-box__badge {
+  color: var(--accent-navy);
+}
+
+.highlight-box__title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.highlight-box__text {
+  font-size: 0.89rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.simulador-cta-card__buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-secondary-gold {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.82rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.btn-secondary-gold:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #facc15;
+}
+
+.btn-sm {
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+}
+
+/* ==========================================================================
+   Pestaña 2: Videoclases y Apuntes Inteligentes (.txt)
+   ========================================================================== */
+
+.video-notes-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.video-player-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.25rem;
+}
+
+.video-player-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.video-player-card__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.btn-yt-external {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--accent-navy);
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-strong);
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-yt-external:hover {
+  border-color: var(--accent-gold);
+}
+
+.video-Aspect-16x9 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  background-color: #0b192c;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.video-Aspect-16x9 iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-player-card__hint {
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.sub-heading {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.video-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.video-card-item {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.video-card-item:hover,
+.video-card-item.is-active {
+  border-color: var(--accent-gold);
+  background-color: var(--bg-surface-alt);
+}
+
+.video-card-item__title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.video-card-item__meta {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.notes-card--tall {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.notes-quick-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.quick-note-btn {
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.quick-note-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+}
+
+.notes-textarea--tall {
+  min-height: 250px;
+}
+
+.notes-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Pestaña 3: Biblioteca y Visor PDF Integrado (Normograma)
+   ========================================================================== */
+
+.pdf-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.pdf-doc-card {
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.pdf-doc-card:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.pdf-doc-card.is-active {
+  border-color: var(--accent-gold);
+  background-color: var(--bg-surface-alt);
+  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.2);
+}
+
+.pdf-doc-card__cat {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-gold);
+}
+
+.pdf-doc-card__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0.25rem 0;
+}
+
+.pdf-doc-card__desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.pdf-doc-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-navy);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.pdf-viewer-shell {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.pdf-viewer-toolbar {
+  background-color: var(--bg-topbar);
+  color: #ffffff;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pdf-viewer-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #facc15;
+  margin-right: 0.5rem;
+}
+
+.pdf-viewer-title {
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.pdf-viewer-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pdf-articles-summary {
+  padding: 1rem 1.35rem;
+  background-color: var(--bg-surface-alt);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.pdf-embed-frame-wrap {
+  width: 100%;
+  height: 620px;
+  background-color: #1e293b;
+}
+
+.pdf-embed-viewer {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ==========================================================================
+   Pestaña 4: Laboratorio Activo de Flashcards 3D (Flip Animation)
+   ========================================================================== */
+
+.fc-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.fc-deck-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.fc-filter-btn {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.79rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.fc-filter-btn.is-active {
+  background-color: var(--bg-topbar);
+  color: #ffffff;
+  border-color: var(--accent-gold);
+}
+
+.fc-stats-pill {
+  background-color: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success-border);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.fc-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.35rem;
+}
+
+.flashcard-3d {
+  width: 100%;
+  max-width: 720px;
+  height: 340px;
+  perspective: 1200px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.flashcard-3d:focus {
+  outline: none;
+}
+
+.flashcard-3d__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.flashcard-3d.is-flipped .flashcard-3d__inner {
+  transform: rotateY(180deg);
+}
+
+.flashcard-3d__face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-lg);
+}
+
+.flashcard-3d__face--front {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-top: 5px solid var(--accent-gold);
+}
+
+.flashcard-3d__face--back {
+  background: linear-gradient(135deg, #0b192c 0%, #162d4c 100%);
+  color: #ffffff;
+  border: 2px solid var(--accent-gold);
+  transform: rotateY(180deg);
+}
+
+.flashcard-3d__top,
+.flashcard-3d__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+}
+
+.fc-status-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background-color: var(--bg-surface-alt);
+  color: var(--text-muted);
+}
+
+.fc-status-tag.is-mastered {
+  background-color: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.fc-ref-tag {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #facc15;
+}
+
+.flashcard-3d__center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.5rem 1rem;
+}
+
+.flashcard-3d__question {
+  font-family: var(--font-serif);
+  font-size: 1.28rem;
+  color: var(--text-primary);
+  line-height: 1.45;
+}
+
+.flashcard-3d__answer {
+  font-size: 1.02rem;
+  color: #f1f5f9;
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+.fc-flip-hint {
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.fc-actions-row {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.fc-mastery-btns {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-fc-mastered {
+  background-color: var(--status-success);
+  color: #ffffff;
+  border: none;
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-fc-review {
+  background-color: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+  padding: 0.65rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Pestaña 5: Simulador Situacional + Cronómetro + Bandeja de Errores
+   ========================================================================== */
+
+.sim-mode-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sim-mode-btn {
+  background-color: var(--bg-surface-alt);
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-secondary);
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.sim-mode-btn.is-active {
+  background-color: var(--bg-topbar);
+  color: #ffffff;
+  border-color: var(--accent-gold);
+}
+
+.error-count-badge {
+  background-color: var(--status-danger);
+  color: #ffffff;
+  font-size: 0.7rem;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+}
+
+.sim-timer-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-strong);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+.sim-timer-display {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.sim-timer-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.18rem 0.48rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sim-question-meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.sim-question-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.sim-peso-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background-color: var(--accent-gold-soft);
+  color: #854d0e;
+  border: 1px solid var(--accent-gold-border);
+}
+
+[data-theme="dark"] .sim-peso-pill {
+  color: #fde047;
+}
+
+.sim-comp-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background-color: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success-border);
+}
+
+.sim-office-case-box {
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-strong);
+  border-left: 4px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  padding: 1.05rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.sim-office-case-box__label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-gold);
+  margin-bottom: 0.35rem;
+}
+
+.sim-office-case-box__text {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.sim-enunciado-box__label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-navy);
+  margin-bottom: 0.35rem;
+}
+
+.sim-time-detail {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.btn-danger-outline {
+  background-color: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1.5px solid var(--status-danger);
+  padding: 0.82rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Modal Oficial "Mi Convocatoria · Cargo 5AM-09"
+   ========================================================================== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 16, 29, 0.72);
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.modal-backdrop[hidden] {
+  display: none !important;
+}
+
+.modal-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-lg);
+  max-width: 860px;
+  width: 100%;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-card__header {
+  background: linear-gradient(90deg, #0b192c 0%, #162f52 100%);
+  color: #ffffff;
+  padding: 1.25rem 1.75rem;
+  border-bottom: 2px solid var(--accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-card__eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #facc15;
+  text-transform: uppercase;
+}
+
+.modal-card__title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: #ffffff;
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.modal-card__body {
+  padding: 1.5rem 1.75rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ficha-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.85rem;
+}
+
+.ficha-kpi {
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ficha-kpi--admitido {
+  background-color: var(--status-success-bg);
+  border-color: var(--status-success-border);
+}
+
+.ficha-kpi__label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.ficha-kpi__value {
+  font-size: 0.94rem;
+  color: var(--text-primary);
+}
+
+.ficha-kpi--admitido .ficha-kpi__value {
+  color: var(--status-success);
+}
+
+.ficha-section__title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.65rem;
+}
+
+.ficha-elegibles-note {
+  margin-top: 0.65rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.competencias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.75rem;
+}
+
+.comp-item-card {
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+}
+
+.comp-item-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.comp-item-card__name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.comp-item-card__level {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-navy);
+  background: var(--bg-surface);
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+}
+
+.comp-item-card__desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.modal-card__footer {
+  padding: 1rem 1.75rem;
+  background-color: var(--bg-surface-alt);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 /* ==========================================================================
    Diseño Responsivo (Tablets y Móviles)
    ========================================================================== */
@@ -1708,6 +2764,10 @@ textarea {
     font-size: 0.92rem;
   }
 
+  .job-strip {
+    display: none;
+  }
+
   .sidebar {
     position: absolute;
     left: 0;
@@ -1726,9 +2786,18 @@ textarea {
     flex-wrap: wrap;
   }
 
+  .study-tabs-bar {
+    padding: 0 1rem;
+  }
+
   .lesson-container,
   .simulador-container {
     padding: 1.25rem 1.15rem 3rem;
+  }
+
+  .executive-highlights-grid,
+  .video-notes-layout {
+    grid-template-columns: 1fr;
   }
 
   .simulador-cta-card {

@@ -1,19 +1,226 @@
 /**
- * Base de Conocimiento Curricular - Convocatoria Procuraduría General de la Nación (243 - 2026)
- * Estructura modular para Modo Curso: Gestión Documental, Atención al Usuario, Inventarios,
- * Estructura PGN / Régimen Disciplinario y Ofimática / Gobierno Digital.
+ * Base de Conocimiento Curricular Interactiva - Convocatoria Procuraduría General de la Nación (243 - 2026)
+ * Empleo: Auxiliar Administrativo (Código 5AM-09) · Radicado #230688 (ADMITIDO)
+ * Arquitectura 5 Pestañas:
+ *  1. Lectura Ejecutiva y Trampas
+ *  2. Videoclases y Apuntes Inteligentes
+ *  3. Biblioteca y Visor PDF (Normograma)
+ *  4. Laboratorio Activo (Flashcards 3D)
+ *  5. Simulador de Juicio Situacional + Bandeja de Errores
  */
+
+const CONVOCATORIA_FICHA = {
+  convocatoria: "Convocatoria 243 - 2026 · Procuraduría General de la Nación",
+  cargo: "Auxiliar Administrativo",
+  codigo: "5AM-09",
+  asignacionBasica: "$4.565.448",
+  vacantes: "26 vacantes (incluyendo Regional Atlántico)",
+  radicado: "#230688",
+  estadoInscripcion: "ADMITIDO",
+  minimoListaElegibles: "Mínimo 70% ponderado total para Lista de Elegibles",
+  pesosExamen: [
+    {
+      prueba: "Prueba de Conocimientos",
+      peso: "60%",
+      caracter: "Eliminatorio",
+      puntajeMinimo: "65 / 100",
+      badgeClass: "peso-badge--eliminatorio"
+    },
+    {
+      prueba: "Competencias Comportamentales",
+      peso: "20%",
+      caracter: "Clasificatorio",
+      puntajeMinimo: "Clasificatorio",
+      badgeClass: "peso-badge--clasificatorio"
+    },
+    {
+      prueba: "Valoración de Antecedentes",
+      peso: "20%",
+      caracter: "Clasificatorio",
+      puntajeMinimo: "Clasificatorio",
+      badgeClass: "peso-badge--clasificatorio"
+    }
+  ],
+  competenciasComportamentales: [
+    {
+      nombre: "Orientación al Usuario",
+      nivel: "Nivel B",
+      ConductaClave:
+        "Escucha activamente, comprende las necesidades del ciudadano, radica y orienta con trato respetuoso, lenguaje claro y enfoque diferencial sin dilaciones."
+    },
+    {
+      nombre: "Organización del Trabajo",
+      nivel: "Nivel C",
+      ConductaClave:
+        "Clasifica, ordena y archiva la documentación aplicando las TRD, el principio de orden original y priorizando tareas según términos legales perentorios."
+    },
+    {
+      nombre: "Responsabilidad",
+      nivel: "Nivel C",
+      ConductaClave:
+        "Asume las consecuencias de sus actos, verifica la exactitud de los radicados y folios, y protege la reserva legal y confidencialidad de los expedientes."
+    },
+    {
+      nombre: "Gestión de Recursos",
+      nivel: "Nivel D",
+      ConductaClave:
+        "Custodia y utiliza racionalmente los bienes de consumo y devolutivos asignados, formalizando todo movimiento mediante comprobantes de almacén."
+    },
+    {
+      nombre: "Cumplimiento",
+      nivel: "Nivel D",
+      ConductaClave:
+        "Acatamiento estricto de los procedimientos institucionales, términos de la Ley 1755 de 2015, protocolos de archivo AGN y metas de la dependencia."
+    }
+  ],
+  funcionesOficiales: [
+    "1. Recibir, radicar, clasificar, distribuir y controlar las comunicaciones oficiales y correspondencia de la dependencia conforme al Acuerdo AGN 060 de 2001.",
+    "2. Organizar, foliar, depurar y conservar los expedientes del Archivo de Gestión aplicando el principio de orden original y las Tablas de Retención Documental (TRD).",
+    "3. Preparar técnicamente las transferencias documentales primarias hacia el Archivo Central diligenciando el Formato Único de Inventario Documental (FUID).",
+    "4. Brindar atención presencial, telefónica y virtual al ciudadano y a los sujetos procesales con trato respetuoso, enfoque diferencial y orientación clara sobre trámites y PQRSDF.",
+    "5. Controlar los términos legales de respuesta de los derechos de petición (Ley 1755 de 2015) generando alertas preventivas para evitar silencios administrativos o faltas disciplinarias.",
+    "6. Recibir, almacenar, custodiar y controlar racionalmente los bienes de consumo (papelería, insumos) y bienes devolutivos asignados a la oficina.",
+    "7. Tramitar oportunamente los comprobantes de entrada, salida, traslado y reintegro de bienes ante el Grupo de Almacén e Inventarios y participar en las tomas físicas.",
+    "8. Elaborar oficios, memorandos, actas, constancias y cuadros de control empleando procesadores de texto, combinación de correspondencia y hojas de cálculo.",
+    "9. Registrar y actualizar de manera íntegra las actuaciones y movimientos de expedientes en los sistemas de información institucionales (SIGDEA / SIM).",
+    "10. Aplicar las políticas de seguridad de la información (escritorio limpio, pantalla limpia, reserva legal) y desempeñar las demás funciones asignadas según la naturaleza del cargo."
+  ]
+};
+
+/**
+ * Catálogo Global de Documentos Oficiales para la Pestaña 3 (Biblioteca y Visor PDF - Normograma)
+ */
+const BIBLIOTECA_NORMOGRAMA = [
+  {
+    id: "doc-funciones-5am09",
+    categoria: "Documento Oficial Mi Concurso",
+    titulo: "Manual de Funciones y Competencias · Auxiliar Administrativo (5AM-09)",
+    subtitulo: "Archivo local en repositorio: docs/PROCURADURIA_FUNCIONES.pdf",
+    descripcion:
+      "Contiene las 10 funciones esenciales del empleo Código 5AM-09, requisitos de estudio/experiencia y las 5 competencias comportamentales evaluables.",
+    tipo: "local-pdf",
+    url: "docs/PROCURADURIA_FUNCIONES.pdf",
+    urlExterna: "docs/PROCURADURIA_FUNCIONES.pdf",
+    destacado: true
+  },
+  {
+    id: "doc-comprobante-230688",
+    categoria: "Documento Oficial Mi Concurso",
+    titulo: "Comprobante Oficial de Inscripción · Radicado #230688 (ADMITIDO)",
+    subtitulo: "Archivo local en repositorio: docs/COMPROBANTE_230688.pdf",
+    descripcion:
+      "Soporte oficial de inscripción y admisión en la Convocatoria 243-2026 para el cargo Auxiliar Administrativo 5AM-09 (26 vacantes, incluye Regional Atlántico).",
+    tipo: "local-pdf",
+    url: "docs/COMPROBANTE_230688.pdf",
+    urlExterna: "docs/COMPROBANTE_230688.pdf",
+    destacado: true
+  },
+  {
+    id: "doc-ley-594-2000",
+    categoria: "Normograma Gestión Documental",
+    titulo: "Ley 594 de 2000 · Ley General de Archivos de Colombia",
+    subtitulo: "Función Pública / Archivo General de la Nación (AGN)",
+    descripcion:
+      "Marco rector de la función archivística: principios de procedencia y orden original, ciclo vital del documento (Gestión, Central e Histórico) y Tablas de Retención (TRD).",
+    tipo: "norma-oficial",
+    url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=4275",
+    urlExterna: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=4275",
+    resumenArticulos: [
+      "Art. 4: Principios generales (Procedencia, Orden Original, Ciclo Vital, Racionalidad, Modernización).",
+      "Art. 23: Formación de archivos según el ciclo vital (Archivo de Gestión, Archivo Central y Archivo Histórico).",
+      "Art. 24: Obligatoriedad de las Tablas de Retención Documental (TRD) para todas las entidades del Estado."
+    ]
+  },
+  {
+    id: "doc-ley-1755-2015",
+    categoria: "Normograma Atención al Usuario",
+    titulo: "Ley 1755 de 2015 · Derecho Fundamental de Petición (CPACA)",
+    subtitulo: "Función Pública · Sustituye Título II de la Ley 1437 de 2011",
+    descripcion:
+      "Regula los términos perentorios (15 días general, 10 días información/documentos, 30 días consultas, 5 días traslado por falta de competencia), peticiones incompletas y reserva legal.",
+    tipo: "norma-oficial",
+    url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=65334",
+    urlExterna: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=65334",
+    resumenArticulos: [
+      "Art. 14: Términos para resolver las distintas modalidades de peticiones (15, 10 y 30 días hábiles).",
+      "Art. 17: Peticiones incompletas (10 días para requerir, 1 mes para que el ciudadano complete).",
+      "Art. 21: Funcionario sin competencia (remisión al competente en máximo 5 días hábiles).",
+      "Art. 31: Falta disciplinaria por desatención a las peticiones y a los términos para resolver."
+    ]
+  },
+  {
+    id: "doc-decreto-262-2000",
+    categoria: "Normograma Estructura PGN",
+    titulo: "Decreto Ley 262 de 2000 · Estructura y Organización de la PGN",
+    subtitulo: "Función Pública · Modificado por Decreto Ley 1851 de 2021",
+    descripcion:
+      "Establece la estructura orgánica de la Procuraduría General de la Nación, funciones preventivas, de intervención judicial/administrativa y disciplinarias en el nivel central y territorial.",
+    tipo: "norma-oficial",
+    url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=4073",
+    urlExterna: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=4073",
+    resumenArticulos: [
+      "Art. 2 y 7: Funciones del Procurador General de la Nación como supremo director del Ministerio Público.",
+      "Art. 24, 75 y 76: Funciones preventivas, de intervención y disciplinarias en Procuradurías Regionales, Distritales y Provinciales."
+    ]
+  }
+];
+
+/**
+ * Mazo Especial de Flashcards 3D de Competencias Comportamentales (Cargo 5AM-09 · 20%)
+ */
+const FLASHCARDS_COMPORTAMENTALES_5AM09 = [
+  {
+    id: "fc-comp-1",
+    categoria: "Competencia Comportamental · 20%",
+    frente: "Orientación al Usuario y al Ciudadano (Nivel B — Cargo 5AM-09)",
+    reverso:
+      "Conducta observable en el examen: Recibir y radicar toda solicitud con trato cortés, lenguaje claro y enfoque diferencial; orientar sobre los requisitos y el trámite sin rechazar escritos en ventanilla ni asumir funciones de fallo.",
+    referencia: "Manual de Funciones 5AM-09 · Peso Comportamental 20%"
+  },
+  {
+    id: "fc-comp-2",
+    categoria: "Competencia Comportamental · 20%",
+    frente: "Organización del Trabajo (Nivel C — Cargo 5AM-09)",
+    reverso:
+      "Conducta observable en el examen: Planificar las labores diarias priorizando términos próximos a vencer, mantener los expedientes foliados y ordenados cronológicamente (Orden Original) y aplicar las TRD sin acumular rezagos.",
+    referencia: "Manual de Funciones 5AM-09 · Peso Comportamental 20%"
+  },
+  {
+    id: "fc-comp-3",
+    categoria: "Competencia Comportamental · 20%",
+    frente: "Responsabilidad (Nivel C — Cargo 5AM-09)",
+    reverso:
+      "Conducta observable en el examen: Responder por la veracidad de los registros en SIGDEA/SIM, salvaguardar la reserva de las actuaciones disciplinarias y reportar de inmediato cualquier inconsistencia o pérdida documental.",
+    referencia: "Manual de Funciones 5AM-09 · Peso Comportamental 20%"
+  },
+  {
+    id: "fc-comp-4",
+    categoria: "Competencia Comportamental · 20%",
+    frente: "Gestión de Recursos (Nivel D — Cargo 5AM-09)",
+    reverso:
+      "Conducta observable en el examen: Emplear los bienes de consumo y devolutivos exclusivamente para fines del servicio, verificar físicamente los materiales recibidos y exigir/firmar siempre el comprobante de salida o traslado de almacén.",
+    referencia: "Manual de Funciones 5AM-09 · Peso Comportamental 20%"
+  },
+  {
+    id: "fc-comp-5",
+    categoria: "Competencia Comportamental · 20%",
+    frente: "Cumplimiento (Nivel D — Cargo 5AM-09)",
+    reverso:
+      "Conducta observable en el examen: Ceñirse estrictamente a los reglamentos, plazos legales (Ley 1755 de 2015) y acuerdos del AGN (060 de 2001 y 042 de 2002), evitando atajos informales como reservar números de radicado.",
+    referencia: "Manual de Funciones 5AM-09 · Peso Comportamental 20%"
+  }
+];
 
 const COURSE_DATA = {
   convocatoria: "Convocatoria 243 - 2026",
   entidad: "Procuraduría General de la Nación",
-  programa: "Plataforma Corporativa de Preparación Integral por Competencias",
+  programa: "Academia Interactiva · Auxiliar Administrativo 5AM-09",
   modules: [
     {
       id: "mod-gestion-documental",
       code: "MÓDULO I",
       title: "Gestión Documental y Archivo Institucional",
-      subtitle: "Normatividad AGN, ciclo vital, TRD, radicación y expedientes",
+      subtitle: "Ley 594 de 2000, TRD/TVD, Acuerdo 060/2001, Acuerdo 042/2002 y los 8 procesos",
       icon: "folder-archive",
       topics: [
         {
@@ -25,6 +232,16 @@ const COURSE_DATA = {
           normativa: ["Ley 594 de 2000", "Decreto 1080 de 2015", "Acuerdo AGN 001 de 2024"],
           summary:
             "Fundamentos rectores de la función archivística en el Estado colombiano: principios de procedencia y orden original, ciclo vital de los documentos y categorización de los archivos institucionales en la Procuraduría.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Procedencia vs. Orden Original",
+            alerta:
+              "En los exámenes de mérito suelen intercambiar las definiciones de 'Principio de Procedencia' y 'Principio de Orden Original'. Recuerda la regla infalible: PROCEDENCIA responde a QUIÉN produjo el documento (entidad/dependencia productora, no mezclar fondos), mientras que ORDEN ORIGINAL responde al CÓMO y CUÁNDO se dispusieron físicamente las piezas dentro del expediente (respetar la secuencia cronológica natural del trámite)."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #2 y #3)",
+            descripcion:
+              "Como Auxiliar Administrativo 5AM-09 en una Procuraduría Regional (ej. Regional Atlántico), cuando recibas un auto de apertura, las citaciones y las constancias de notificación de un proceso disciplinario, debes archivarlos dentro de la misma unidad documental (expediente) en el estricto orden cronológico en que se produjeron. Jamás debes armar una carpeta suelta de 'solo oficios' y otra de 'solo autos'."
+          },
           sections: [
             {
               heading: "1. Los Dos Principios Fundamentales de la Archivística",
@@ -44,7 +261,7 @@ const COURSE_DATA = {
                     "Archivo de Gestión (1ª Edad)",
                     "Valores Primarios (Administrativo, Legal, Fiscal, Contable, Técnico)",
                     "Alta y constante (trámite activo)",
-                    "Productor en la dependencia / oficina respectiva"
+                    "Productor en la dependencia / Auxiliar Administrativo 5AM-09"
                   ],
                   [
                     "Archivo Central (2ª Edad)",
@@ -67,7 +284,7 @@ const COURSE_DATA = {
               callout: {
                 type: "norma",
                 title: "Secuencia Jerárquica Documental (De mayor a menor)",
-                text: "Fondo Documental (Entidad: PGN) → Subfondo / Sección (Dependencia productora: ej. Procuraduría Provincial) → Subsección (Grupo interno de trabajo) → Serie Documental (Conjunto de unidades de estructura y contenido homogéneos: ej. Procesos Disciplinarios) → Subserie → Unidad Documental Compleja (Expediente) → Unidad Documental Simple (Pieza / Folio)."
+                text: "Fondo Documental (Entidad: PGN) → Subfondo / Sección (Dependencia productora: ej. Procuraduría Regional Atlántico) → Subsección (Grupo interno de trabajo) → Serie Documental (Conjunto de unidades homogéneas: ej. Procesos Disciplinarios) → Subserie → Unidad Documental Compleja (Expediente) → Unidad Documental Simple (Pieza / Folio)."
               }
             }
           ],
@@ -75,6 +292,56 @@ const COURSE_DATA = {
             "Los valores primarios interesan a la propia administración (administrativo, legal, fiscal, contable); los secundarios interesan a la historia, ciencia y cultura.",
             "Nunca se deben organizar expedientes por tipo de documento aislado ('carpeta de oficios enviados', 'carpeta de memorandos'); siempre se conforman por serie/asunto respetando el Orden Original.",
             "Los documentos públicos son inalienables, imprescriptibles e inembargables."
+          ],
+          videos: [
+            {
+              titulo: "Ley 594 de 2000 · Ley General de Archivos y Ciclo Vital Documental",
+              canal: "Archivo General de la Nación Colombia",
+              duracion: "14:20",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=Ley+594+de+2000+principios+archivisticos+ciclo+vital+AGN"
+            },
+            {
+              titulo: "Principio de Procedencia y Principio de Orden Original Explicados con Casos",
+              canal: "Capacitación Gestión Documental Pública",
+              duracion: "11:45",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=principio+de+procedencia+y+orden+original+archivistica+colombia"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-gd101-1",
+              categoria: "Ley 594 de 2000",
+              frente: "¿Qué establece el Principio de Orden Original?",
+              reverso:
+                "Establece que los documentos dentro de un expediente deben conservar la disposición física y secuencia cronológica en que fueron producidos durante el trámite que les dio origen.",
+              referencia: "Art. 4 Ley 594 de 2000"
+            },
+            {
+              id: "fc-gd101-2",
+              categoria: "Ley 594 de 2000",
+              frente: "¿Qué establece el Principio de Procedencia?",
+              reverso:
+                "Establece que cada documento debe conservarse en el fondo documental y dependencia productora a la que naturalmente pertenece, sin mezclarse con los de otras entidades u oficinas.",
+              referencia: "Art. 4 Ley 594 de 2000"
+            },
+            {
+              id: "fc-gd101-3",
+              categoria: "Ciclo Vital Documental",
+              frente: "¿Cuáles son las 3 fases del archivo según el ciclo vital del documento (Art. 23 Ley 594)?",
+              reverso:
+                "1) Archivo de Gestión (trámite activo en la oficina), 2) Archivo Central (consulta esporádica tras finalizar trámite) y 3) Archivo Histórico (conservación permanente por valor secundario).",
+              referencia: "Art. 23 Ley 594 de 2000"
+            },
+            {
+              id: "fc-gd101-4",
+              categoria: "Valores Documentales",
+              frente: "¿Cuáles son los Valores Primarios vs. los Valores Secundarios de un documento?",
+              reverso:
+                "Primarios: Administrativo, Legal, Fiscal, Contable y Técnico (interesan a la entidad productora). Secundarios: Histórico, Cultural, Científico e Investigativo (interesan a la sociedad y memoria colectiva).",
+              referencia: "Acuerdo AGN 001 de 2024"
+            }
           ],
           caseQuestion: {
             stem: "Un funcionario recién vinculado a una Procuraduría Regional decide reorganizar los expedientes disciplinarios activos extrayendo todos los oficios remisores para guardarlos en una AZ independiente denominada 'Oficios Despachados 2026', dejando los autos en otra carpeta. Desde el punto de vista técnico archivístico, esta actuación:",
@@ -91,12 +358,22 @@ const COURSE_DATA = {
         {
           id: "gd-102",
           code: "1.2",
-          title: "Tablas de Retención Documental (TRD) y Tablas de Valoración (TVD)",
+          title: "Tablas de Retención Documental (TRD), TVD y Foliación (Acuerdo 042 de 2002)",
           duration: "18 min",
           priority: "Esencial",
-          normativa: ["Acuerdo AGN 004 de 2019", "Ley 594 de 2000 Art. 24", "Acuerdo AGN 001 de 2024"],
+          normativa: ["Acuerdo AGN 004 de 2019", "Acuerdo AGN 042 de 2002", "Ley 594 de 2000 Art. 24"],
           summary:
-            "Instrumentos archivísticos esenciales para determinar tiempos de permanencia en cada fase del archivo y la disposición final de las series y subseries documentales.",
+            "Instrumentos archivísticos esenciales para determinar tiempos de permanencia en cada fase del archivo, disposición final de las series y reglas técnicas de foliación física.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Conteo de Retención y Esquina de Foliación",
+            alerta:
+              "Trampa 1: Confundir TRD (producción actual y futura) con TVD (fondos acumulados antiguos). Trampa 2: Creer que los años de retención en la TRD se cuentan desde que se abre la carpeta; ¡SIEMPRE se cuentan desde el CIERRE definitivo del trámite! Trampa 3: La foliación siempre va en la esquina SUPERIOR DERECHA de la cara recta del folio con lápiz de mina negra (HB o B), nunca en la esquina inferior ni con esfero de tinta húmeda."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #2 y #3)",
+            descripcion:
+              "El Auxiliar Administrativo 5AM-09 es el responsable directo de foliar los expedientes en la esquina superior derecha, depurar duplicados o ganchos metálicos oxidados y diligenciar el Formato Único de Inventario Documental (FUID) cuando se cumplen los tiempos de la TRD para transferir del Archivo de Gestión al Archivo Central."
+          },
           sections: [
             {
               heading: "1. Diferencia Técnica entre TRD y TVD",
@@ -127,25 +404,67 @@ const COURSE_DATA = {
               body: "Al cumplirse el tiempo de retención en el Archivo Central, la TRD establece cuál es el destino técnico de la serie o subserie:",
               bullets: [
                 "CT (Conservación Total): Se aplica a documentos que adquieren valores secundarios (históricos, científicos o culturales). Pasan de manera definitiva al Archivo Histórico.",
-                "E (Eliminación): Destrucción técnica autorizada de documentos que han perdido totalmente sus valores primarios y carecen de valores secundarios. Requiere Acta de Eliminación aprobada por el Comité Institucional de Gestión y Desempeño y publicación previa del inventario.",
+                "E (Eliminación): Destrucción técnica autorizada de documentos que han perdido totalmente sus valores primarios y carecen de valores secundarios. Requiere Acta de Eliminación aprobada y publicación previa del inventario.",
                 "S (Selección): Muestreo técnico (cualitativo o cuantitativo) mediante el cual se conserva una fracción representativa de una serie voluminosa y se elimina el resto.",
                 "M / D (Microfilmación o Digitalización): Procedimiento de reprografía técnica con fines de preservación y consulta para complementar la Conservación Total o Selección."
               ]
             },
             {
-              heading: "3. Cuadro de Clasificación Documental (CCD) e Inventario FUID",
-              body: "La TRD se articula directamente con el Cuadro de Clasificación Documental (CCD), que codifica jerárquicamente las dependencias y series, y con el Formato Único de Inventario Documental (FUID), instrumento obligatorio para entregas de cargo, transferencias primarias/secundarias y eliminaciones.",
+              heading: "3. Reglas Oficiales de Foliación (Acuerdo AGN 042 de 2002)",
+              body: "La foliación es el acto de numerar las hojas (folios) por su cara recta (anverso) y es requisito indispensable para cualquier transferencia documental y para garantizar que ninguna pieza sea sustraída o añadida irregularmente:",
               callout: {
                 type: "alerta",
-                title: "Regla de Oro sobre Conteo de Términos de Retención",
-                text: "Los tiempos de retención establecidos en la TRD (tanto en Archivo de Gestión como en Archivo Central) comienzan a contarse a partir del CIERRE definitivo del trámite o expediente, nunca desde la fecha de apertura o primer folio."
+                title: "Protocolo Técnico de Foliación Física",
+                text: "Se numera de manera consecutiva (1, 2, 3...) en la ESQUINA SUPERIOR DERECHA de la cara recta del folio, en el mismo sentido del texto, utilizando lápiz de mina negra blanda (HB o B). Si existe un error de foliación, se anula trazando una línea oblicua (/) sobre el número equivocado y registrando la constancia; nunca se usa corrector líquido ni se arrancan hojas."
               }
             }
           ],
           keyPoints: [
             "Ningún servidor público puede eliminar documentos públicos por iniciativa propia; toda eliminación debe estar prevista en la TRD/TVD y contar con acta e inventario publicado.",
             "Las transferencias documentales primarias (del Archivo de Gestión al Central) deben realizarse estrictamente según el cronograma anual y usando el FUID.",
-            "Antes de transferir un expediente, debe depurarse (retirar copias idénticas, borradores sin valor, ganchos metálicos oxidables) y foliarse adecuadamente."
+            "La foliación se realiza en la esquina superior derecha de la cara recta del folio con lápiz de mina negra HB o B."
+          ],
+          videos: [
+            {
+              titulo: "Tablas de Retención Documental (TRD) vs. Tablas de Valoración (TVD)",
+              canal: "Archivo General de la Nación Colombia",
+              duracion: "16:10",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=Tablas+de+Retencion+Documental+TRD+y+TVD+Archivo+General+de+la+Nacion"
+            },
+            {
+              titulo: "Guía Práctica de Foliación Documental y Diligenciamiento del FUID",
+              canal: "Formación Archivística Colombia",
+              duracion: "12:30",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=como+foliar+expedientes+archivo+general+de+la+nacion+acuerdo+042+de+2002"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-gd102-1",
+              categoria: "Instrumentos Archivísticos",
+              frente: "¿Qué diferencia a la TRD de la TVD?",
+              reverso:
+                "La TRD asigna tiempos de permanencia y disposición final a los documentos actuales y futuros; la TVD se aplica a fondos acumulados antiguos producidos sin TRD.",
+              referencia: "Acuerdo AGN 004 de 2019"
+            },
+            {
+              id: "fc-gd102-2",
+              categoria: "Acuerdo 042 de 2002",
+              frente: "¿En qué lugar exacto de la hoja se realiza la foliación y con qué implemento?",
+              reverso:
+                "En la esquina superior derecha de la cara recta (anverso) del folio, en el sentido del texto, utilizando lápiz de mina negra tipo HB o B.",
+              referencia: "Acuerdo AGN 042 de 2002"
+            },
+            {
+              id: "fc-gd102-3",
+              categoria: "Retención Documental",
+              frente: "¿Desde qué momento empiezan a contarse los años de retención de un expediente en la TRD?",
+              reverso:
+                "A partir del CIERRE definitivo del trámite o actuación administrativa/disciplinaria, nunca desde la fecha de apertura del expediente.",
+              referencia: "Acuerdo AGN 004 de 2019"
+            }
           ],
           caseQuestion: {
             stem: "Un expediente contractual en una Procuraduría Provincial fue abierto en marzo de 2023 y su liquidación definitiva (cierre del trámite) se firmó en noviembre de 2025. Si la TRD indica una retención de 2 años en Archivo de Gestión y 18 años en Archivo Central, ¿a partir de qué momento se empiezan a contar los 2 años de permanencia en el Archivo de Gestión?",
@@ -168,6 +487,16 @@ const COURSE_DATA = {
           normativa: ["Acuerdo AGN 060 de 2001", "Ley 1437 de 2011 (CPACA)", "Ley 527 de 1999"],
           summary:
             "Lineamientos obligatorios para la recepción, radicación, numeración consecutiva, distribución y control de las comunicaciones oficiales enviadas y recibidas.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Reserva de Números y Correspondencia Privada",
+            alerta:
+              "Si el caso plantea que un jefe o procurador pide 'guardar o reservar 3 números de radicado del viernes para usarlos el lunes' o 'ponerle número BIS a un oficio', la respuesta SIEMPRE es que está PROHIBIDO por el Art. 5 del Acuerdo 060 de 2001. Además, los sobres privados/personales dirigidos a un servidor NO se abren ni se radican como comunicación oficial."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #1 y #9)",
+            descripcion:
+              "La Función #1 del cargo 5AM-09 consiste precisamente en recibir, radicar, clasificar y distribuir las comunicaciones oficiales en el sistema SIGDEA/SIM. Debes verificar que todo oficio de salida lleve la firma autorizada antes de asignarle consecutivo de radicación."
+          },
           sections: [
             {
               heading: "1. Comunicaciones Oficiales vs. Correspondencia Personal",
@@ -201,6 +530,33 @@ const COURSE_DATA = {
             "No se pueden reservar números de radicado para comunicaciones futuras bajo ninguna circunstancia.",
             "En las comunicaciones internas (memorandos) se emplean controles consecutivos internos que identifican la dependencia productora y la destinataria."
           ],
+          videos: [
+            {
+              titulo: "Acuerdo 060 de 2001 AGN · Pautas para Administración de Comunicaciones Oficiales",
+              canal: "Archivo General de la Nación Colombia",
+              duracion: "13:50",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=Acuerdo+060+de+2001+AGN+comunicaciones+oficiales+radicacion"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-gd103-1",
+              categoria: "Acuerdo 060 de 2001",
+              frente: "¿Está permitido reservar números de radicación o usar sufijos 'BIS' en comunicaciones oficiales?",
+              reverso:
+                "No. El artículo 5 del Acuerdo 060 de 2001 prohíbe taxativamente reservar números de radicación, dejar espacios en blanco, repetir números o agregar sufijos como BIS.",
+              referencia: "Art. 5 Acuerdo AGN 060 de 2001"
+            },
+            {
+              id: "fc-gd103-2",
+              categoria: "Acuerdo 060 de 2001",
+              frente: "¿Qué diferencia una Comunicación Oficial de la Correspondencia Privada?",
+              reverso:
+                "La Comunicación Oficial trata asuntos propios de las funciones de la entidad y se radica; la Correspondencia Privada es de carácter personal del funcionario, NO se abre ni se radica.",
+              referencia: "Art. 2 Acuerdo AGN 060 de 2001"
+            }
+          ],
           caseQuestion: {
             stem: "El viernes a las 4:50 p. m., un asesor solicita al encargado de la Ventanilla Única de la Procuraduría que le reserve tres números de radicación de salida con fecha del viernes para unos oficios que terminará de redactar y firmar el lunes a primera hora. ¿Cuál debe ser la actuación del funcionario de correspondencia?",
             options: [
@@ -222,6 +578,16 @@ const COURSE_DATA = {
           normativa: ["Decreto 1080 de 2015", "Acuerdo AGN 001 de 2024", "Modelo Integrado de Planeación y Gestión (MIPG)"],
           summary:
             "Estructura estratégica del Programa de Gestión Documental (PGD) y articulación de los ocho procesos técnicos que rigen el documento desde su planeación hasta su valoración.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Las 3 Fases dentro de 'Organización'",
+            alerta:
+              "Muchos aspirantes confunden el proceso general ('Organización Documental') con una de sus partes ('Ordenación'). Recuerda la ecuación exacta: ORGANIZACIÓN = 1º Clasificación (agrupar por serie/CCD) + 2º Ordenación (secuencia cronológica y foliación) + 3º Descripción (hacer el inventario FUID y metadatos)."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #2, #3 y #9)",
+            descripcion:
+              "En tu puesto de Auxiliar Administrativo 5AM-09 aplicas a diario el proceso #3 (Gestión y Trámite al radicar y distribuir), el proceso #4 (Organización al clasificar en carpetas, ordenar cronológicamente y describir en el FUID) y el proceso #5 (Transferencia primaria hacia el Archivo Central)."
+          },
           sections: [
             {
               heading: "1. Los 8 Procesos de la Gestión Documental (Decreto 1080 de 2015)",
@@ -255,6 +621,33 @@ const COURSE_DATA = {
             "La foliación se realiza en la esquina superior derecha de la cara recta del folio, de manera consecutiva, sin omitir ni repetir números.",
             "El PGD debe estar alineado con la Dimensión de Gestión del Conocimiento y la Dimensión de Información y Comunicación del MIPG."
           ],
+          videos: [
+            {
+              titulo: "Los 8 Procesos de la Gestión Documental (Decreto 1080 de 2015) y el PGD",
+              canal: "Archivo General de la Nación Colombia",
+              duracion: "15:15",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=8+procesos+de+la+gestion+documental+decreto+1080+de+2015+AGN"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-gd104-1",
+              categoria: "Organización Documental",
+              frente: "¿Cuáles son las 3 operaciones técnicas que integran el proceso de Organización Documental?",
+              reverso:
+                "1. Clasificación (agrupar por series según el CCD), 2. Ordenación (disponer cronológicamente según Orden Original y foliar) y 3. Descripción (diligenciar el FUID e índices).",
+              referencia: "Decreto 1080 de 2015"
+            },
+            {
+              id: "fc-gd104-2",
+              categoria: "Transferencias Documentales",
+              frente: "¿Qué es una Transferencia Documental Primaria vs. Secundaria?",
+              reverso:
+                "Primaria: Remisión de expedientes del Archivo de Gestión al Archivo Central. Secundaria: Remisión de expedientes con valor permanente del Archivo Central al Archivo Histórico.",
+              referencia: "Acuerdo AGN 001 de 2024"
+            }
+          ],
           caseQuestion: {
             stem: "Dentro del proceso técnico de Organización Documental, cuando un servidor público elabora el Formato Único de Inventario Documental (FUID) y diligencia los metadatos e índices de búsqueda para localizar rápidamente los expedientes de una serie, está ejecutando específicamente la fase de:",
             options: [
@@ -285,6 +678,16 @@ const COURSE_DATA = {
           normativa: ["Art. 23 Constitución Política", "Ley 1755 de 2015", "Ley 1437 de 2011 (CPACA)"],
           summary:
             "Dominio absoluto de las modalidades del derecho de petición, plazos perentorios de respuesta, trámite de peticiones incompletas, falta de competencia y reserva legal.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: 10 días (Documentos) vs. 15 días (General) vs. 5 días (Traslado)",
+            alerta:
+              "Lee con lupa qué pide el ciudadano en el enunciado: si solicita COPIAS o INFORMACIÓN pública, el plazo es de 10 DÍAS HÁBILES (y si no se responde en 10 días, opera aceptación tácita y hay 3 días para entregar las copias). Si la PGN NO es competente, hay 5 DÍAS HÁBILES para remitirla al competente. El término general de 15 días aplica para peticiones de interés general, particular, quejas y reclamos."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #4 y #5)",
+            descripcion:
+              "En el empleo 5AM-09 llevas el tablero de control de términos de las peticiones recibidas en la Procuraduría Regional o Provincial. Tu labor preventiva de alertar antes del vencimiento evita que el despacho incurra en falta disciplinaria (Art. 31 Ley 1755 de 2015)."
+          },
           sections: [
             {
               heading: "1. Matriz Oficial de Términos del Derecho de Petición",
@@ -344,6 +747,41 @@ const COURSE_DATA = {
             "Las peticiones anónimas deben admitirse y tramitarse siempre que los hechos narrados ameriten una actuación o queja verificable.",
             "Peticiones de congresistas en ejercicio de control político se rigen por la Ley 5ª de 1992 (5 días calendario siguientes a su recepción)."
           ],
+          videos: [
+            {
+              titulo: "Ley 1755 de 2015 · Derecho de Petición, Términos y Silencio Positivo en Documentos",
+              canal: "Función Pública / Capacitación Estatal",
+              duracion: "17:05",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=Ley+1755+de+2015+derecho+de+peticion+terminos+concurso+de+meritos"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-au201-1",
+              categoria: "Ley 1755 de 2015",
+              frente: "¿Cuáles son los 3 términos básicos del Derecho de Petición (Art. 14 Ley 1755)?",
+              reverso:
+                "• 15 días hábiles: Peticiones generales, particulares, quejas y reclamos.\n• 10 días hábiles: Peticiones de información y copias de documentos.\n• 30 días hábiles: Consultas o conceptos jurídicos/técnicos.",
+              referencia: "Art. 14 Ley 1755 de 2015"
+            },
+            {
+              id: "fc-au201-2",
+              categoria: "Falta de Competencia",
+              frente: "¿Qué plazo tiene la entidad para trasladar una petición escrita cuando NO es competente?",
+              reverso:
+                "Cinco (5) días hábiles siguientes a la recepción, remitiéndola a la autoridad competente e informando de inmediato al peticionario con copia del oficio remisorio.",
+              referencia: "Art. 21 Ley 1755 de 2015"
+            },
+            {
+              id: "fc-au201-3",
+              categoria: "Aceptación Tácita Documentos",
+              frente: "¿Qué ocurre si pasan 10 días hábiles sin responder una solicitud de copias/documentos?",
+              reverso:
+                "Se entiende aceptada la solicitud para todos los efectos legales y las copias deberán entregarse dentro de los tres (3) días hábiles siguientes.",
+              referencia: "Art. 14 Num. 1 Ley 1755 de 2015"
+            }
+          ],
           caseQuestion: {
             stem: "Un ciudadano radica en la Procuraduría una solicitud de copias simples de un informe de gestión pública que no goza de reserva legal. Transcurridos once (11) días hábiles desde la radicación sin que la dependencia haya emitido respuesta ni informado prórroga antes del vencimiento, ¿qué efecto jurídico se produce según el artículo 14 de la Ley 1755 de 2015?",
             options: [
@@ -365,6 +803,16 @@ const COURSE_DATA = {
           normativa: ["Resolución PGN de Atención al Ciudadano", "Ley 1952 de 2019", "Ley 1712 de 2014"],
           summary:
             "Clasificación precisa de las solicitudes ciudadanas ante el Ministerio Público y distinción crítica entre queja por atención al servicio y queja o denuncia de carácter disciplinario.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: El Quejoso NO es Sujeto Procesal",
+            alerta:
+              "En el proceso disciplinario (Art. 110 Parágrafo 1 de la Ley 1952 de 2019), el quejoso NO tiene calidad de sujeto procesal. Solo tiene 3 facultades taxativas: 1) presentar y ampliar la queja bajo juramento, 2) aportar las pruebas que tenga en su poder y 3) recurrir la decisión de archivo y el fallo absolutorio. Además, en ventanilla NUNCA se rechaza una queja porque al ciudadano le falten pruebas físicas."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #1 y #4)",
+            descripcion:
+              "En el Centro de Atención al Público (CAP) o ventanilla de una Procuraduría Regional, cuando un ciudadano acude a denunciar una conducta irregular de un servidor público, tu deber como Auxiliar Administrativo 5AM-09 es recibirla, radicarla con trato respetuoso y orientarlo sobre el trámite de evaluación disciplinaria."
+          },
           sections: [
             {
               heading: "1. Clasificación Técnica de las PQRSDF",
@@ -415,6 +863,25 @@ const COURSE_DATA = {
             "Las peticiones de intervención judicial o administrativa buscan que un Procurador Judicial o Delegado actúe como Ministerio Público en defensa del orden jurídico o derechos fundamentales.",
             "Toda solicitud recibida debe quedar registrada en el sistema de gestión documental de la PGN entregando al ciudadano su número de radicado."
           ],
+          videos: [
+            {
+              titulo: "PQRSDF en el Sector Público y Trámite de Quejas Disciplinarias en la PGN",
+              canal: "Instituto de Estudios del Ministerio Público - IEMP",
+              duracion: "14:40",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=atencion+al+ciudadano+PQRSDF+queja+disciplinaria+procuraduria"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-au202-1",
+              categoria: "Proceso Disciplinario",
+              frente: "¿Cuáles son las únicas 3 facultades del quejoso en el proceso disciplinario?",
+              reverso:
+                "1) Presentar y ampliar la queja bajo juramento, 2) Aportar las pruebas que tenga en su poder y 3) Recurrir la decisión de archivo y el fallo absolutorio (No es sujeto procesal).",
+              referencia: "Art. 110 Parágrafo 1 Ley 1952 de 2019"
+            }
+          ],
           caseQuestion: {
             stem: "Una ciudadana acude al Centro de Atención al Público (CAP) de la Procuraduría para manifestar que un funcionario de una alcaldía municipal le exigió dinero para agilizar una licencia urbanística. Al clasificar y orientar este requerimiento, el servidor de la PGN debe:",
             options: [
@@ -436,6 +903,16 @@ const COURSE_DATA = {
           normativa: ["Ley 1712 de 2014", "Ley 1755 de 2015 Art. 20", "Directivas PGN sobre Enfoque Diferencial"],
           summary:
             "Atención prioritaria a sujetos de especial protección constitucional, lenguaje claro, comunicación asertiva y garantía del derecho de acceso a la información pública.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Información Clasificada vs. Información Reservada",
+            alerta:
+              "En la Ley 1712 de 2014, la Información PÚBLICA CLASIFICADA protege datos privados/semiprivados de personas particulares (ej. historia clínica, intimidad, datos personales sensibles), mientras que la Información PÚBLICA RESERVADA protege intereses públicos superiores del Estado (ej. seguridad nacional, defensa, investigaciones disciplinarias en curso antes del pliego de cargos o etapa reservada)."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #4 y #10)",
+            descripcion:
+              "Al expedir copias autorizadas o atender público en ventanilla, el Auxiliar Administrativo 5AM-09 debe dar turno preferente a adultos mayores, gestantes y personas con discapacidad, y verificar que en las versiones públicas de actos administrativos se testen los datos sensibles."
+          },
           sections: [
             {
               heading: "1. Atención Prioritaria y Sujetos de Especial Protección",
@@ -482,6 +959,25 @@ const COURSE_DATA = {
             "Las peticiones formuladas por niños, niñas o adolescentes no requieren representación de adulto ni abogado para ser recibidas y atendidas.",
             "La reproducción de documentos solo puede cobrar el costo real de producción del medio físico; el envío por correo electrónico es gratuito."
           ],
+          videos: [
+            {
+              titulo: "Ley 1712 de 2014 · Transparencia, Información Clasificada vs. Reservada",
+              canal: "Función Pública Colombia",
+              duracion: "12:50",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=Ley+1712+de+2014+informacion+clasificada+y+reservada+colombia"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-au203-1",
+              categoria: "Ley 1712 de 2014",
+              frente: "¿Qué diferencia a la Información Pública Clasificada de la Información Pública Reservada?",
+              reverso:
+                "La Clasificada protege la intimidad y datos personales/sensibles de personas particulares; la Reservada protege intereses públicos superiores (seguridad nacional, orden público, investigaciones reservadas).",
+              referencia: "Arts. 18 y 19 Ley 1712 de 2014"
+            }
+          ],
           caseQuestion: {
             stem: "Un ciudadano solicita copia de una resolución administrativa de la Procuraduría que, en uno de sus párrafos, menciona datos personales sensibles sobre el estado de salud e historia clínica de un funcionario. De acuerdo con la Ley 1712 de 2014, la actuación correcta es:",
             options: [
@@ -512,6 +1008,16 @@ const COURSE_DATA = {
           normativa: ["Marco Normativo Contaduría General de la Nación (NICSP)", "Manual de Administración de Bienes PGN", "Ley 80 de 1993"],
           summary:
             "Distinción técnica y contable entre bienes de consumo y bienes devolutivos, flujo documental de entradas y salidas de almacén, plaqueteo y valoración de activos.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Comprobante de Salida de Almacén vs. Factura",
+            alerta:
+              "Cuando el examen pregunta qué documento soporta formalmente la entrega de elementos del almacén al servidor público y traslada la responsabilidad de custodia, la respuesta NUNCA es la factura del proveedor ni un correo electrónico: siempre es el COMPROBANTE DE EGRESO O SALIDA DE ALMACÉN debidamente firmado."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #6 y #7)",
+            descripcion:
+              "Como Auxiliar Administrativo 5AM-09 debes recibir físicamente la papelería e insumos de oficina (bienes de consumo) y los equipos o mobiliario (bienes devolutivos), verificando cantidades, placas y firmando el comprobante de salida de almacén."
+          },
           sections: [
             {
               heading: "1. Bienes Devolutivos vs. Bienes de Consumo",
@@ -553,9 +1059,36 @@ const COURSE_DATA = {
             }
           ],
           keyPoints: [
-            "Ningún bien adquirido por la entidad puede entregarse directamente del proveedor al usuario final sin surtir previamente el registro de Entrada y Salida de Almacén (salvo casos de legalización en sede territorial autorizada).",
+            "Ningún bien adquirido por la entidad puede entregarse directamente del proveedor al usuario final sin surtir previamente el registro de Entrada y Salida de Almacén.",
             "El plaqueteo (asignación de placa única de identificación) es obligatorio para todo bien devolutivo antes de su puesta en servicio.",
-            "Los bienes recibidos en comodato (préstamo de uso) no son propiedad de la entidad, pero se registran en cuentas de orden para control administrativo y de seguros."
+            "El Comprobante de Salida de Almacén firmado formaliza la entrega y asunción de responsabilidad sobre los bienes."
+          ],
+          videos: [
+            {
+              titulo: "Administración de Bienes Públicos: Bienes de Consumo vs. Bienes Devolutivos",
+              canal: "Contaduría General de la Nación / Gestión Pública",
+              duracion: "14:10",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=bienes+devolutivos+y+de+consumo+almacen+inventarios+sector+publico"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-inv301-1",
+              categoria: "Inventarios y Almacén",
+              frente: "¿Cuál es la diferencia esencial entre un Bien de Consumo y un Bien Devolutivo?",
+              reverso:
+                "El bien de consumo se agota o extingue con su uso (ej. papel, tóner); el bien devolutivo tiene vida útil prolongada, lleva placa de inventario individual y debe reintegrarse al almacén.",
+              referencia: "Manual de Administración de Bienes PGN"
+            },
+            {
+              id: "fc-inv301-2",
+              categoria: "Soportes de Almacén",
+              frente: "¿Qué documento soporta formalmente la entrega de elementos del almacén a un funcionario y le traslada la custodia?",
+              reverso:
+                "El Comprobante de Egreso o Salida de Almacén debidamente firmado por el servidor que recibe.",
+              referencia: "Procedimiento de Almacén e Inventarios PGN"
+            }
           ],
           caseQuestion: {
             stem: "Un contratista proveedor entrega directamente en una Procuraduría Provincial 10 computadores portátiles nuevos objeto de un contrato de compraventa. El coordinador administrativo reparte de inmediato los equipos a los funcionarios para agilizar el trabajo, sin tramitar comprobante de entrada a almacén ni asignar placas de inventario. Esta actuación es:",
@@ -578,6 +1111,16 @@ const COURSE_DATA = {
           normativa: ["Ley 1952 de 2019 Art. 38 y 39", "Ley 610 de 2000 (Responsabilidad Fiscal)", "Manual de Bienes PGN"],
           summary:
             "Deberes de guarda, uso exclusivo para el servicio, prohibición de préstamos o traslados no autorizados, paz y salvo de inventarios y procedimiento ante pérdida o daño.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Préstamos Verbales entre Compañeros",
+            alerta:
+              "Si en un caso situacional el funcionario A le entrega su computador o escáner al funcionario B 'de palabra' por un traslado urgente y el equipo se pierde, la responsabilidad administrativa primaria ante Almacén recae sobre el funcionario A, porque el bien continúa cargado a su inventario individual hasta que se legalice el formato oficial de traslado."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #6 y #7)",
+            descripcion:
+              "El Auxiliar Administrativo 5AM-09 debe velar por que ningún equipo de cómputo, impresora o mobiliario cambie de oficina o de responsable sin tramitar previamente el acta de traslado en el sistema de inventarios."
+          },
           sections: [
             {
               heading: "1. Obligaciones del Servidor Público frente a su Inventario Individual",
@@ -603,6 +1146,25 @@ const COURSE_DATA = {
             "La responsabilidad fiscal (Ley 610 de 2000) es de carácter patrimonial y resarcitorio: busca recuperar el detrimento patrimonial sufrido por el Estado cuando hay dolo o culpa grave.",
             "Para retirar un equipo de las instalaciones de la entidad (ej. trabajo en casa o comisión) se requiere autorización expresa de salida de bienes."
           ],
+          videos: [
+            {
+              titulo: "Responsabilidad Fiscal (Ley 610 de 2000) y Disciplinaria sobre Bienes del Estado",
+              canal: "Formación Control Fiscal y Disciplinario",
+              duracion: "15:00",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=responsabilidad+fiscal+y+disciplinaria+custodia+de+bienes+publicos"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-inv302-1",
+              categoria: "Custodia de Bienes",
+              frente: "¿Qué debe hacer de inmediato un servidor público si sufre el hurto de un equipo institucional asignado?",
+              reverso:
+                "1) Interponer denuncia penal indicando marca, serial y placa de inventario, y 2) Informar por escrito de inmediato al jefe inmediato y al Grupo de Almacén/Seguros adjuntando la denuncia.",
+              referencia: "Manual de Bienes PGN"
+            }
+          ],
           caseQuestion: {
             stem: "Un funcionario de la Procuraduría es trasladado de dependencia y, por premura, le deja su computador de escritorio y su escáner a un compañero de oficina mediante un acuerdo verbal, sin reportar ni tramitar el traslado ante el Grupo de Almacén e Inventarios. Tres meses después, en la toma física, el escáner no aparece. ¿Sobre quién recae primariamente el requerimiento administrativo de inventarios?",
             options: [
@@ -624,6 +1186,16 @@ const COURSE_DATA = {
           normativa: ["Resoluciones Contaduría General de la Nación", "Ley 42 de 1993", "Decreto 1082 de 2015"],
           summary:
             "Procedimientos periódicos de verificación física, conciliación entre almacén y contabilidad, avalúo técnico y causales legales para la baja definitiva de bienes públicos.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Bienes Inservibles en Oficina",
+            alerta:
+              "Jamás selecciones una opción donde un funcionario 'bota a la basura', 'regala' o 'desarma' un equipo dañado en su propia oficina. Todo bien devolutivo dañado u obsoleto debe REINTEGRARSE primero a la bodega de Almacén con concepto técnico para que el Comité de Bajas y el ordenador del gasto expidan el acto administrativo de baja."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Función #7)",
+            descripcion:
+              "Durante la toma física anual en la Procuraduría Regional, el Auxiliar Administrativo 5AM-09 acompaña la verificación de placas y seriales y tramita el reintegro al almacén de los bienes deteriorados u obsoletos."
+          },
           sections: [
             {
               heading: "1. Toma Física y Conciliación Almacén - Contabilidad",
@@ -665,6 +1237,25 @@ const COURSE_DATA = {
             "Los residuos de aparatos eléctricos y electrónicos (RAEE) dados de baja requieren disposición final ambientalmente segura con gestor autorizado (Ley 1672 de 2013).",
             "Un bien inservible en una oficina no debe arrojarse a la basura; debe reintegrarse primero al almacén para surtir el procedimiento legal de baja."
           ],
+          videos: [
+            {
+              titulo: "Toma Física de Inventarios, Conciliación Contable y Baja de Bienes Públicos",
+              canal: "Gestión Financiera y Contable Pública",
+              duracion: "13:20",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=baja+de+bienes+publicos+toma+fisica+inventarios+contaduria+general"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-inv303-1",
+              categoria: "Baja de Bienes",
+              frente: "¿Cuáles son los 4 pasos obligatorios para dar de baja un equipo de cómputo dañado en la PGN?",
+              reverso:
+                "1) Reintegro físico al Almacén, 2) Concepto técnico de Sistemas/TI (y borrado seguro), 3) Recomendación del Comité de Bajas y 4) Acto administrativo motivado + disposición RAEE.",
+              referencia: "Manual de Administración de Bienes PGN"
+            }
+          ],
           caseQuestion: {
             stem: "En una oficina de la Procuraduría una impresora láser sufre un daño grave en su tarjeta principal. El técnico informa verbalmente que repararla cuesta más que comprar una nueva. ¿Cuál es el procedimiento administrativo correcto para retirar ese activo del inventario?",
             options: [
@@ -695,6 +1286,16 @@ const COURSE_DATA = {
           normativa: ["Constitución Política Arts. 275 a 284", "Decreto Ley 262 de 2000", "Decreto Ley 1851 de 2021"],
           summary:
             "Ubicación de la Procuraduría como órgano de control autónomo e independiente, sus tres ejes misionales (Preventivo, Intervención y Disciplinario) y su estructura territorial.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Ministerio Público vs. Rama Ejecutiva / Fiscalía",
+            alerta:
+              "La Procuraduría General de la Nación NO pertenece a la Rama Ejecutiva ni a la Rama Judicial (donde está la Fiscalía): es el máximo organismo del MINISTERIO PÚBLICO (Órgano de Control autónomo e independiente). Además, recuerda que la Función Preventiva vigila y exhorta, pero NUNCA puede coadministrar."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Nivel Territorial / Regional Atlántico)",
+            descripcion:
+              "En una Procuraduría Regional o Provincial, el Auxiliar Administrativo 5AM-09 apoya transversalmente los tres ejes misionales: tramita expedientes de actuaciones preventivas, comunicaciones de intervención judicial/administrativa y procesos disciplinarios (distinguiendo entre despachos de Instrucción y de Juzgamiento)."
+          },
           sections: [
             {
               heading: "1. ¿Qué es el Ministerio Público y quién lo dirige?",
@@ -744,6 +1345,33 @@ const COURSE_DATA = {
             "La función preventiva vigila y alerta oportunamente, pero tiene expresamente prohibido coadministrar o cogobernar con las entidades vigiladas.",
             "El Instituto de Estudios del Ministerio Público (IEMP) es la unidad administrativa especial de la PGN encargada de la capacitación, investigación y gestión del conocimiento."
           ],
+          videos: [
+            {
+              titulo: "Estructura de la Procuraduría General de la Nación (Decreto Ley 262 de 2000)",
+              canal: "Procuraduría General de la Nación / IEMP",
+              duracion: "16:40",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=Decreto+262+de+2000+estructura+Procuraduria+General+de+la+Nacion+funciones"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-pgn401-1",
+              categoria: "Estructura Constitucional",
+              frente: "¿De qué órgano constitucional es supremo director el Procurador General de la Nación y quién lo elige?",
+              reverso:
+                "Es el supremo director del Ministerio Público. Lo elige el Senado de la República para un período de 4 años de terna enviada por el Presidente, la Corte Suprema y el Consejo de Estado.",
+              referencia: "Arts. 275 y 276 Constitución Política"
+            },
+            {
+              id: "fc-pgn401-2",
+              categoria: "Funciones Misionales PGN",
+              frente: "¿Cuáles son las 3 funciones misionales de la Procuraduría General de la Nación?",
+              reverso:
+                "1) Función Preventiva (sin coadministrar), 2) Función de Intervención Judicial y Administrativa, y 3) Función Disciplinaria (con poder preferente).",
+              referencia: "Decreto Ley 262 de 2000"
+            }
+          ],
           caseQuestion: {
             stem: "En desarrollo de una actuación preventiva frente a una licitación pública de un municipio, un funcionario de la Procuraduría le ordena al alcalde adjudicar el contrato a uno de los oferentes específicos que participa en el proceso. Esta actuación:",
             options: [
@@ -765,6 +1393,16 @@ const COURSE_DATA = {
           normativa: ["Ley 1952 de 2019", "Ley 2094 de 2021", "Sentencia C-030 de 2023"],
           summary:
             "Principios rectores de la acción disciplinaria, ilicitud sustancial, clasificación de las faltas, formas de culpabilidad (dolo y culpa) y etapas del proceso disciplinario.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Culpa Leve e Indagación Previa",
+            alerta:
+              "Trampa 1: En derecho disciplinario colombiano NO existe sanción por Culpa Leve (solo Dolo, Culpa Gravísima o Culpa Grave). Trampa 2: La Indagación Previa (6 meses) NO es obligatoria en todos los procesos; solo procede cuando existe DUDA sobre la identificación o individualización del autor de la falta."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #8, #9 y #10)",
+            descripcion:
+              "En el apoyo administrativo a los despachos de Instrucción y Juzgamiento, el Auxiliar Administrativo 5AM-09 elabora oficios de notificación, controla que los expedientes se remitan del despacho instructor al de juzgamiento tras el pliego de cargos y protege la reserva legal de las actuaciones."
+          },
           sections: [
             {
               heading: "1. Estructura de la Responsabilidad Disciplinaria",
@@ -814,6 +1452,25 @@ const COURSE_DATA = {
             "La Indagación Previa tiene una duración de seis (6) meses y procede únicamente cuando existe duda sobre la identificación o individualización del posible autor de la falta.",
             "La acción disciplinaria caduca/prescribe conforme al artículo 33 de la Ley 1952 de 2019 (5 años para faltas instantáneas o desde el último acto en las permanentes; hasta 12 años para faltas gravísimas de DIH y DDHH)."
           ],
+          videos: [
+            {
+              titulo: "Código General Disciplinario (Ley 1952 de 2019 y Ley 2094 de 2021) Explicado",
+              canal: "IEMP · Procuraduría General de la Nación",
+              duracion: "19:10",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=Codigo+General+Disciplinario+Ley+1952+de+2019+Ley+2094+de+2021+etapas"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-pgn402-1",
+              categoria: "Código General Disciplinario",
+              frente: "¿Cuándo procede abrir Indagación Previa y cuál es su término máximo?",
+              reverso:
+                "Procede únicamente cuando existe duda sobre la identificación o individualización del posible autor de la falta disciplinaria, y tiene un término máximo de seis (6) meses.",
+              referencia: "Art. 208 Ley 1952 de 2019 (Mod. Ley 2094/2021)"
+            }
+          ],
           caseQuestion: {
             stem: "Se presenta una queja disciplinaria en la que están plenamente identificados con nombre, cédula y cargo los dos servidores públicos presuntamente responsables de una irregularidad contractual. De acuerdo con el Código General Disciplinario (Ley 1952 de 2019), ¿qué actuación procesal procede abrir?",
             options: [
@@ -844,6 +1501,16 @@ const COURSE_DATA = {
           normativa: ["Ley 527 de 1999", "Decreto 2364 de 2012", "Ley 1581 de 2012", "Política de Gobierno Digital (MIPG)"],
           summary:
             "Principios de Confidencialidad, Integridad y Disponibilidad (CID), diferencias entre firma digital y firma electrónica, protección de datos personales y controles de seguridad en el puesto de trabajo.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: Tríada CID y Firma Escaneada",
+            alerta:
+              "Pegar la foto o imagen escaneada de tu rúbrica en un Word NO es una Firma Digital ni Electrónica (carece de mecanismo criptográfico o de autenticación confiable). Y en la Tríada CID: divulgar información reservada rompe la CONFIDENCIALIDAD; alterar cifras o fechas sin permiso rompe la INTEGRIDAD; que el servidor se caiga sin backup rompe la DISPONIBILIDAD."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #9 y #10)",
+            descripcion:
+              "El Auxiliar Administrativo 5AM-09 aplica la política de Escritorio Limpio y Pantalla Limpia (bloquear Windows con Win+L al levantarse del puesto y guardar bajo llave los expedientes disciplinarios reservados) y nunca presta su usuario de SIGDEA/SIM."
+          },
           sections: [
             {
               heading: "1. La Tríada CID de la Seguridad de la Información (ISO/IEC 27001 / MSPI)",
@@ -883,6 +1550,25 @@ const COURSE_DATA = {
             "Las credenciales de acceso a los sistemas institucionales (SIM, SIGDEA, SIAF) son personales e intransferibles; prestarlas acarrea responsabilidad disciplinaria.",
             "El principio de Equivalencia Funcional (Ley 527 de 1999) otorga a los mensajes de datos la misma validez y fuerza probatoria que los documentos en soporte papel."
           ],
+          videos: [
+            {
+              titulo: "Seguridad de la Información (Tríada CID) y Firma Digital vs. Electrónica (Ley 527)",
+              canal: "MinTIC / Gobierno Digital Colombia",
+              duracion: "12:15",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=triada+confidencialidad+integridad+disponibilidad+firma+digital+ley+527+de+1999"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-ofi501-1",
+              categoria: "Seguridad de la Información",
+              frente: "¿Qué significan los 3 pilares de la Tríada CID?",
+              reverso:
+                "• Confidencialidad: Acceso solo a personal autorizado.\n• Integridad: Exactitud y no alteración no autorizada.\n• Disponibilidad: Acceso oportuno cuando se requiera.",
+              referencia: "Modelo MSPI / ISO 27001"
+            }
+          ],
           caseQuestion: {
             stem: "Un servidor público sale a almorzar dejando su computador desbloqueado con la sesión activa en el sistema disciplinario y sobre su escritorio quedan abiertos varios expedientes sometidos a reserva legal. ¿Qué principio de la Seguridad de la Información se pone en riesgo directo e inmediato con esta omisión?",
             options: [
@@ -904,6 +1590,16 @@ const COURSE_DATA = {
           normativa: ["Competencias Funcionales Nivel Técnico y Asistencial PGN"],
           summary:
             "Funciones esenciales de hojas de cálculo para control de vencimientos de PQRSDF e inventarios, combinación de correspondencia para oficios masivos y buenas prácticas en documentos institucionales.",
+          trampaExamen: {
+            titulo: "OJO CON LA TRAMPA DEL EXAMEN: DIA.LAB vs. DIAS.LAB en Excel",
+            alerta:
+              "Fíjate en la 'S': DIA.LAB (en singular) suma días hábiles a una fecha inicial y te devuelve la FECHA EXACTA DE VENCIMIENTO. En cambio, DIAS.LAB (en plural) cuenta el NÚMERO DE DÍAS HÁBILES transcurridos entre dos fechas."
+          },
+          aplicacionCargo5AM09: {
+            titulo: "APLICACIÓN PRÁCTICA EN EL CARGO 5AM-09 (Funciones #5 y #8)",
+            descripcion:
+              "La Función #8 del Auxiliar Administrativo 5AM-09 exige elaborar oficios masivos mediante Combinación de Correspondencia en Word y controlar en Excel los términos de vencimiento de PQRSDF e inventarios usando DIA.LAB, DIAS.LAB y BUSCARV."
+          },
           sections: [
             {
               heading: "1. Funciones de Hoja de Cálculo Clave en Exámenes de Mérito",
@@ -954,6 +1650,25 @@ const COURSE_DATA = {
             "En BUSCARV, el cuarto argumento debe ser FALSO (o 0) cuando se busca una coincidencia exacta como un número de radicado, cédula o placa de inventario.",
             "El formato estándar de preservación documental electrónica exigido por el AGN es PDF/A."
           ],
+          videos: [
+            {
+              titulo: "Excel para Concursos Públicos: DIA.LAB, DIAS.LAB, BUSCARV y Combinación de Correspondencia",
+              canal: "Ofimática para el Estado",
+              duracion: "15:45",
+              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
+              searchUrl: "https://www.youtube.com/results?search_query=Excel+DIA.LAB+DIAS.LAB+BUSCARV+combinacion+de+correspondencia+concurso"
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc-ofi502-1",
+              categoria: "Ofimática · Control de Términos",
+              frente: "¿Qué función de Excel devuelve la FECHA exacta de vencimiento sumando días hábiles y descontando festivos?",
+              reverso:
+                "=DIA.LAB(fecha_inicial; días_hábiles; [rango_festivos]). Mientras que =DIAS.LAB cuenta la cantidad de días hábiles entre dos fechas.",
+              referencia: "Competencias Ofimáticas 5AM-09"
+            }
+          ],
           caseQuestion: {
             stem: "El encargado de seguimiento de PQRSDF tiene en la celda A2 la fecha de radicación de un derecho de petición de interés particular, en B2 la cantidad de días hábiles de plazo legal (15) y en el rango H2:H20 el listado de días festivos de Colombia en 2026. ¿Qué fórmula de Excel le devuelve automáticamente la fecha exacta de vencimiento excluyendo sábados, domingos y festivos?",
             options: [
@@ -972,13 +1687,19 @@ const COURSE_DATA = {
 };
 
 /**
- * Banco Oficial del Motor de Simulacros (60% Peso Eliminatorio - Umbral 65%)
- * Arreglo oficial de 10 preguntas con modulo, pregunta, opciones, respuesta_correcta y justificacion.
+ * Banco Oficial del Motor de Simulacros en Formato de Juicio Situacional (10 Preguntas Oficiales)
+ * Incluye: id, modulo, peso_evaluado, competencia_asociada, caso_situacional, pregunta, opciones, respuesta_correcta y justificacion.
  */
 const simuladorData = [
   {
+    id: "sim-q1",
     modulo: "Gestión Documental",
-    pregunta: "Según la Ley 594 de 2000, ¿cuál de los siguientes principios archivísticos establece que los documentos deben conservar la disposición física en la que fueron creados por la oficina productora?",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "En la Procuraduría Regional del Atlántico, usted como Auxiliar Administrativo (Código 5AM-09) recibe varios expedientes disciplinarios activos para su archivo físico diario. Un practicante sugiere separar todos los autos en una carpeta y todos los oficios de citación en otra carpeta distinta, pero el coordinador le recuerda que debe respetarse la secuencia natural de producción de las actuaciones.",
+    pregunta:
+      "Según la Ley 594 de 2000, ¿cuál de los siguientes principios archivísticos establece que los documentos deben conservar la disposición física en la que fueron creados por la oficina productora?",
     opciones: [
       "A) Principio de procedencia.",
       "B) Principio de orden original.",
@@ -986,11 +1707,18 @@ const simuladorData = [
       "D) Principio de disposición final."
     ],
     respuesta_correcta: "B",
-    justificacion: "El principio de orden original respeta la secuencia natural y cronológica de los trámites que dieron origen al documento."
+    justificacion:
+      "El principio de orden original respeta la secuencia natural y cronológica de los trámites que dieron origen al documento."
   },
   {
+    id: "sim-q2",
     modulo: "Gestión Documental",
-    pregunta: "¿Qué instrumento archivístico define el tiempo de permanencia de los documentos en cada una de las fases del ciclo vital (gestión, central e histórico)?",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Cumplimiento (Nivel D)",
+    caso_situacional:
+      "Durante la jornada de alistamiento de archivo en su dependencia de la Procuraduría, usted debe verificar cuántos años deben permanecer las carpetas de 'Derechos de Petición' en el Archivo de Gestión antes de ser remitidas en transferencia primaria al Archivo Central y cuál será su destino final.",
+    pregunta:
+      "¿Qué instrumento archivístico define el tiempo de permanencia de los documentos en cada una de las fases del ciclo vital (gestión, central e histórico)?",
     opciones: [
       "A) Cuadro de Clasificación Documental (CCD).",
       "B) Programa de Gestión Documental (PGD).",
@@ -998,11 +1726,18 @@ const simuladorData = [
       "D) Tablas de Retención Documental (TRD)."
     ],
     respuesta_correcta: "D",
-    justificacion: "Las TRD son el listado de series con sus correspondientes tipos documentales, a las cuales se asigna el tiempo de permanencia en cada etapa del ciclo vital."
+    justificacion:
+      "Las TRD son el listado de series con sus correspondientes tipos documentales, a las cuales se asigna el tiempo de permanencia en cada etapa del ciclo vital."
   },
   {
+    id: "sim-q3",
     modulo: "Atención al Usuario",
-    pregunta: "De acuerdo con la normatividad vigente (Ley 1755 de 2015), ¿cuál es el término general que tiene la entidad para resolver una petición de información pública o documentos?",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Cumplimiento (Nivel D)",
+    caso_situacional:
+      "En la ventanilla de radicación de la Procuraduría Regional se recibe la solicitud de un ciudadano que requiere copias simples e información pública sobre las actas de posesión de tres funcionarios de la sede. Usted debe registrarla en la matriz de control de vencimientos de la oficina.",
+    pregunta:
+      "De acuerdo con la normatividad vigente (Ley 1755 de 2015), ¿cuál es el término general que tiene la entidad para resolver una petición de información pública o documentos?",
     opciones: [
       "A) 10 días hábiles.",
       "B) 15 días hábiles.",
@@ -1010,11 +1745,18 @@ const simuladorData = [
       "D) 5 días hábiles."
     ],
     respuesta_correcta: "A",
-    justificacion: "Las peticiones de información y solicitud de documentos deben resolverse dentro de los diez (10) días hábiles siguientes a su recepción."
+    justificacion:
+      "Las peticiones de información y solicitud de documentos deben resolverse dentro de los diez (10) días hábiles siguientes a su recepción."
   },
   {
+    id: "sim-q4",
     modulo: "Gestión Documental",
-    pregunta: "En el ciclo vital del documento, ¿cómo se denomina al archivo donde se transfieren los documentos que ya finalizaron su trámite pero siguen siendo de consulta esporádica?",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "Habiendo culminado el trámite de varios procesos administrativos de vigencias anteriores y cumplido su tiempo de retención en la oficina productora, usted prepara las cajas y el inventario FUID para remitirlos a la segunda fase del archivo institucional, donde solo serán consultados de manera ocasional.",
+    pregunta:
+      "En el ciclo vital del documento, ¿cómo se denomina al archivo donde se transfieren los documentos que ya finalizaron su trámite pero siguen siendo de consulta esporádica?",
     opciones: [
       "A) Archivo de Gestión.",
       "B) Archivo Central.",
@@ -1022,11 +1764,18 @@ const simuladorData = [
       "D) Archivo Inactivo."
     ],
     respuesta_correcta: "B",
-    justificacion: "El Archivo Central agrupa documentos transferidos por las dependencias una vez finalizado su trámite, siendo de consulta esporádica o por precaución legal."
+    justificacion:
+      "El Archivo Central agrupa documentos transferidos por las dependencias una vez finalizado su trámite, siendo de consulta esporádica o por precaución legal."
   },
   {
+    id: "sim-q5",
     modulo: "Atención al Usuario",
-    pregunta: "Como Auxiliar Administrativo, al recibir a un ciudadano que presenta una queja disciplinaria, su deber principal en primera instancia respecto a la atención es:",
+    peso_evaluado: "Comportamentales (20% · Clasificatorio)",
+    competencia_asociada: "Orientación al Usuario (Nivel B)",
+    caso_situacional:
+      "Un ciudadano visiblemente alterado se acerca al punto de atención de la Procuraduría manifestando que desea interponer una queja disciplinaria contra un servidor público municipal, pero indica que en ese momento solo trae su relato escrito y no cuenta aún con los soportes probatorios impresos.",
+    pregunta:
+      "Como Auxiliar Administrativo, al recibir a un ciudadano que presenta una queja disciplinaria, su deber principal en primera instancia respecto a la atención es:",
     opciones: [
       "A) Rechazar la queja si no trae pruebas documentales físicas.",
       "B) Radicar la solicitud, brindar un trato respetuoso y orientar sobre el trámite a seguir.",
@@ -1034,11 +1783,18 @@ const simuladorData = [
       "D) Remitir al ciudadano verbalmente a las Procuradurías Delegadas sin radicar."
     ],
     respuesta_correcta: "B",
-    justificacion: "La orientación al usuario exige radicar, clasificar y tramitar según los procedimientos, garantizando siempre el valor del respeto y el compromiso institucional."
+    justificacion:
+      "La orientación al usuario exige radicar, clasificar y tramitar según los procedimientos, garantizando siempre el valor del respeto y el compromiso institucional."
   },
   {
+    id: "sim-q6",
     modulo: "Inventarios",
-    pregunta: "Dentro del manejo y control de bienes de la entidad, ¿cuál es la característica principal que diferencia a un 'bien de consumo' de un 'bien devolutivo'?",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Gestión de Recursos (Nivel D)",
+    caso_situacional:
+      "En el pedido trimestral de recursos físicos para la Procuraduría Regional, usted recibe cajas de resmas de papel carta, cartuchos de tóner, dos escáneres de alta velocidad y tres sillas ergonómicas. Para registrarlos en el control interno de la dependencia, debe separarlos según su naturaleza contable y administrativa.",
+    pregunta:
+      "Dentro del manejo y control de bienes de la entidad, ¿cuál es la característica principal que diferencia a un 'bien de consumo' de un 'bien devolutivo'?",
     opciones: [
       "A) El bien devolutivo se extingue con su primer uso, el de consumo no.",
       "B) El bien de consumo se agota o perece con su uso, mientras que el devolutivo no se consume rápidamente y debe reintegrarse al almacén.",
@@ -1046,11 +1802,18 @@ const simuladorData = [
       "D) Los bienes de consumo solo incluyen papelería, y los devolutivos solo vehículos."
     ],
     respuesta_correcta: "B",
-    justificacion: "Los bienes de consumo (ej. resmas de papel, tóner) se extinguen con el uso. Los devolutivos (ej. computadores, escritorios) tienen vida útil prolongada y se deprecian, por lo que deben devolverse o darse de baja formalmente."
+    justificacion:
+      "Los bienes de consumo (ej. resmas de papel, tóner) se extinguen con el uso. Los devolutivos (ej. computadores, escritorios) tienen vida útil prolongada y se deprecian, por lo que deben devolverse o darse de baja formalmente."
   },
   {
+    id: "sim-q7",
     modulo: "Estructura PGN",
-    pregunta: "A nivel constitucional e institucional, la Procuraduría General de la Nación es el máximo organismo directivo de:",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Responsabilidad (Nivel C)",
+    caso_situacional:
+      "Durante el programa de inducción institucional para nuevos Auxiliares Administrativos 5AM-09, se analiza la ubicación de la Procuraduría General de la Nación dentro de la estructura del Estado colombiano conforme a los artículos 118 y 275 de la Constitución Política y el Decreto Ley 262 de 2000.",
+    pregunta:
+      "A nivel constitucional e institucional, la Procuraduría General de la Nación es el máximo organismo directivo de:",
     opciones: [
       "A) La Rama Ejecutiva del Poder Público.",
       "B) La Contraloría General de la República.",
@@ -1058,11 +1821,18 @@ const simuladorData = [
       "D) La Fiscalía General de la Nación."
     ],
     respuesta_correcta: "C",
-    justificacion: "La Procuraduría General de la Nación, junto con la Defensoría del Pueblo y las personerías, conforman el Ministerio Público, encargado de la guarda y promoción de los derechos humanos y la protección del interés público."
+    justificacion:
+      "La Procuraduría General de la Nación, junto con la Defensoría del Pueblo y las personerías, conforman el Ministerio Público, encargado de la guarda y promoción de los derechos humanos y la protección del interés público."
   },
   {
+    id: "sim-q8",
     modulo: "Gestión Documental",
-    pregunta: "Según el Acuerdo 042 de 2002 del AGN, ¿en qué ubicación del documento físico debe realizarse el proceso de foliación (numeración consecutiva de las hojas)?",
+    peso_evaluado: "Conocimientos (60% · Eliminatorio)",
+    competencia_asociada: "Organización del Trabajo (Nivel C)",
+    caso_situacional:
+      "El Procurador Regional le solicita alistar un expediente disciplinario de 180 hojas para remitirlo en traslado a otra dependencia, indicándole que verifique que todas las piezas estén debidamente numeradas conforme a las normas técnicas del Archivo General de la Nación.",
+    pregunta:
+      "Según el Acuerdo 042 de 2002 del AGN, ¿en qué ubicación del documento físico debe realizarse el proceso de foliación (numeración consecutiva de las hojas)?",
     opciones: [
       "A) En la esquina inferior izquierda.",
       "B) En el centro de la página superior.",
@@ -1070,11 +1840,18 @@ const simuladorData = [
       "D) En la esquina superior derecha de la cara recta del folio."
     ],
     respuesta_correcta: "D",
-    justificacion: "La foliación debe realizarse en la esquina superior derecha del anverso (cara recta) de cada documento, utilizando lápiz de mina negra, tipo HB o B, de forma legible."
+    justificacion:
+      "La foliación debe realizarse en la esquina superior derecha del anverso (cara recta) de cada documento, utilizando lápiz de mina negra, tipo HB o B, de forma legible."
   },
   {
+    id: "sim-q9",
     modulo: "Atención al Usuario",
-    pregunta: "Si la Procuraduría recibe un Derecho de Petición que no es de su competencia, ¿cuál es el paso a seguir según la Ley 1755 de 2015?",
+    peso_evaluado: "Comportamentales (20% · Clasificatorio)",
+    competencia_asociada: "Orientación al Usuario (Nivel B) / Cumplimiento (Nivel D)",
+    caso_situacional:
+      "Al revisar la bandeja de correspondencia radicada en el día, usted encuentra un Derecho de Petición escrito mediante el cual un ciudadano solicita la reliquidación de una factura de acueducto, asunto cuya competencia recae exclusivamente en la empresa prestadora y en la Superintendencia de Servicios Públicos Domiciliarios.",
+    pregunta:
+      "Si la Procuraduría recibe un Derecho de Petición que no es de su competencia, ¿cuál es el paso a seguir según la Ley 1755 de 2015?",
     opciones: [
       "A) Archivar la petición sin notificar al solicitante.",
       "B) Remitir la petición a la autoridad competente dentro de los 5 días siguientes e informar de inmediato al peticionario.",
@@ -1082,11 +1859,18 @@ const simuladorData = [
       "D) Resolver la petición así no sea de su competencia para garantizar el servicio."
     ],
     respuesta_correcta: "B",
-    justificacion: "Cuando no se tiene competencia, se debe enviar a quien sí la tiene en un plazo máximo de 5 días hábiles y notificar al ciudadano sobre este traslado."
+    justificacion:
+      "Cuando no se tiene competencia, se debe enviar a quien sí la tiene en un plazo máximo de 5 días hábiles y notificar al ciudadano sobre este traslado."
   },
   {
+    id: "sim-q10",
     modulo: "Inventarios",
-    pregunta: "Al recibir materiales de almacén en la dependencia, el Auxiliar Administrativo debe verificar físicamente los elementos recibidos. ¿Qué documento soporta formalmente la entrega y asunción de responsabilidad sobre esos bienes?",
+    peso_evaluado: "Comportamentales (20% · Clasificatorio)",
+    competencia_asociada: "Gestión de Recursos (Nivel D) / Responsabilidad (Nivel C)",
+    caso_situacional:
+      "El almacenista de la sede territorial llega a su oficina para hacer entrega de un computador de escritorio, una impresora multifuncional y los insumos de papelería solicitados para el trimestre. Usted procede a cotejar físicamente los seriales, placas y cantidades recibidas.",
+    pregunta:
+      "Al recibir materiales de almacén en la dependencia, el Auxiliar Administrativo debe verificar físicamente los elementos recibidos. ¿Qué documento soporta formalmente la entrega y asunción de responsabilidad sobre esos bienes?",
     opciones: [
       "A) El comprobante de egreso o salida de almacén debidamente firmado.",
       "B) La factura original del proveedor.",
@@ -1094,8 +1878,7 @@ const simuladorData = [
       "D) El plan de compras anual."
     ],
     respuesta_correcta: "A",
-    justificacion: "El comprobante de salida de almacén, al ser firmado por quien recibe, formaliza la entrega y traslada la responsabilidad de la custodia y uso del bien al funcionario correspondiente."
+    justificacion:
+      "El comprobante de salida de almacén, al ser firmado por quien recibe, formaliza la entrega y traslada la responsabilidad de la custodia y uso del bien al funcionario correspondiente."
   }
 ];
-
-
