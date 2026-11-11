@@ -501,30 +501,38 @@
   }
 
   /* ==========================================================================
-     Motor de Simulacros por Módulo (60% Peso Eliminatorio - Umbral 65%)
+     Motor de Simulacros Oficial (60% Peso Eliminatorio - Umbral 65%)
      ========================================================================== */
 
-  function getActiveModuleObj() {
-    const activeTopic = allTopicsFlat.find((t) => t.id === state.activeTopicId) || allTopicsFlat[0];
-    return COURSE_DATA.modules.find((m) => m.id === activeTopic.moduleId) || COURSE_DATA.modules[0];
+  function parseOptionString(rawOption, index) {
+    const fallbackLetters = ["A", "B", "C", "D"];
+    const match = String(rawOption).match(/^([A-D])\)\s*(.*)$/i);
+    if (match) {
+      return {
+        letter: match[1].toUpperCase(),
+        text: match[2]
+      };
+    }
+    return {
+      letter: fallbackLetters[index] || String(index + 1),
+      text: String(rawOption)
+    };
   }
 
   function openSimulador() {
-    const mod = getActiveModuleObj();
-    const modSimData = typeof simuladorData !== "undefined" ? simuladorData[mod.id] : null;
-    if (!modSimData || !Array.isArray(modSimData.preguntas) || modSimData.preguntas.length === 0) {
+    if (typeof simuladorData === "undefined" || !Array.isArray(simuladorData) || simuladorData.length === 0) {
       return;
     }
 
     simSession.isActive = true;
-    simSession.moduleId = mod.id;
-    simSession.questions = modSimData.preguntas;
+    simSession.questions = simuladorData;
     simSession.currentIndex = 0;
     simSession.answers = {};
 
-    dom.simModuleBadge.textContent = `${mod.code} · SIMULACRO DE SELECCIÓN MÚLTIPLE (60%)`;
-    dom.simTitle.textContent = modSimData.titulo;
-    dom.simDescription.textContent = modSimData.descripcion;
+    dom.simModuleBadge.textContent = "SIMULACRO OFICIAL INTEGRAL · PESO ELIMINATORIO 60%";
+    dom.simTitle.textContent = "Evaluación Oficial de Conocimientos (10 Preguntas)";
+    dom.simDescription.textContent =
+      "Banco oficial de preguntas sobre Gestión Documental, Atención al Usuario, Inventarios y Estructura PGN. Puntaje mínimo aprobatorio: 65%.";
 
     dom.simResultsCard.hidden = true;
     dom.simQuestionCard.hidden = false;
@@ -576,39 +584,38 @@
     const progressPct = Math.round(((idx + 1) / total) * 100);
     dom.simQuestionCounter.textContent = `Pregunta ${idx + 1} de ${total}`;
     dom.simProgressFill.style.width = `${progressPct}%`;
-    dom.simQBadge.textContent = `PREGUNTA ${idx + 1} DE ${total}`;
+    dom.simQBadge.textContent = `PREGUNTA ${idx + 1} DE ${total} · EJE: ${qObj.modulo.toUpperCase()}`;
     dom.simQuestionText.textContent = qObj.pregunta;
 
     dom.simOptionsGrid.innerHTML = "";
     dom.simJustificationBox.hidden = true;
     dom.simJustificationBox.className = "sim-justification-box";
 
-    const selectedLetter = simSession.answers[qObj.id];
-    const letters = ["A", "B", "C", "D"];
+    const selectedLetter = simSession.answers[idx];
+    const correctLetter = String(qObj.respuesta_correcta).toUpperCase();
 
-    letters.forEach((letter) => {
-      const optText = qObj.opciones[letter];
-      if (!optText) return;
+    qObj.opciones.forEach((rawOpt, optIdx) => {
+      const parsed = parseOptionString(rawOpt, optIdx);
 
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "case-option-btn";
       btn.innerHTML = `
-        <span class="case-option-letter">${letter}</span>
-        <span>${escapeHTML(optText)}</span>
+        <span class="case-option-letter">${escapeHTML(parsed.letter)}</span>
+        <span>${escapeHTML(rawOpt)}</span>
       `;
 
       if (selectedLetter) {
-        if (letter === qObj.respuestaCorrecta) {
+        if (parsed.letter === correctLetter) {
           btn.classList.add("is-correct");
-        } else if (letter === selectedLetter && selectedLetter !== qObj.respuestaCorrecta) {
+        } else if (parsed.letter === selectedLetter && selectedLetter !== correctLetter) {
           btn.classList.add("is-wrong");
         }
       }
 
       btn.addEventListener("click", () => {
-        if (simSession.answers[qObj.id]) return; // Evitar cambiar respuesta una vez validada en el intento actual
-        simSession.answers[qObj.id] = letter;
+        if (simSession.answers[idx]) return; // Respuesta ya registrada en esta pregunta
+        simSession.answers[idx] = parsed.letter;
         renderSimQuestion();
       });
 
@@ -616,24 +623,24 @@
     });
 
     if (selectedLetter) {
-      const isCorrect = selectedLetter === qObj.respuestaCorrecta;
+      const isCorrect = selectedLetter === correctLetter;
       dom.simJustificationBox.hidden = false;
       dom.simJustificationBox.classList.add(isCorrect ? "is-correct" : "is-wrong");
       dom.simJustificationStatus.textContent = isCorrect
-        ? `✓ ¡Respuesta Correcta! (Opción ${qObj.respuestaCorrecta})`
-        : `✕ Respuesta Incorrecta. Seleccionaste ${selectedLetter} y la opción correcta es la ${qObj.respuestaCorrecta}.`;
+        ? `✓ ¡Respuesta Correcta! (Opción ${correctLetter})`
+        : `✕ Respuesta Incorrecta. Seleccionaste ${selectedLetter} y la opción correcta es la ${correctLetter}.`;
       dom.simJustificationText.textContent = qObj.justificacion;
 
       dom.simNextBtn.disabled = false;
       dom.simActionHint.textContent =
         idx < total - 1
           ? "Revisa la justificación normativa y avanza a la siguiente pregunta."
-          : "Has respondido todas las preguntas. Haz clic para calificar el módulo.";
-      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Calificar Módulo";
+          : "Has respondido las 10 preguntas. Haz clic para ver tu puntaje final y justificaciones.";
+      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Ver Puntaje";
     } else {
       dom.simNextBtn.disabled = true;
-      dom.simActionHint.textContent = "Selecciona una opción (A, B, C o D) para validar tu respuesta.";
-      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Calificar Módulo";
+      dom.simActionHint.textContent = "Selecciona una de las 4 opciones (A, B, C o D) para validar tu respuesta.";
+      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Ver Puntaje";
     }
   }
 
@@ -644,8 +651,9 @@
     const total = simSession.questions.length;
     let correctCount = 0;
 
-    simSession.questions.forEach((q) => {
-      if (simSession.answers[q.id] === q.respuestaCorrecta) {
+    simSession.questions.forEach((q, idx) => {
+      const userAns = simSession.answers[idx];
+      if (userAns === String(q.respuesta_correcta).toUpperCase()) {
         correctCount += 1;
       }
     });
@@ -654,7 +662,7 @@
     const isPassed = percentage >= 65;
 
     dom.simScorePercent.textContent = `${percentage}%`;
-    dom.simScoreDetail.textContent = `Obtuviste ${correctCount} de ${total} respuestas correctas en este módulo (Umbral mínimo exigido: 65%).`;
+    dom.simScoreDetail.textContent = `Obtuviste ${correctCount} de ${total} respuestas correctas en el simulacro oficial (Umbral mínimo exigido: 65%).`;
 
     dom.simScoreCircle.className = `sim-score-circle ${isPassed ? "is-passed" : "is-failed"}`;
 
@@ -664,30 +672,31 @@
     }`;
     if (isPassed) {
       dom.simEvalBanner.innerHTML = `
-        <div class="sim-eval-banner__title">✓ ¡Módulo Aprobado Satisfactoriamente! (${percentage}% de aciertos)</div>
-        <p>Has alcanzado o superado el puntaje mínimo aprobatorio del <strong>65%</strong> exigido para la prueba eliminatoria de conocimientos de la Convocatoria 243-2026.</p>
+        <div class="sim-eval-banner__title">✓ ¡Simulacro Aprobado Satisfactoriamente! (${percentage}% de aciertos)</div>
+        <p>Has alcanzado o superado el puntaje mínimo aprobatorio del <strong>65%</strong> exigido para la prueba eliminatoria de conocimientos de la Convocatoria Procuraduría 243-2026.</p>
       `;
     } else {
       dom.simEvalBanner.innerHTML = `
         <div class="sim-eval-banner__title">⚠ Alerta de Refuerzo Académico (${percentage}% de aciertos)</div>
-        <p>Tu porcentaje de aciertos es inferior al umbral mínimo del <strong>65%</strong>. Te recomendamos volver a la zona de lectura teórica, repasar los puntos clave del módulo e intentar nuevamente el simulacro.</p>
+        <p>Tu porcentaje de aciertos es inferior al umbral mínimo del <strong>65%</strong>. Te recomendamos revisar las justificaciones normativas a continuación, repasar los módulos teóricos e intentar nuevamente el simulacro.</p>
       `;
     }
 
-    // Listado de revisión pregunta por pregunta
+    // Listado de revisión pregunta por pregunta con su justificación
     dom.simReviewList.innerHTML = "";
     simSession.questions.forEach((q, i) => {
-      const userAns = simSession.answers[q.id] || "Sin responder";
-      const ok = userAns === q.respuestaCorrecta;
+      const userAns = simSession.answers[i] || "Sin responder";
+      const correctLetter = String(q.respuesta_correcta).toUpperCase();
+      const ok = userAns === correctLetter;
+      const correctOptionFull =
+        q.opciones.find((opt, idx) => parseOptionString(opt, idx).letter === correctLetter) || correctLetter;
 
       const item = document.createElement("div");
       item.className = "sim-review-item";
       item.innerHTML = `
-        <div class="sim-review-item__q">${i + 1}. ${escapeHTML(q.pregunta)}</div>
+        <div class="sim-review-item__q">${i + 1}. [${escapeHTML(q.modulo)}] ${escapeHTML(q.pregunta)}</div>
         <div class="sim-review-item__ans ${ok ? "is-ok" : "is-bad"}">
-          Tu respuesta: Opción ${escapeHTML(userAns)} · Respuesta Correcta: Opción ${escapeHTML(q.respuestaCorrecta)} (${escapeHTML(
-            q.opciones[q.respuestaCorrecta]
-          )})
+          Tu respuesta: ${escapeHTML(userAns)} · Respuesta Correcta: ${escapeHTML(correctOptionFull)}
         </div>
         <div class="sim-review-item__just"><strong>Justificación:</strong> ${escapeHTML(q.justificacion)}</div>
       `;

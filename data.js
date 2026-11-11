@@ -972,394 +972,130 @@ const COURSE_DATA = {
 };
 
 /**
- * Banco Oficial del Motor de Simulacros por Módulo (60% Peso Eliminatorio - Umbral 65%)
- * Estructura simuladorData con preguntas situacionales, 4 opciones (A, B, C, D),
- * respuestaCorrecta y justificación normativa detallada.
+ * Banco Oficial del Motor de Simulacros (60% Peso Eliminatorio - Umbral 65%)
+ * Arreglo oficial de 10 preguntas con modulo, pregunta, opciones, respuesta_correcta y justificacion.
  */
-const simuladorData = {
-  "mod-gestion-documental": {
-    titulo: "Simulacro Eliminatorio · Módulo I: Gestión Documental y Archivo",
-    descripcion: "Evalúa tu dominio sobre la Ley 594 de 2000, TRD/TVD, Acuerdo AGN 060 de 2001 y los 8 procesos archivísticos.",
-    preguntas: [
-      {
-        id: "sim-gd-1",
-        pregunta:
-          "En una Procuraduría Provincial se encuentran 45 cajas de documentos producidos entre 1994 y 2001, época en la cual la dependencia no contaba con Tablas de Retención Documental (TRD) aprobadas. Para intervenir técnicamente este fondo documental acumulado y definir su conservación o eliminación, el instrumento archivístico que debe elaborarse y aplicarse es:",
-        opciones: {
-          A: "Una Tabla de Retención Documental (TRD) retroactiva convalidada por el Comité de Conciliación.",
-          B: "Una Tabla de Valoración Documental (TVD), reconstruyendo las estructuras orgánicas y series de dicho período.",
-          C: "Un acta de eliminación directa por antigüedad superior a veinte (20) años.",
-          D: "Un registro de radicación de comunicaciones oficiales del Acuerdo 060 de 2001."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "De acuerdo con la normatividad del Archivo General de la Nación (Acuerdo 004 de 2019 y Acuerdo 001 de 2024), las Tablas de Valoración Documental (TVD) son el instrumento técnico específico para organizar y determinar la disposición final de fondos acumulados producidos sin TRD vigente."
-      },
-      {
-        id: "sim-gd-2",
-        pregunta:
-          "Durante la preparación de una transferencia documental primaria del Archivo de Gestión al Archivo Central, el servidor encargado observa que un expediente disciplinario cerrado hace tres años tiene documentos repetidos, borradores sin firma y ganchos metálicos oxidados. Antes de diligenciar el FUID y remitir la carpeta, la actuación técnica obligatoria es:",
-        opciones: {
-          A: "Enviar el expediente tal como está para no alterar el principio de procedencia.",
-          B: "Realizar la depuración o limpieza documental (retiro de duplicados idénticos, borradores y material metálico abrasivo) y verificar la foliación consecutiva.",
-          C: "Destruir las piezas deterioradas sin dejar constancia y reenumerar solo los folios nuevos.",
-          D: "Separar los oficios de los autos en carpetas distintas para reducir el grosor de la unidad documental."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "Previo a toda transferencia documental primaria, la dependencia productora debe adelantar la depuración técnica (retiro de copias idénticas, folios en blanco y material metálico que afecte la conservación), manteniendo intacto el orden original y asegurando su correcta foliación antes de registrarlo en el Formato Único de Inventario Documental (FUID)."
-      },
-      {
-        id: "sim-gd-3",
-        pregunta:
-          "Un ciudadano entrega en la Ventanilla Única de Correspondencia de la Procuraduría un sobre cerrado dirigido a nombre personal de un profesional universitario de la entidad, con la leyenda 'Confidencial - Extracto Bancario Privado'. Conforme al Acuerdo AGN 060 de 2001, el funcionario de ventanilla debe:",
-        opciones: {
-          A: "Abrir el sobre, sellar cada hoja con reloj radicador y escanearlo en el sistema de gestión documental.",
-          B: "Abstenerse de abrirlo o radicarlo como comunicación oficial y entregarlo directamente al servidor destinatario por tratarse de correspondencia privada.",
-          C: "Devolver el sobre a la empresa de mensajería porque en las entidades públicas no puede recibirse correo dirigido a personas naturales.",
-          D: "Asignarle número de radicado oficial de entrada y publicarlo en la cartelera de notificaciones."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "El Acuerdo 060 de 2001 distingue entre Comunicaciones Oficiales (que se radican y controlan por referirse a funciones de la entidad) y Correspondencia Privada (comunicaciones de carácter personal dirigidas a funcionarios), la cual no se abre ni se radica oficialmente, sino que se remite sin violar la reserva de la correspondencia al destinatario."
-      },
-      {
-        id: "sim-gd-4",
-        pregunta:
-          "En la Tabla de Retención Documental (TRD) de una dependencia de la Procuraduría, la serie 'Informes de Gestión' registra un tiempo de retención de 2 años en Archivo de Gestión, 8 años en Archivo Central y una marca en la columna de Disposición Final con la letra 'S'. Esto significa que, al vencer los 8 años en el Archivo Central, con dicha serie se debe:",
-        opciones: {
-          A: "Proceder a su eliminación total e inmediata mediante picado industrial.",
-          B: "Aplicar el procedimiento técnico de Selección (conservar una muestra representativa con valor secundario y eliminar el resto mediante acta aprobada).",
-          C: "Transferir el 100% de las carpetas al Archivo Histórico por tener Conservación Total.",
-          D: "Devolver la serie al Archivo de Gestión de la oficina productora por otros 2 años."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "En las Tablas de Retención Documental (TRD), la convención 'S' en Disposición Final corresponde a Selección documental: método técnico de muestreo cualitativo o cuantitativo mediante el cual se conserva una fracción representativa para el Archivo Histórico y se elimina el resto cumpliendo el procedimiento legal de baja documental."
-      },
-      {
-        id: "sim-gd-5",
-        pregunta:
-          "Cuando un técnico administrativo agrupa los expedientes de su oficina identificando primero el Fondo (PGN), luego la Sección (Procuraduría Regional), la Subsección y finalmente la Serie y Subserie según el Cuadro de Clasificación Documental (CCD), está ejecutando específicamente la operación de:",
-        opciones: {
-          A: "Descripción documental.",
-          B: "Ordenación física y foliación.",
-          C: "Clasificación documental, primera fase del proceso de Organización.",
-          D: "Preservación digital a largo plazo."
-        },
-        respuestaCorrecta: "C",
-        justificacion:
-          "El proceso de Organización Documental comprende tres fases sucesivas: 1) Clasificación (identificación y agrupación jerárquica por fondo, sección, serie y subserie conforme al CCD), 2) Ordenación (secuencia cronológica interna según el principio de orden original y foliación) y 3) Descripción (elaboración de inventarios FUID e índices)."
-      }
-    ]
+const simuladorData = [
+  {
+    modulo: "Gestión Documental",
+    pregunta: "Según la Ley 594 de 2000, ¿cuál de los siguientes principios archivísticos establece que los documentos deben conservar la disposición física en la que fueron creados por la oficina productora?",
+    opciones: [
+      "A) Principio de procedencia.",
+      "B) Principio de orden original.",
+      "C) Principio de ciclo vital.",
+      "D) Principio de disposición final."
+    ],
+    respuesta_correcta: "B",
+    justificacion: "El principio de orden original respeta la secuencia natural y cronológica de los trámites que dieron origen al documento."
   },
-
-  "mod-atencion-usuario": {
-    titulo: "Simulacro Eliminatorio · Módulo II: Atención al Usuario y PQRSDF",
-    descripcion: "Evalúa tu dominio sobre la Ley 1755 de 2015, términos de respuesta, quejas disciplinarias y Ley 1712 de 2014.",
-    preguntas: [
-      {
-        id: "sim-au-1",
-        pregunta:
-          "Un ciudadano presenta ante la Procuraduría una petición escrita solicitando un concepto jurídico general sobre el alcance de una norma disciplinaria aplicable a los servidores públicos (modalidad de consulta). De acuerdo con el artículo 14 de la Ley 1755 de 2015, ¿cuál es el término legal máximo para resolver esta petición?",
-        opciones: {
-          A: "Diez (10) días hábiles siguientes a su recepción.",
-          B: "Quince (15) días hábiles siguientes a su recepción.",
-          C: "Treinta (30) días hábiles siguientes a su recepción.",
-          D: "Cinco (5) días hábiles por tratarse de una norma de derecho público."
-        },
-        respuestaCorrecta: "C",
-        justificacion:
-          "El numeral 2 del artículo 14 de la Ley 1755 de 2015 establece que toda petición mediante la cual se eleva una consulta a las autoridades en relación con las materias a su cargo deberá resolverse dentro de los treinta (30) días hábiles siguientes a su recepción."
-      },
-      {
-        id: "sim-au-2",
-        pregunta:
-          "En la ventanilla de atención al ciudadano de una Procuraduría Regional se recibe un derecho de petición escrito cuyo asunto es de competencia exclusiva de la Superintendencia de Servicios Públicos Domiciliarios. Según el artículo 21 de la Ley 1755 de 2015, el funcionario receptor y la dependencia deben:",
-        opciones: {
-          A: "Negarse a recibir el documento en ventanilla para evitar congestión administrativa.",
-          B: "Recibir y radicar la petición, y dentro de los cinco (5) días hábiles siguientes remitirla a la entidad competente enviando copia del oficio remisorio al peticionario.",
-          C: "Archivar definitivamente la solicitud sin comunicarle al ciudadano por falta de jurisdicción.",
-          D: "Disponer de treinta (30) días hábiles para informarle al ciudadano que debe radicarla nuevamente."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "El artículo 21 de la Ley 1755 de 2015 ordena que si la autoridad a quien se dirige la petición no es la competente, en caso de petición escrita deberá remitirla al competente dentro de los cinco (5) días hábiles siguientes a la recepción y enviar copia del oficio remisorio al peticionario."
-      },
-      {
-        id: "sim-au-3",
-        pregunta:
-          "Al revisar una petición radicada hace cuatro (4) días hábiles, el funcionario encargado advierte que el peticionario omitió adjuntar un documento soporte indispensable para poder decidir de fondo su solicitud. Conforme al artículo 17 de la Ley 1755 de 2015 (Peticiones incompletas), ¿cuál es el procedimiento legal?",
-        opciones: {
-          A: "Rechazar de plano la petición el mismo día por negligencia del ciudadano.",
-          B: "Requerir al peticionario dentro de los diez (10) días siguientes a la fecha de radicación para que la complete en el término máximo de un (1) mes.",
-          C: "Esperar a que se cumplan los 15 días hábiles para informarle que no se pudo estudiar su caso.",
-          D: "Otorgarle un plazo improrrogable de 24 horas so pena de multa."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "Según el artículo 17 de la Ley 1755 de 2015, cuando se constate que una petición ya radicada está incompleta, se requerirá al peticionario dentro de los diez (10) días siguientes a la fecha de radicación para que la complete en el término máximo de un (1) mes. A partir del día siguiente en que el interesado aporte los documentos se reactivará el término para resolver."
-      },
-      {
-        id: "sim-au-4",
-        pregunta:
-          "Un ciudadano que presentó una queja disciplinaria contra un servidor público acude a la Procuraduría exigiendo ser reconocido formalmente como 'sujeto procesal' pleno para dirigir la práctica de todas las pruebas de la investigación. De acuerdo con el parágrafo 1 del artículo 110 de la Ley 1952 de 2019, el funcionario debe orientarlo explicándole que:",
-        opciones: {
-          A: "El quejoso es sujeto procesal con las mismas facultades del defensor y del investigado.",
-          B: "El quejoso NO es sujeto procesal; su actuación se limita a presentar y ampliar la queja bajo juramento, aportar pruebas que tenga en su poder y recurrir la decisión de archivo y el fallo absolutorio.",
-          C: "El quejoso no puede aportar pruebas ni impugnar el archivo definitivo en ningún caso.",
-          D: "Solo puede intervenir si paga una caución judicial ante la Procuraduría."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "El parágrafo 1 del artículo 110 del Código General Disciplinario (Ley 1952 de 2019) establece taxativamente que en el proceso disciplinario el quejoso no es sujeto procesal, limitando su intervención a presentar y ampliar la queja bajo la gravedad del juramento, aportar las pruebas que tenga en su poder y recurrir la decisión de archivo y el fallo absolutorio."
-      },
-      {
-        id: "sim-au-5",
-        pregunta:
-          "Una dependencia recibe una solicitud de información de alta complejidad técnica que no alcanza a ser resuelta dentro de los quince (15) días hábiles iniciales. Conforme al parágrafo del artículo 14 de la Ley 1755 de 2015, para que la ampliación del plazo sea legalmente válida se requiere:",
-        opciones: {
-          A: "Informar al interesado ANTES del vencimiento del término inicial, expresando los motivos de la demora y señalando el plazo razonable en que se resolverá, sin exceder el doble del inicialmente previsto.",
-          B: "Avisar al peticionario tres (3) días después de haberse vencido el plazo de los 15 días hábiles.",
-          C: "Ampliar unilateralmente el plazo hasta por seis (6) meses sin necesidad de comunicarle al ciudadano.",
-          D: "Archivar temporalmente la petición y abrir un nuevo radicado para reiniciar el conteo."
-        },
-        respuestaCorrecta: "A",
-        justificacion:
-          "El parágrafo del artículo 14 de la Ley 1755 de 2015 exige tres requisitos concurrentes para la prórroga: 1) Comunicar al interesado ANTES del vencimiento del término legal inicial, 2) Expresar los motivos de la demora y 3) Señalar la fecha o plazo razonable en que se resolverá o dará respuesta, que no podrá exceder del doble del inicialmente previsto."
-      }
-    ]
+  {
+    modulo: "Gestión Documental",
+    pregunta: "¿Qué instrumento archivístico define el tiempo de permanencia de los documentos en cada una de las fases del ciclo vital (gestión, central e histórico)?",
+    opciones: [
+      "A) Cuadro de Clasificación Documental (CCD).",
+      "B) Programa de Gestión Documental (PGD).",
+      "C) Tablas de Valoración Documental (TVD).",
+      "D) Tablas de Retención Documental (TRD)."
+    ],
+    respuesta_correcta: "D",
+    justificacion: "Las TRD son el listado de series con sus correspondientes tipos documentales, a las cuales se asigna el tiempo de permanencia en cada etapa del ciclo vital."
   },
-
-  "mod-inventarios": {
-    titulo: "Simulacro Eliminatorio · Módulo III: Administración de Inventarios y Almacén",
-    descripcion: "Evalúa tu dominio sobre bienes devolutivos y de consumo, custodia, responsabilidad fiscal/disciplinaria y bajas.",
-    preguntas: [
-      {
-        id: "sim-inv-1",
-        pregunta:
-          "El Grupo de Almacén e Inventarios de la Procuraduría recibe una adquisición compuesta por 50 sillas ergonómicas giratorias y 200 cajas de resmas de papel tamaño carta. Desde el punto de vista técnico y administrativo de control de bienes públicos, su clasificación correcta es:",
-        opciones: {
-          A: "Ambos lotes son bienes de consumo porque se utilizan dentro de las oficinas.",
-          B: "Las sillas ergonómicas son bienes devolutivos (sujetos a plaqueteo y cargo individual) y las resmas de papel son bienes de consumo (fungibles).",
-          C: "Las sillas son bienes inmuebles y las resmas de papel son bienes devolutivos.",
-          D: "Ambos son bienes devolutivos y cada resma de papel debe llevar placa metálica de activo fijo."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "Las sillas ergonómicas son bienes devolutivos (Propiedad, Planta y Equipo) porque tienen vocación de permanencia superior a un año, no se extinguen con el primer uso y requieren identificación mediante placa e inventario individual. Las resmas de papel son bienes de consumo pues se agotan con su utilización en el servicio."
-      },
-      {
-        id: "sim-inv-2",
-        pregunta:
-          "Durante una comisión oficial fuera de la sede, a un servidor de la Procuraduría le es hurtado el computador portátil institucional que tenía asignado en su inventario individual. ¿Cuál es la secuencia obligatoria de actuaciones que debe adelantar el servidor?",
-        opciones: {
-          A: "Comprar por su cuenta cualquier computador usado en el comercio y colocarle el adhesivo de la placa anterior sin informar a la entidad.",
-          B: "Interponer denuncia penal inmediata especificando marca, serial y placa de inventario, e informar por escrito al jefe inmediato y al Grupo de Almacén/Seguros adjuntando la denuncia.",
-          C: "Esperar hasta el inventario anual de fin de año para reportar verbalmente que ya no tiene el equipo.",
-          D: "Solicitar la baja inmediata por obsolescencia tecnológica sin presentar denuncia."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "Ante la pérdida o hurto de un bien público asignado, el servidor responsable de su custodia debe formular de inmediato la denuncia penal identificando las características y placa del activo, y reportar formalmente el siniestro al jefe inmediato y al área de Almacén/Seguros para tramitar la reclamación ante la aseguradora y las actuaciones administrativas correspondientes."
-      },
-      {
-        id: "sim-inv-3",
-        pregunta:
-          "En la toma física anual de inventarios realizada en una Procuraduría Distrital, el funcionario verificador encuentra físicamente en una oficina dos (2) monitores en buen estado que tienen placa institucional pero no figuran cargados en el inventario de esa dependencia, mientras que un (1) videoproyector que sí aparece en el listado no se encuentra físicamente. Estas novedades se denominan técnicamente:",
-        opciones: {
-          A: "Bienes de consumo y bienes dados de baja.",
-          B: "Bienes sobrantes (los 2 monitores hallados sin registro en la dependencia) y bien faltante (el videoproyector registrado pero no hallado físicamente).",
-          C: "Comodatos perfeccionados y activos intangibles.",
-          D: "Depreciación acumulada y amortización contable."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "En el levantamiento físico de inventarios, los bienes hallados físicamente que no figuran en la relación de la dependencia se registran como 'sobrantes' (para conciliar su origen y titular), mientras que los activos que figuran en el inventario oficial pero no se encuentran físicamente constituyen 'faltantes', generando el requerimiento al responsable."
-      },
-      {
-        id: "sim-inv-4",
-        pregunta:
-          "Un servidor público presenta renuncia a su cargo en la Procuraduría General de la Nación. Respecto a los bienes devolutivos que figuran cargados en su inventario individual (computador, teléfono IP, mobiliario), ¿qué requisito administrativo debe surtir antes de su desvinculación efectiva?",
-        opciones: {
-          A: "Ninguno, porque al dejar el escritorio en la oficina se presume legalmente la entrega a quien llegue en su reemplazo.",
-          B: "Realizar la entrega formal y física de los bienes asignados al Almacén o al funcionario designado mediante acta oficial y obtener el respectivo Paz y Salvo de Almacén e Inventarios.",
-          C: "Llevarse los equipos a su domicilio mientras nombran al nuevo titular del despacho.",
-          D: "Firmar una declaración juramentada ante notario sin verificación física de los elementos."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "Todo servidor público que se retire del servicio o sea trasladado tiene la obligación administrativa y disciplinaria de entregar formalmente, mediante inventario verificado, los bienes devolutivos bajo su custodia y tramitar el Paz y Salvo de Almacén e Inventarios."
-      },
-      {
-        id: "sim-inv-5",
-        pregunta:
-          "Para proceder legalmente a la baja definitiva de un lote de equipos de cómputo declarados obsoletos e inservibles en la entidad, es indispensable contar previamente con:",
-        opciones: {
-          A: "Únicamente la autorización verbal del coordinador administrativo de la sede territorial.",
-          B: "El reintegro de los bienes al almacén, el concepto técnico de la oficina de sistemas/TI (incluyendo borrado seguro de información), la recomendación del Comité de Bajas y el acto administrativo motivado del ordenador del gasto.",
-          C: "Un derecho de petición de los funcionarios solicitando equipos nuevos.",
-          D: "El visto bueno del Archivo Histórico Nacional."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "El procedimiento reglado de baja de bienes tecnológicos exige: 1) Reintegro físico al almacén, 2) Concepto técnico idóneo del área de TI que certifique obsolescencia o daño antieconómico y retiro de discos/información, 3) Evaluación del Comité de Inventarios/Bajas y 4) Expedición del acto administrativo de baja y disposición final (RAEE)."
-      }
-    ]
+  {
+    modulo: "Atención al Usuario",
+    pregunta: "De acuerdo con la normatividad vigente (Ley 1755 de 2015), ¿cuál es el término general que tiene la entidad para resolver una petición de información pública o documentos?",
+    opciones: [
+      "A) 10 días hábiles.",
+      "B) 15 días hábiles.",
+      "C) 30 días hábiles.",
+      "D) 5 días hábiles."
+    ],
+    respuesta_correcta: "A",
+    justificacion: "Las peticiones de información y solicitud de documentos deben resolverse dentro de los diez (10) días hábiles siguientes a su recepción."
   },
-
-  "mod-institucional-pgn": {
-    titulo: "Simulacro Eliminatorio · Módulo IV: Estructura PGN y Régimen Disciplinario",
-    descripcion: "Evalúa tu dominio sobre la Constitución Política, el Decreto Ley 262 de 2000 y el Código General Disciplinario.",
-    preguntas: [
-      {
-        id: "sim-pgn-1",
-        pregunta:
-          "De conformidad con los artículos 275 y 276 de la Constitución Política de Colombia, el Procurador General de la Nación es el supremo director del Ministerio Público y su elección corresponde a:",
-        opciones: {
-          A: "La Cámara de Representantes para un período de cuatro (4) años de terna enviada por el Consejo Superior de la Judicatura.",
-          B: "El Senado de la República, para un período de cuatro (4) años, de terna integrada por candidatos del Presidente de la República, la Corte Suprema de Justicia y el Consejo de Estado.",
-          C: "El Presidente de la República mediante decreto ejecutivo de libre nombramiento y remoción.",
-          D: "La Corte Constitucional en sala plena para un período institucional de ocho (8) años."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "El artículo 276 de la Constitución Política dispone que el Procurador General de la Nación será elegido por el Senado, para un período de cuatro años, de terna integrada por candidatos del Presidente de la República, la Corte Suprema de Justicia y el Consejo de Estado."
-      },
-      {
-        id: "sim-pgn-2",
-        pregunta:
-          "Cuando una Oficina de Control Disciplinario Interno de una alcaldía o ministerio se encuentra adelantando una investigación disciplinaria contra un funcionario, y la Procuraduría General de la Nación decide asumir directamente el conocimiento del proceso desplazando al control interno, está ejerciendo constitucionalmente:",
-        opciones: {
-          A: "La función de coadministración territorial.",
-          B: "El Poder Preferente Disciplinario atribuido a la Procuraduría General de la Nación.",
-          C: "La jurisdicción coactiva fiscal de la Contraloría.",
-          D: "El recurso extraordinario de casación penal."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "En virtud del artículo 277 numeral 6 de la Constitución Política y el artículo 3 de la Ley 1952 de 2019, la Procuraduría General de la Nación es titular del ejercicio preferente del poder disciplinario, pudiendo iniciar, proseguir o remitir cualquier investigación o juzgamiento de competencia de los órganos de control disciplinario interno."
-      },
-      {
-        id: "sim-pgn-3",
-        pregunta:
-          "A partir de la entrada en vigencia de la Ley 2094 de 2021 y el Decreto Ley 1851 de 2021 que modificaron el Código General Disciplinario y la estructura de la PGN, ¿cuál es la regla fundamental de garantía procesal entre las etapas de Instrucción y Juzgamiento?",
-        opciones: {
-          A: "El mismo funcionario que investiga y formula el pliego de cargos debe obligatoriamente dictar el fallo de primera instancia.",
-          B: "El funcionario que adelanta la etapa de instrucción (investigación y pliego de cargos) debe ser diferente e independiente del funcionario que adelanta la etapa de juzgamiento (descargos, pruebas de juicio y fallo).",
-          C: "La etapa de instrucción la realiza la Defensoría del Pueblo y el juzgamiento lo realiza el Congreso.",
-          D: "Solo existe separación de roles cuando la falta es leve culposa."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "El artículo 12 del Código General Disciplinario (modificado por el artículo 3 de la Ley 2094 de 2021) consagra la garantía de imparcialidad y separación de roles: el sujeto disciplinable deberá ser investigado y luego juzgado por funcionarios diferentes e independientes."
-      },
-      {
-        id: "sim-pgn-4",
-        pregunta:
-          "De acuerdo con el régimen de culpabilidad del Código General Disciplinario (artículos 10 y 29 de la Ley 1952 de 2019), en materia disciplinaria queda proscrita toda forma de responsabilidad objetiva y las faltas solo son sancionables a título de:",
-        opciones: {
-          A: "Dolo, culpa gravísima, culpa grave y culpa levísima.",
-          B: "Dolo o Culpa (únicamente en las modalidades de Culpa Gravísima o Culpa Grave, pues la culpa leve no es sancionable disciplinariamente).",
-          C: "Responsabilidad objetiva automática por el solo resultado dañoso.",
-          D: "Preterintención y caso fortuito."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "Según el artículo 29 de la Ley 1952 de 2019, las faltas disciplinarias solo son sancionables a título de dolo o culpa, y el parágrafo de dicha norma precisa que la culpa sancionable puede ser gravísima o grave; la culpa leve no da lugar a responsabilidad disciplinaria."
-      },
-      {
-        id: "sim-pgn-5",
-        pregunta:
-          "Según el artículo 9 de la Ley 1952 de 2019, la conducta de un servidor público es disciplinariamente ilícita (Ilicitud Sustancial) cuando:",
-        opciones: {
-          A: "Vulnera cualquier formalismo de cortesía social, aunque no tenga relación con sus funciones.",
-          B: "Afecta sustancialmente el deber funcional sin justificación alguna.",
-          C: "Produce necesariamente un detrimento patrimonial superior a cien salarios mínimos.",
-          D: "Está tipificada exclusivamente en el Código Penal como delito contra la vida."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "El artículo 9 del Código General Disciplinario define la Ilicitud Sustancial estableciendo que la conducta del disciplinable será ilícita cuando afecte sustancialmente el deber funcional sin justificación alguna."
-      }
-    ]
+  {
+    modulo: "Gestión Documental",
+    pregunta: "En el ciclo vital del documento, ¿cómo se denomina al archivo donde se transfieren los documentos que ya finalizaron su trámite pero siguen siendo de consulta esporádica?",
+    opciones: [
+      "A) Archivo de Gestión.",
+      "B) Archivo Central.",
+      "C) Archivo Histórico.",
+      "D) Archivo Inactivo."
+    ],
+    respuesta_correcta: "B",
+    justificacion: "El Archivo Central agrupa documentos transferidos por las dependencias una vez finalizado su trámite, siendo de consulta esporádica o por precaución legal."
   },
-
-  "mod-ofimatica-seguridad": {
-    titulo: "Simulacro Eliminatorio · Módulo V: Ofimática, Seguridad de la Información y Gobierno Digital",
-    descripcion: "Evalúa tu dominio sobre la Tríada CID, firmas electrónicas (Ley 527 de 1999), funciones de Excel y estándar PDF/A.",
-    preguntas: [
-      {
-        id: "sim-ofi-1",
-        pregunta:
-          "Un funcionario del área de archivo modifica sin autorización las fechas de radicación en una base de datos institucional de seguimiento de términos para ocultar el vencimiento de tres peticiones, alterando la veracidad de los registros. Dentro de la Tríada CID de la Seguridad de la Información, ¿cuál pilar fue vulnerado directamente?",
-        opciones: {
-          A: "La Disponibilidad de la red eléctrica.",
-          B: "La Integridad de la información (exactitud, completitud y no alteración no autorizada de los datos).",
-          C: "La Interoperabilidad semántica.",
-          D: "El principio de neutralidad tecnológica."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "La Integridad es el pilar de la seguridad de la información que garantiza la exactitud y completitud de los datos y sistemas, impidiendo su modificación, alteración o borrado no autorizado o fraudulento."
-      },
-      {
-        id: "sim-ofi-2",
-        pregunta:
-          "De acuerdo con la Ley 527 de 1999 y las directrices de Gobierno Digital, ¿qué diferencia técnica y jurídica distingue a una Firma Digital de una imagen escaneada de la firma manuscrita pegada en un documento Word?",
-        opciones: {
-          A: "No existe ninguna diferencia; pegar un recorte de imagen JPG en un Word es una Firma Digital certificada.",
-          B: "La Firma Digital es un valor numérico criptográfico adherido a un mensaje de datos, respaldado por un certificado emitido por una Entidad de Certificación Digital acreditada por la ONAC, que garantiza autenticidad, integridad y no repudio.",
-          C: "La Firma Digital solo sirve para correos personales y la imagen escaneada es obligatoria para fallos disciplinarios.",
-          D: "La Firma Digital requiere que el documento se imprima en papel moneda para tener validez."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "Según el artículo 2 literal c) y el artículo 28 de la Ley 527 de 1999, la Firma Digital utiliza un método criptográfico asimétrico respaldado por un certificado de una Entidad de Certificación Digital acreditada, garantizando que el suscriptor es quien dice ser y que el documento no fue alterado tras su firma."
-      },
-      {
-        id: "sim-ofi-3",
-        pregunta:
-          "Un técnico administrativo de una Procuraduría Regional debe enviar una citación idéntica en estructura a 120 quejosos distintos, personalizando automáticamente en cada oficio el nombre completo, la dirección, la ciudad y el número de radicado que reposan en una tabla de Excel. ¿Cuál es la herramienta ofimática del procesador de textos diseñada para realizar esta tarea sin redactar 120 archivos uno por uno?",
-        opciones: {
-          A: "Control de cambios y comentarios.",
-          B: "Combinación de Correspondencia (Mail Merge) vinculada a la lista de destinatarios en Excel.",
-          C: "Tabla de contenido automática por estilos.",
-          D: "Corrector ortográfico y sinónimos."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "La Combinación de Correspondencia (Mail Merge) permite conectar un documento maestro de procesador de texto (plantilla del oficio) con un origen de datos estructurado (hoja de cálculo Excel) para generar masivamente comunicaciones personalizadas."
-      },
-      {
-        id: "sim-ofi-4",
-        pregunta:
-          "En una hoja de cálculo de control de inventarios, la columna A contiene el número de placa de 800 bienes devolutivos y la columna D contiene el nombre del servidor público responsable. Si en otra hoja se desea escribir un número de placa en la celda B2 y que aparezca automáticamente el nombre exacto del responsable, ¿qué función debe utilizarse?",
-        opciones: {
-          A: "=CONTAR.SI(A2:A800; B2)",
-          B: "=BUSCARV(B2; A2:D800; 4; FALSO)",
-          C: "=PROMEDIO(A2:D800)",
-          D: "=DIAS.LAB(B2; A2; 4)"
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "La función BUSCARV(valor_buscado; matriz_tabla; indicador_columnas; [rango]) busca el número de placa (B2) en la primera columna de la matriz (A2:D800), devuelve el valor ubicado en la columna 4 (nombre del responsable) y utiliza FALSO (0) para exigir coincidencia exacta."
-      },
-      {
-        id: "sim-ofi-5",
-        pregunta:
-          "Conforme a los lineamientos del Archivo General de la Nación para documentos electrónicos de archivo de conservación permanente o largo plazo, ¿cuál es el estándar ISO de formato de archivo que garantiza la visualización invariable en el tiempo al incrustar fuentes y prohibir enlaces externos o cifrado?",
-        opciones: {
-          A: "Formato .DOCX editable con macros habilitadas.",
-          B: "Estándar PDF/A (ISO 19005) para preservación documental a largo plazo.",
-          C: "Archivo comprimido .RAR con contraseña.",
-          D: "Imagen temporal en portapapeles."
-        },
-        respuestaCorrecta: "B",
-        justificacion:
-          "El estándar internacional PDF/A (ISO 19005) es el formato exigido en la gestión documental electrónica colombiana para la preservación a largo plazo de documentos textuales, ya que es autocontenido (incrusta tipografías y perfiles de color) y prohíbe cifrados o scripts que impidan su apertura futura."
-      }
-    ]
+  {
+    modulo: "Atención al Usuario",
+    pregunta: "Como Auxiliar Administrativo, al recibir a un ciudadano que presenta una queja disciplinaria, su deber principal en primera instancia respecto a la atención es:",
+    opciones: [
+      "A) Rechazar la queja si no trae pruebas documentales físicas.",
+      "B) Radicar la solicitud, brindar un trato respetuoso y orientar sobre el trámite a seguir.",
+      "C) Resolver la queja inmediatamente en la ventanilla de atención.",
+      "D) Remitir al ciudadano verbalmente a las Procuradurías Delegadas sin radicar."
+    ],
+    respuesta_correcta: "B",
+    justificacion: "La orientación al usuario exige radicar, clasificar y tramitar según los procedimientos, garantizando siempre el valor del respeto y el compromiso institucional."
+  },
+  {
+    modulo: "Inventarios",
+    pregunta: "Dentro del manejo y control de bienes de la entidad, ¿cuál es la característica principal que diferencia a un 'bien de consumo' de un 'bien devolutivo'?",
+    opciones: [
+      "A) El bien devolutivo se extingue con su primer uso, el de consumo no.",
+      "B) El bien de consumo se agota o perece con su uso, mientras que el devolutivo no se consume rápidamente y debe reintegrarse al almacén.",
+      "C) Ambos bienes son idénticos y solo cambian de nombre según la dependencia.",
+      "D) Los bienes de consumo solo incluyen papelería, y los devolutivos solo vehículos."
+    ],
+    respuesta_correcta: "B",
+    justificacion: "Los bienes de consumo (ej. resmas de papel, tóner) se extinguen con el uso. Los devolutivos (ej. computadores, escritorios) tienen vida útil prolongada y se deprecian, por lo que deben devolverse o darse de baja formalmente."
+  },
+  {
+    modulo: "Estructura PGN",
+    pregunta: "A nivel constitucional e institucional, la Procuraduría General de la Nación es el máximo organismo directivo de:",
+    opciones: [
+      "A) La Rama Ejecutiva del Poder Público.",
+      "B) La Contraloría General de la República.",
+      "C) El Ministerio Público.",
+      "D) La Fiscalía General de la Nación."
+    ],
+    respuesta_correcta: "C",
+    justificacion: "La Procuraduría General de la Nación, junto con la Defensoría del Pueblo y las personerías, conforman el Ministerio Público, encargado de la guarda y promoción de los derechos humanos y la protección del interés público."
+  },
+  {
+    modulo: "Gestión Documental",
+    pregunta: "Según el Acuerdo 042 de 2002 del AGN, ¿en qué ubicación del documento físico debe realizarse el proceso de foliación (numeración consecutiva de las hojas)?",
+    opciones: [
+      "A) En la esquina inferior izquierda.",
+      "B) En el centro de la página superior.",
+      "C) Al respaldo de cada hoja escrita.",
+      "D) En la esquina superior derecha de la cara recta del folio."
+    ],
+    respuesta_correcta: "D",
+    justificacion: "La foliación debe realizarse en la esquina superior derecha del anverso (cara recta) de cada documento, utilizando lápiz de mina negra, tipo HB o B, de forma legible."
+  },
+  {
+    modulo: "Atención al Usuario",
+    pregunta: "Si la Procuraduría recibe un Derecho de Petición que no es de su competencia, ¿cuál es el paso a seguir según la Ley 1755 de 2015?",
+    opciones: [
+      "A) Archivar la petición sin notificar al solicitante.",
+      "B) Remitir la petición a la autoridad competente dentro de los 5 días siguientes e informar de inmediato al peticionario.",
+      "C) Devolver la petición al ciudadano para que él mismo busque a la entidad correcta.",
+      "D) Resolver la petición así no sea de su competencia para garantizar el servicio."
+    ],
+    respuesta_correcta: "B",
+    justificacion: "Cuando no se tiene competencia, se debe enviar a quien sí la tiene en un plazo máximo de 5 días hábiles y notificar al ciudadano sobre este traslado."
+  },
+  {
+    modulo: "Inventarios",
+    pregunta: "Al recibir materiales de almacén en la dependencia, el Auxiliar Administrativo debe verificar físicamente los elementos recibidos. ¿Qué documento soporta formalmente la entrega y asunción de responsabilidad sobre esos bienes?",
+    opciones: [
+      "A) El comprobante de egreso o salida de almacén debidamente firmado.",
+      "B) La factura original del proveedor.",
+      "C) Un correo electrónico del almacenista.",
+      "D) El plan de compras anual."
+    ],
+    respuesta_correcta: "A",
+    justificacion: "El comprobante de salida de almacén, al ser firmado por quien recibe, formaliza la entrega y traslada la responsabilidad de la custodia y uso del bien al funcionario correspondiente."
   }
-};
+];
+
 
