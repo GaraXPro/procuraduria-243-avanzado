@@ -90,7 +90,45 @@
     prevTopicTitle: document.getElementById("prev-topic-title"),
     nextTopicBtn: document.getElementById("next-topic-btn"),
     nextTopicTitle: document.getElementById("next-topic-title"),
-    completeAndNextBtn: document.getElementById("complete-and-next-btn")
+    completeAndNextBtn: document.getElementById("complete-and-next-btn"),
+
+    // Referencias del Motor de Simulacros
+    lessonView: document.getElementById("lesson-view"),
+    simuladorView: document.getElementById("simulador-view"),
+    openSimuladorBtn: document.getElementById("open-simulador-btn"),
+    closeSimuladorBtn: document.getElementById("close-simulador-btn"),
+    simModuleBadge: document.getElementById("sim-module-badge"),
+    simTitle: document.getElementById("sim-title"),
+    simDescription: document.getElementById("sim-description"),
+    simQuestionCounter: document.getElementById("sim-question-counter"),
+    simProgressFill: document.getElementById("sim-progress-fill"),
+    simQuestionCard: document.getElementById("sim-question-card"),
+    simQBadge: document.getElementById("sim-q-badge"),
+    simQuestionText: document.getElementById("sim-question-text"),
+    simOptionsGrid: document.getElementById("sim-options-grid"),
+    simJustificationBox: document.getElementById("sim-justification-box"),
+    simJustificationStatus: document.getElementById("sim-justification-status"),
+    simJustificationText: document.getElementById("sim-justification-text"),
+    simActionHint: document.getElementById("sim-action-hint"),
+    simNextBtn: document.getElementById("sim-next-btn"),
+    simNextLabel: document.getElementById("sim-next-label"),
+    simResultsCard: document.getElementById("sim-results-card"),
+    simScoreCircle: document.getElementById("sim-score-circle"),
+    simScorePercent: document.getElementById("sim-score-percent"),
+    simScoreDetail: document.getElementById("sim-score-detail"),
+    simEvalBanner: document.getElementById("sim-eval-banner"),
+    simReviewList: document.getElementById("sim-review-list"),
+    simRetryBtn: document.getElementById("sim-retry-btn"),
+    simBackReadingBtn: document.getElementById("sim-back-reading-btn")
+  };
+
+  // Estado interno de la sesión activa del Simulador
+  const simSession = {
+    isActive: false,
+    moduleId: null,
+    questions: [],
+    currentIndex: 0,
+    answers: {} // { [questionId]: 'A' | 'B' | 'C' | 'D' }
   };
 
   /* ==========================================================================
@@ -463,10 +501,210 @@
   }
 
   /* ==========================================================================
+     Motor de Simulacros por Módulo (60% Peso Eliminatorio - Umbral 65%)
+     ========================================================================== */
+
+  function getActiveModuleObj() {
+    const activeTopic = allTopicsFlat.find((t) => t.id === state.activeTopicId) || allTopicsFlat[0];
+    return COURSE_DATA.modules.find((m) => m.id === activeTopic.moduleId) || COURSE_DATA.modules[0];
+  }
+
+  function openSimulador() {
+    const mod = getActiveModuleObj();
+    const modSimData = typeof simuladorData !== "undefined" ? simuladorData[mod.id] : null;
+    if (!modSimData || !Array.isArray(modSimData.preguntas) || modSimData.preguntas.length === 0) {
+      return;
+    }
+
+    simSession.isActive = true;
+    simSession.moduleId = mod.id;
+    simSession.questions = modSimData.preguntas;
+    simSession.currentIndex = 0;
+    simSession.answers = {};
+
+    dom.simModuleBadge.textContent = `${mod.code} · SIMULACRO DE SELECCIÓN MÚLTIPLE (60%)`;
+    dom.simTitle.textContent = modSimData.titulo;
+    dom.simDescription.textContent = modSimData.descripcion;
+
+    dom.simResultsCard.hidden = true;
+    dom.simQuestionCard.hidden = false;
+
+    renderSimQuestion();
+
+    // Transición suave: ocultar lectura teórica y mostrar simulador
+    dom.lessonView.classList.add("is-fading-out");
+    setTimeout(() => {
+      dom.lessonView.classList.add("is-hidden");
+      dom.simuladorView.classList.remove("is-hidden");
+      dom.simuladorView.classList.add("is-fading-out");
+      requestAnimationFrame(() => {
+        dom.simuladorView.classList.remove("is-fading-out");
+      });
+      dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
+    }, 220);
+  }
+
+  function closeSimulador(immediate) {
+    if (!simSession.isActive) return;
+    simSession.isActive = false;
+
+    if (immediate) {
+      dom.simuladorView.classList.add("is-hidden");
+      dom.simuladorView.classList.remove("is-fading-out");
+      dom.lessonView.classList.remove("is-hidden", "is-fading-out");
+      return;
+    }
+
+    dom.simuladorView.classList.add("is-fading-out");
+    setTimeout(() => {
+      dom.simuladorView.classList.add("is-hidden");
+      dom.lessonView.classList.remove("is-hidden");
+      dom.lessonView.classList.add("is-fading-out");
+      requestAnimationFrame(() => {
+        dom.lessonView.classList.remove("is-fading-out");
+      });
+      dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
+    }, 220);
+  }
+
+  function renderSimQuestion() {
+    const total = simSession.questions.length;
+    const idx = simSession.currentIndex;
+    const qObj = simSession.questions[idx];
+    if (!qObj) return;
+
+    const progressPct = Math.round(((idx + 1) / total) * 100);
+    dom.simQuestionCounter.textContent = `Pregunta ${idx + 1} de ${total}`;
+    dom.simProgressFill.style.width = `${progressPct}%`;
+    dom.simQBadge.textContent = `PREGUNTA ${idx + 1} DE ${total}`;
+    dom.simQuestionText.textContent = qObj.pregunta;
+
+    dom.simOptionsGrid.innerHTML = "";
+    dom.simJustificationBox.hidden = true;
+    dom.simJustificationBox.className = "sim-justification-box";
+
+    const selectedLetter = simSession.answers[qObj.id];
+    const letters = ["A", "B", "C", "D"];
+
+    letters.forEach((letter) => {
+      const optText = qObj.opciones[letter];
+      if (!optText) return;
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "case-option-btn";
+      btn.innerHTML = `
+        <span class="case-option-letter">${letter}</span>
+        <span>${escapeHTML(optText)}</span>
+      `;
+
+      if (selectedLetter) {
+        if (letter === qObj.respuestaCorrecta) {
+          btn.classList.add("is-correct");
+        } else if (letter === selectedLetter && selectedLetter !== qObj.respuestaCorrecta) {
+          btn.classList.add("is-wrong");
+        }
+      }
+
+      btn.addEventListener("click", () => {
+        if (simSession.answers[qObj.id]) return; // Evitar cambiar respuesta una vez validada en el intento actual
+        simSession.answers[qObj.id] = letter;
+        renderSimQuestion();
+      });
+
+      dom.simOptionsGrid.appendChild(btn);
+    });
+
+    if (selectedLetter) {
+      const isCorrect = selectedLetter === qObj.respuestaCorrecta;
+      dom.simJustificationBox.hidden = false;
+      dom.simJustificationBox.classList.add(isCorrect ? "is-correct" : "is-wrong");
+      dom.simJustificationStatus.textContent = isCorrect
+        ? `✓ ¡Respuesta Correcta! (Opción ${qObj.respuestaCorrecta})`
+        : `✕ Respuesta Incorrecta. Seleccionaste ${selectedLetter} y la opción correcta es la ${qObj.respuestaCorrecta}.`;
+      dom.simJustificationText.textContent = qObj.justificacion;
+
+      dom.simNextBtn.disabled = false;
+      dom.simActionHint.textContent =
+        idx < total - 1
+          ? "Revisa la justificación normativa y avanza a la siguiente pregunta."
+          : "Has respondido todas las preguntas. Haz clic para calificar el módulo.";
+      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Calificar Módulo";
+    } else {
+      dom.simNextBtn.disabled = true;
+      dom.simActionHint.textContent = "Selecciona una opción (A, B, C o D) para validar tu respuesta.";
+      dom.simNextLabel.textContent = idx < total - 1 ? "Siguiente Pregunta" : "Finalizar y Calificar Módulo";
+    }
+  }
+
+  function renderSimResults() {
+    dom.simQuestionCard.hidden = true;
+    dom.simResultsCard.hidden = false;
+
+    const total = simSession.questions.length;
+    let correctCount = 0;
+
+    simSession.questions.forEach((q) => {
+      if (simSession.answers[q.id] === q.respuestaCorrecta) {
+        correctCount += 1;
+      }
+    });
+
+    const percentage = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+    const isPassed = percentage >= 65;
+
+    dom.simScorePercent.textContent = `${percentage}%`;
+    dom.simScoreDetail.textContent = `Obtuviste ${correctCount} de ${total} respuestas correctas en este módulo (Umbral mínimo exigido: 65%).`;
+
+    dom.simScoreCircle.className = `sim-score-circle ${isPassed ? "is-passed" : "is-failed"}`;
+
+    // Mensaje de Éxito en Verde (>= 65%) o Alerta de Refuerzo en Rojo (< 65%)
+    dom.simEvalBanner.className = `sim-eval-banner ${
+      isPassed ? "sim-eval-banner--success" : "sim-eval-banner--danger"
+    }`;
+    if (isPassed) {
+      dom.simEvalBanner.innerHTML = `
+        <div class="sim-eval-banner__title">✓ ¡Módulo Aprobado Satisfactoriamente! (${percentage}% de aciertos)</div>
+        <p>Has alcanzado o superado el puntaje mínimo aprobatorio del <strong>65%</strong> exigido para la prueba eliminatoria de conocimientos de la Convocatoria 243-2026.</p>
+      `;
+    } else {
+      dom.simEvalBanner.innerHTML = `
+        <div class="sim-eval-banner__title">⚠ Alerta de Refuerzo Académico (${percentage}% de aciertos)</div>
+        <p>Tu porcentaje de aciertos es inferior al umbral mínimo del <strong>65%</strong>. Te recomendamos volver a la zona de lectura teórica, repasar los puntos clave del módulo e intentar nuevamente el simulacro.</p>
+      `;
+    }
+
+    // Listado de revisión pregunta por pregunta
+    dom.simReviewList.innerHTML = "";
+    simSession.questions.forEach((q, i) => {
+      const userAns = simSession.answers[q.id] || "Sin responder";
+      const ok = userAns === q.respuestaCorrecta;
+
+      const item = document.createElement("div");
+      item.className = "sim-review-item";
+      item.innerHTML = `
+        <div class="sim-review-item__q">${i + 1}. ${escapeHTML(q.pregunta)}</div>
+        <div class="sim-review-item__ans ${ok ? "is-ok" : "is-bad"}">
+          Tu respuesta: Opción ${escapeHTML(userAns)} · Respuesta Correcta: Opción ${escapeHTML(q.respuestaCorrecta)} (${escapeHTML(
+            q.opciones[q.respuestaCorrecta]
+          )})
+        </div>
+        <div class="sim-review-item__just"><strong>Justificación:</strong> ${escapeHTML(q.justificacion)}</div>
+      `;
+      dom.simReviewList.appendChild(item);
+    });
+
+    dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ==========================================================================
      Acciones de Usuario y Eventos
      ========================================================================== */
 
   function selectTopic(topicId) {
+    if (simSession.isActive) {
+      closeSimulador(true);
+    }
     state.activeTopicId = topicId;
 
     // Asegurar que el módulo del tema activo esté expandido
@@ -612,6 +850,39 @@
     // Menú lateral en pantallas móviles
     dom.sidebarToggle.addEventListener("click", () => {
       dom.sidebar.classList.toggle("is-open");
+    });
+
+    // Eventos del Motor de Simulacros (60% Peso Eliminatorio)
+    dom.openSimuladorBtn.addEventListener("click", () => {
+      openSimulador();
+    });
+
+    dom.closeSimuladorBtn.addEventListener("click", () => {
+      closeSimulador(false);
+    });
+
+    dom.simBackReadingBtn.addEventListener("click", () => {
+      closeSimulador(false);
+    });
+
+    dom.simNextBtn.addEventListener("click", () => {
+      const total = simSession.questions.length;
+      if (simSession.currentIndex < total - 1) {
+        simSession.currentIndex += 1;
+        renderSimQuestion();
+        dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        renderSimResults();
+      }
+    });
+
+    dom.simRetryBtn.addEventListener("click", () => {
+      simSession.currentIndex = 0;
+      simSession.answers = {};
+      dom.simResultsCard.hidden = true;
+      dom.simQuestionCard.hidden = false;
+      renderSimQuestion();
+      dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
 

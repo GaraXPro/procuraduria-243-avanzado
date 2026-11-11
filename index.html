@@ -141,8 +141,8 @@
         </div>
       </div>
 
-      <!-- Artículo Principal del Tema -->
-      <article class="lesson-container">
+      <!-- Artículo Principal del Tema (Zona de Lectura Teórica) -->
+      <article id="lesson-view" class="lesson-container">
         <header class="lesson-header">
           <div id="lesson-normativa" class="normativa-list" aria-label="Marco normativo de referencia"></div>
           <h2 id="lesson-title" class="lesson-title">Cargando tema...</h2>
@@ -191,6 +191,24 @@
           ></textarea>
         </section>
 
+        <!-- Bloque de Transición al Motor de Simulacros (60% Peso Concurso) -->
+        <section class="simulador-cta-card" aria-labelledby="sim-cta-heading">
+          <div class="simulador-cta-card__info">
+            <span class="simulador-cta-card__eyebrow">PRUEBA DE CONOCIMIENTOS · PESO ELIMINATORIO 60%</span>
+            <h3 id="sim-cta-heading" class="simulador-cta-card__title">¿Listo para poner a prueba este módulo?</h3>
+            <p class="simulador-cta-card__desc">
+              Resuelve el simulacro oficial de selección múltiple (A, B, C, D) de este módulo. Necesitas un mínimo de <strong>65% de aciertos</strong> para superar el umbral aprobatorio.
+            </p>
+          </div>
+          <button id="open-simulador-btn" type="button" class="btn-evaluar-conocimientos">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            <span>Evaluar Conocimientos</span>
+          </button>
+        </section>
+
         <!-- Navegación Inferior del Curso -->
         <footer class="lesson-footer">
           <button id="prev-topic-btn" type="button" class="nav-step-btn nav-step-btn--prev">
@@ -211,6 +229,91 @@
           </button>
         </footer>
       </article>
+
+      <!-- Panel del Motor de Simulacros por Módulo (Oculto por defecto, transición suave) -->
+      <section id="simulador-view" class="simulador-container is-hidden" aria-label="Simulador de Evaluación por Módulo">
+        <header class="simulador-header">
+          <div class="simulador-header__top">
+            <span id="sim-module-badge" class="case-badge">SIMULACRO POR MÓDULO · PESO 60%</span>
+            <button id="close-simulador-btn" type="button" class="btn-back-reading">
+              ← Volver a la Lectura Teórica
+            </button>
+          </div>
+          <h2 id="sim-title" class="lesson-title">Simulacro Eliminatorio del Módulo</h2>
+          <p id="sim-description" class="lesson-summary"></p>
+
+          <!-- Barra de Progreso del Simulacro -->
+          <div class="sim-progress-bar-wrap">
+            <div class="sim-progress-meta">
+              <span id="sim-question-counter">Pregunta 1 de 5</span>
+              <span class="sim-threshold-tag">Umbral mínimo aprobatorio: 65%</span>
+            </div>
+            <div class="sim-progress-track">
+              <div id="sim-progress-fill" class="sim-progress-fill" style="width: 20%"></div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Vista de Pregunta Activa -->
+        <div id="sim-question-card" class="sim-question-card">
+          <div class="sim-question-card__number" id="sim-q-badge">PREGUNTA 1</div>
+          <p id="sim-question-text" class="sim-question-stem"></p>
+
+          <div id="sim-options-grid" class="sim-options-grid" role="radiogroup" aria-label="Opciones de respuesta"></div>
+
+          <!-- Caja de Justificación Normativa -->
+          <div id="sim-justification-box" class="sim-justification-box" hidden>
+            <div id="sim-justification-status" class="sim-justification-status"></div>
+            <p id="sim-justification-text" class="sim-justification-text"></p>
+          </div>
+
+          <div class="sim-question-actions">
+            <span id="sim-action-hint" class="sim-action-hint">Selecciona una opción (A, B, C o D) para validar tu respuesta.</span>
+            <button id="sim-next-btn" type="button" class="btn-primary-advance" disabled>
+              <span id="sim-next-label">Siguiente Pregunta</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Vista de Evaluación Final del Módulo -->
+        <div id="sim-results-card" class="sim-results-card" hidden>
+          <div class="sim-score-header">
+            <div id="sim-score-circle" class="sim-score-circle">
+              <span id="sim-score-percent" class="sim-score-percent">0%</span>
+              <span class="sim-score-caption">Puntaje</span>
+            </div>
+            <div class="sim-score-summary">
+              <h3 class="sim-score-title">Resultado de la Evaluación del Módulo</h3>
+              <p id="sim-score-detail" class="sim-score-detail">Has acertado 0 de 5 preguntas.</p>
+            </div>
+          </div>
+
+          <!-- Alerta Dinámica: >= 65% Verde / < 65% Rojo -->
+          <div id="sim-eval-banner" class="sim-eval-banner" role="alert"></div>
+
+          <!-- Resumen de Respuestas y Justificaciones -->
+          <div class="sim-review-section">
+            <h4 class="sim-review-heading">Revisión Detallada de Preguntas y Justificaciones</h4>
+            <div id="sim-review-list" class="sim-review-list"></div>
+          </div>
+
+          <div class="sim-results-footer">
+            <button id="sim-retry-btn" type="button" class="btn-evaluar-conocimientos">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              <span>Repetir Simulacro del Módulo</span>
+            </button>
+            <button id="sim-back-reading-btn" type="button" class="btn-back-reading btn-back-reading--large">
+              ← Volver a la Zona de Lectura
+            </button>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
