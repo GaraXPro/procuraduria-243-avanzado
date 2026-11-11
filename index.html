@@ -117,10 +117,15 @@
         </div>
 
         <!-- Filtros de Estado -->
-        <div class="filter-tabs" role="tablist" aria-label="Filtrar temas por estado de lectura">
-          <button type="button" class="filter-tab is-active" data-filter="all" role="tab" aria-selected="true">Todos</button>
-          <button type="button" class="filter-tab" data-filter="pending" role="tab" aria-selected="false">Pendientes</button>
-          <button type="button" class="filter-tab" data-filter="completed" role="tab" aria-selected="false">Leídos</button>
+        <div class="filter-chips" role="group" aria-label="Filtrar temas por estado o por módulo">
+          <button type="button" class="filter-chip is-active" data-filter="all">Todos</button>
+          <button type="button" class="filter-chip" data-filter="pending">Pendientes</button>
+          <button type="button" class="filter-chip" data-filter="completed">Leídos</button>
+          <button type="button" class="filter-chip" data-module-filter="0" title="Módulo I">M1</button>
+          <button type="button" class="filter-chip" data-module-filter="1" title="Módulo II">M2</button>
+          <button type="button" class="filter-chip" data-module-filter="2" title="Módulo III">M3</button>
+          <button type="button" class="filter-chip" data-module-filter="3" title="Módulo IV">M4</button>
+          <button type="button" class="filter-chip" data-module-filter="4" title="Módulo V">M5</button>
         </div>
       </div>
 
@@ -144,6 +149,8 @@
 
     <!-- Superficie Principal Interactiva -->
     <main id="main-content" class="course-reader" tabindex="-1">
+      <!-- ZONA FIJA: toolbar + título del tema + barra de 5 pestañas (siempre visible, nunca hace scroll) -->
+      <div class="reader-fixed">
       <!-- Barra Contextual Fija del Tema Actual -->
       <div class="reader-toolbar">
         <div class="reader-breadcrumb">
@@ -169,30 +176,35 @@
         </div>
       </div>
 
-      <!-- Barra de Secuencia Guiada en 5 Pestañas (Tabs) -->
+      <!-- Título del tema (siempre visible bajo la toolbar) -->
+      <div class="reader-topic-title">
+        <span id="reader-topic-code" class="reader-topic-title__code">Tema 1.1</span>
+        <strong id="reader-topic-name" class="reader-topic-title__name">Cargando tema...</strong>
+      </div>
+
+      <!-- Barra de Secuencia Guiada en 5 Pestañas (FIJA / SIEMPRE VISIBLE) -->
       <nav class="study-tabs-bar" role="tablist" aria-label="Secuencia guiada de aprendizaje en 5 pestañas">
         <button type="button" class="study-tab is-active" role="tab" aria-selected="true" data-tab="tab-lectura">
-          <span class="study-tab__step">1</span>
-          <span class="study-tab__label">Lectura Ejecutiva y Trampas</span>
+          <span class="study-tab__label">1. 📖 Lectura y Trampas</span>
         </button>
         <button type="button" class="study-tab" role="tab" aria-selected="false" data-tab="tab-video">
-          <span class="study-tab__step">2</span>
-          <span class="study-tab__label">Videoclases y Apuntes</span>
+          <span class="study-tab__label">2. 🎬 Videoclases y Apuntes</span>
         </button>
         <button type="button" class="study-tab" role="tab" aria-selected="false" data-tab="tab-pdf">
-          <span class="study-tab__step">3</span>
-          <span class="study-tab__label">Biblioteca y Visor PDF</span>
+          <span class="study-tab__label">3. 📚 Biblioteca y PDFs</span>
         </button>
         <button type="button" class="study-tab" role="tab" aria-selected="false" data-tab="tab-flashcards">
-          <span class="study-tab__step">4</span>
-          <span class="study-tab__label">Flashcards 3D</span>
+          <span class="study-tab__label">4. 🧠 Flashcards 3D</span>
         </button>
         <button type="button" class="study-tab" role="tab" aria-selected="false" data-tab="tab-simulador">
-          <span class="study-tab__step">5</span>
-          <span class="study-tab__label">Simulador Situacional</span>
+          <span class="study-tab__label">5. ⚖️ Simulador (10 PJS)</span>
           <span id="error-tray-pill" class="tab-error-pill" hidden>0</span>
         </button>
       </nav>
+      </div><!-- /.reader-fixed -->
+
+      <!-- ÁREA CON SCROLL PROPIO: solo el contenido de cada pestaña se desplaza -->
+      <div id="reader-scroll" class="reader-scroll">
 
       <!-- ====================================================================
            PESTAÑA 1: LECTURA EJECUTIVA, TRAMPAS DE EXAMEN Y APLICACIÓN 5AM-09
@@ -271,6 +283,8 @@
           </div>
         </section>
 
+        <div class="step-nav" data-step-nav></div>
+
         <!-- Navegación Inferior del Curso -->
         <footer class="lesson-footer">
           <button id="prev-topic-btn" type="button" class="nav-step-btn nav-step-btn--prev">
@@ -293,46 +307,72 @@
       </article>
 
       <!-- ====================================================================
-           PESTAÑA 2: VIDEOCLASES Y APUNTES INTELIGENTES (CON DESCARGA .TXT)
+           PESTAÑA 2: VIDEOCLASES Y APUNTES INTELIGENTES (SIN IFRAMES ROTOS)
            ==================================================================== -->
       <section id="tab-video" class="tab-panel lesson-container is-hidden" role="tabpanel">
         <header class="lesson-header">
-          <span class="case-badge">PESTAÑA 2 · MULTIMEDIA Y SÍNTESIS PERSONAL</span>
+          <span class="case-badge">PASO 2 · VIDEOCLASES Y SÍNTESIS PERSONAL</span>
           <h2 class="lesson-title" id="video-tab-title">Videoclases y Apuntes Inteligentes</h2>
           <p class="lesson-summary">
-            Visualiza las clases de refuerzo sobre la normativa del tema actual o abre las listas directas en YouTube mientras registras tus apuntes en tiempo real.
+            Guía visual de la videoclase del tema, accesos directos a las clases reales y a los listados oficiales, y tu propia lista de videos con apuntes.
           </p>
         </header>
 
         <div class="video-notes-layout">
-          <!-- Columna Izquierda: Reproductor y Galería de Videos -->
           <div class="video-gallery-col">
-            <div class="video-player-card">
+            <!-- Guía visual en tarjetas -->
+            <div class="video-guide-grid">
+              <article class="guide-card guide-card--summary">
+                <h3 class="guide-card__title">🎯 Resumen clave de la videoclase</h3>
+                <p id="video-guide-summary" class="guide-card__text"></p>
+              </article>
+              <article class="guide-card guide-card--critical">
+                <h3 class="guide-card__title">⚠️ Puntos críticos para el examen PGN</h3>
+                <ul id="video-guide-critical" class="guide-card__list"></ul>
+              </article>
+            </div>
+
+            <!-- Clases reales (enlaces directos) -->
+            <section class="video-links-section">
+              <h3 class="sub-heading">▶ Clases reales en YouTube para este tema (1 clic)</h3>
+              <div id="video-cards-list" class="video-cards-list"></div>
+            </section>
+
+            <!-- Listados oficiales -->
+            <section class="video-links-section">
+              <h3 class="sub-heading">🏛️ Listados oficiales · AGN / Función Pública / PGN</h3>
+              <div id="official-resources-list" class="video-cards-list"></div>
+            </section>
+
+            <!-- Reproductor y lista personal -->
+            <section class="video-player-card" aria-labelledby="my-videos-heading">
               <div class="video-player-card__top">
-                <span id="active-video-title" class="video-player-card__title">Videoclase del Tema</span>
-                <a id="active-video-yt-link" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="btn-yt-external">
-                  Buscar / Abrir en YouTube ↗
-                </a>
+                <span id="my-videos-heading" class="video-player-card__title">🎞️ Mi reproductor y mi lista personal del tema</span>
               </div>
-              <div class="video-Aspect-16x9">
+              <form id="user-video-form" class="user-video-form" autocomplete="off">
+                <input id="user-video-url" class="user-video-input" type="text" placeholder="Pega aquí cualquier enlace de YouTube (watch, youtu.be, shorts o lista)" aria-label="Enlace de YouTube" />
+                <input id="user-video-title" class="user-video-input" type="text" placeholder="Título para recordarlo (opcional)" aria-label="Título del video" />
+                <div class="user-video-actions">
+                  <button type="submit" class="btn-evaluar-conocimientos btn-sm">▶ Reproducir</button>
+                  <button type="button" id="user-video-save-btn" class="btn-back-reading">💾 Guardar en mi lista</button>
+                </div>
+              </form>
+              <p id="user-video-msg" class="video-player-card__hint" aria-live="polite">
+                Pega un enlace y pulsa «Reproducir». Si abres la página desde tu disco (file://), YouTube bloquea el reproductor incrustado (Error 153): usa «Abrir en YouTube». Publicada en GitHub Pages, el reproductor funciona normal.
+              </p>
+              <div id="user-video-stage" class="video-Aspect-16x9" hidden>
                 <iframe
                   id="video-iframe"
-                  title="Reproductor de videoclase"
+                  title="Reproductor de mi videoclase"
                   src="about:blank"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
                   allowfullscreen
                 ></iframe>
               </div>
-              <p class="video-player-card__hint">
-                Si algún canal institucional restringe la reproducción embebida, usa el botón <strong>"Buscar / Abrir en YouTube ↗"</strong> o las tarjetas inferiores para acceder directamente.
-              </p>
-            </div>
-
-            <div class="video-selector-section">
-              <h3 class="sub-heading">Recursos de Video Recomendados para este Tema y Módulo</h3>
-              <div id="video-cards-list" class="video-cards-list"></div>
-            </div>
+              <h4 class="sub-heading user-video-list-heading">Mi lista guardada para este tema</h4>
+              <div id="user-video-list" class="video-cards-list"></div>
+            </section>
           </div>
 
           <!-- Columna Derecha: Panel de Apuntes Inteligentes -->
@@ -377,54 +417,56 @@
             </div>
           </aside>
         </div>
+        <div class="step-nav" data-step-nav></div>
       </section>
 
       <!-- ====================================================================
-           PESTAÑA 3: BIBLIOTECA Y VISOR PDF INTEGRADO (NORMOGRAMA)
+           PESTAÑA 3: BIBLIOTECA Y VISOR PDF (DOCUMENTOS LOCALES + FICHAS DE NORMAS)
            ==================================================================== -->
       <section id="tab-pdf" class="tab-panel lesson-container is-hidden" role="tabpanel">
         <header class="lesson-header">
-          <span class="case-badge">PESTAÑA 3 · DOCUMENTOS OFICIALES Y NORMOGRAMA PGN</span>
-          <h2 class="lesson-title">Biblioteca Oficial y Visor de Documentos PDF</h2>
+          <span class="case-badge">PASO 3 · DOCUMENTOS OFICIALES Y NORMOGRAMA PGN</span>
+          <h2 class="lesson-title">Biblioteca y Visor de Documentos PDF</h2>
           <p class="lesson-summary">
-            Consulta tus documentos oficiales en la carpeta <code>docs/</code> (Manual de Funciones 5AM-09 y Comprobante #230688) y las leyes troncales del concurso directamente en el visor integrado.
+            Alterna entre tus documentos locales de <code>docs/</code> y las fichas resumen interactivas de las normas troncales del concurso.
           </p>
+          <div class="pdf-mode-bar">
+            <button type="button" id="pdf-back-lectura-btn" class="btn-back-reading">← Volver a Lectura Teórica</button>
+            <div class="pdf-mode-switch" role="group" aria-label="Tipo de documento">
+              <button type="button" class="pdf-mode-btn is-active" data-pdf-mode="local">📄 Mis documentos locales</button>
+              <button type="button" class="pdf-mode-btn" data-pdf-mode="normas">⚖️ Fichas: Ley 594 · Ley 1755 · DL 262</button>
+            </div>
+          </div>
         </header>
 
-        <!-- Tarjetas de Selección de Documento -->
         <div id="pdf-cards-grid" class="pdf-cards-grid"></div>
 
-        <!-- Visor Integrado (<embed> / <iframe>) con Botón Pantalla Completa -->
+        <!-- Visor integrado (solo modo "documentos locales") -->
         <div id="pdf-viewer-container" class="pdf-viewer-shell">
           <div class="pdf-viewer-toolbar">
             <div class="pdf-viewer-toolbar__info">
               <span class="pdf-viewer-badge" id="pdf-active-category">DOCUMENTO ACTIVO</span>
-              <strong id="pdf-active-title" class="pdf-viewer-title">Manual de Funciones 5AM-09 (docs/PROCURADURIA_FUNCIONES.pdf)</strong>
+              <strong id="pdf-active-title" class="pdf-viewer-title">Manual de Funciones 5AM-09</strong>
             </div>
             <div class="pdf-viewer-toolbar__actions">
               <a id="pdf-external-btn" href="docs/PROCURADURIA_FUNCIONES.pdf" target="_blank" rel="noopener noreferrer" class="btn-back-reading">
                 Abrir en Pestaña / Descargar ↗
               </a>
               <button type="button" id="pdf-fullscreen-btn" class="btn-evaluar-conocimientos btn-sm">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                </svg>
-                <span>Pantalla Completa</span>
+                <span>⛶ Pantalla Completa</span>
               </button>
             </div>
           </div>
-
           <div id="pdf-articles-summary" class="pdf-articles-summary" hidden></div>
-
           <div class="pdf-embed-frame-wrap">
-            <iframe
-              id="pdf-embed-viewer"
-              class="pdf-embed-viewer"
-              src="docs/PROCURADURIA_FUNCIONES.pdf"
-              title="Visor de Documentos Oficiales y Normograma"
-            ></iframe>
+            <iframe id="pdf-embed-viewer" class="pdf-embed-viewer" src="about:blank" title="Visor de documentos locales"></iframe>
           </div>
         </div>
+
+        <!-- Ficha resumen interactiva (solo modo "fichas de normas") -->
+        <div id="norma-ficha" class="norma-ficha" hidden></div>
+
+        <div class="step-nav" data-step-nav></div>
       </section>
 
       <!-- ====================================================================
@@ -504,6 +546,7 @@
             <button type="button" id="fc-next-btn" class="btn-back-reading">Siguiente →</button>
           </div>
         </div>
+        <div class="step-nav" data-step-nav></div>
       </section>
 
       <!-- ====================================================================
@@ -648,7 +691,9 @@
             </button>
           </div>
         </div>
+        <div class="step-nav" data-step-nav></div>
       </section>
+      </div><!-- /#reader-scroll -->
     </main>
   </div>
 

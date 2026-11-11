@@ -166,6 +166,38 @@ const BIBLIOTECA_NORMOGRAMA = [
 ];
 
 /**
+ * Accesos directos oficiales (AGN / Función Pública / PGN) para la Pestaña 2 (Videoclases).
+ * Son enlaces externos de un clic: no se incrustan, por lo que no dependen de iframes ni de file://.
+ */
+const RECURSOS_OFICIALES_VIDEO = [
+  {
+    titulo: "Archivo General de la Nación (AGN)",
+    descripcion: "Acuerdos, guías y capacitaciones oficiales de gestión documental, TRD/TVD y ciclo vital.",
+    url: "https://www.archivogeneral.gov.co"
+  },
+  {
+    titulo: "AGN en YouTube (clases y webinars)",
+    descripcion: "Búsqueda directa de las videoclases institucionales publicadas por el AGN.",
+    url: "https://www.youtube.com/results?search_query=Archivo+General+de+la+Naci%C3%B3n+Colombia+capacitaci%C3%B3n+gesti%C3%B3n+documental"
+  },
+  {
+    titulo: "Función Pública · Gestor Normativo",
+    descripcion: "Texto oficial y vigente de leyes, decretos y circulares del concurso.",
+    url: "https://www.funcionpublica.gov.co/eva/gestornormativo/"
+  },
+  {
+    titulo: "Función Pública en YouTube",
+    descripcion: "Clases sobre derecho de petición, servicio al ciudadano y empleo público.",
+    url: "https://www.youtube.com/results?search_query=Funci%C3%B3n+P%C3%BAblica+Colombia+derecho+de+petici%C3%B3n+servicio+al+ciudadano"
+  },
+  {
+    titulo: "Procuraduría General de la Nación",
+    descripcion: "Portal institucional: estructura, Régimen Disciplinario y Carrera Administrativa.",
+    url: "https://www.procuraduria.gov.co"
+  }
+];
+
+/**
  * Mazo Especial de Flashcards 3D de Competencias Comportamentales (Cargo 5AM-09 · 20%)
  */
 const FLASHCARDS_COMPORTAMENTALES_5AM09 = [
@@ -298,14 +330,12 @@ const COURSE_DATA = {
               titulo: "Ley 594 de 2000 · Ley General de Archivos y Ciclo Vital Documental",
               canal: "Archivo General de la Nación Colombia",
               duracion: "14:20",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=Ley+594+de+2000+principios+archivisticos+ciclo+vital+AGN"
             },
             {
               titulo: "Principio de Procedencia y Principio de Orden Original Explicados con Casos",
               canal: "Capacitación Gestión Documental Pública",
               duracion: "11:45",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=principio+de+procedencia+y+orden+original+archivistica+colombia"
             }
           ],
@@ -429,14 +459,12 @@ const COURSE_DATA = {
               titulo: "Tablas de Retención Documental (TRD) vs. Tablas de Valoración (TVD)",
               canal: "Archivo General de la Nación Colombia",
               duracion: "16:10",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=Tablas+de+Retencion+Documental+TRD+y+TVD+Archivo+General+de+la+Nacion"
             },
             {
               titulo: "Guía Práctica de Foliación Documental y Diligenciamiento del FUID",
               canal: "Formación Archivística Colombia",
               duracion: "12:30",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=como+foliar+expedientes+archivo+general+de+la+nacion+acuerdo+042+de+2002"
             }
           ],
@@ -535,7 +563,6 @@ const COURSE_DATA = {
               titulo: "Acuerdo 060 de 2001 AGN · Pautas para Administración de Comunicaciones Oficiales",
               canal: "Archivo General de la Nación Colombia",
               duracion: "13:50",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=Acuerdo+060+de+2001+AGN+comunicaciones+oficiales+radicacion"
             }
           ],
@@ -626,7 +653,6 @@ const COURSE_DATA = {
               titulo: "Los 8 Procesos de la Gestión Documental (Decreto 1080 de 2015) y el PGD",
               canal: "Archivo General de la Nación Colombia",
               duracion: "15:15",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=8+procesos+de+la+gestion+documental+decreto+1080+de+2015+AGN"
             }
           ],
@@ -752,7 +778,6 @@ const COURSE_DATA = {
               titulo: "Ley 1755 de 2015 · Derecho de Petición, Términos y Silencio Positivo en Documentos",
               canal: "Función Pública / Capacitación Estatal",
               duracion: "17:05",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=Ley+1755+de+2015+derecho+de+peticion+terminos+concurso+de+meritos"
             }
           ],
@@ -868,7 +893,6 @@ const COURSE_DATA = {
               titulo: "PQRSDF en el Sector Público y Trámite de Quejas Disciplinarias en la PGN",
               canal: "Instituto de Estudios del Ministerio Público - IEMP",
               duracion: "14:40",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=atencion+al+ciudadano+PQRSDF+queja+disciplinaria+procuraduria"
             }
           ],
@@ -964,7 +988,6 @@ const COURSE_DATA = {
               titulo: "Ley 1712 de 2014 · Transparencia, Información Clasificada vs. Reservada",
               canal: "Función Pública Colombia",
               duracion: "12:50",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=Ley+1712+de+2014+informacion+clasificada+y+reservada+colombia"
             }
           ],
@@ -1068,7 +1091,6 @@ const COURSE_DATA = {
               titulo: "Administración de Bienes Públicos: Bienes de Consumo vs. Bienes Devolutivos",
               canal: "Contaduría General de la Nación / Gestión Pública",
               duracion: "14:10",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=bienes+devolutivos+y+de+consumo+almacen+inventarios+sector+publico"
             }
           ],
@@ -1151,7 +1173,6 @@ const COURSE_DATA = {
               titulo: "Responsabilidad Fiscal (Ley 610 de 2000) y Disciplinaria sobre Bienes del Estado",
               canal: "Formación Control Fiscal y Disciplinario",
               duracion: "15:00",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=responsabilidad+fiscal+y+disciplinaria+custodia+de+bienes+publicos"
             }
           ],
@@ -1242,7 +1263,6 @@ const COURSE_DATA = {
               titulo: "Toma Física de Inventarios, Conciliación Contable y Baja de Bienes Públicos",
               canal: "Gestión Financiera y Contable Pública",
               duracion: "13:20",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=baja+de+bienes+publicos+toma+fisica+inventarios+contaduria+general"
             }
           ],
@@ -1350,7 +1370,6 @@ const COURSE_DATA = {
               titulo: "Estructura de la Procuraduría General de la Nación (Decreto Ley 262 de 2000)",
               canal: "Procuraduría General de la Nación / IEMP",
               duracion: "16:40",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=Decreto+262+de+2000+estructura+Procuraduria+General+de+la+Nacion+funciones"
             }
           ],
@@ -1457,7 +1476,6 @@ const COURSE_DATA = {
               titulo: "Código General Disciplinario (Ley 1952 de 2019 y Ley 2094 de 2021) Explicado",
               canal: "IEMP · Procuraduría General de la Nación",
               duracion: "19:10",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=Codigo+General+Disciplinario+Ley+1952+de+2019+Ley+2094+de+2021+etapas"
             }
           ],
@@ -1555,7 +1573,6 @@ const COURSE_DATA = {
               titulo: "Seguridad de la Información (Tríada CID) y Firma Digital vs. Electrónica (Ley 527)",
               canal: "MinTIC / Gobierno Digital Colombia",
               duracion: "12:15",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=triada+confidencialidad+integridad+disponibilidad+firma+digital+ley+527+de+1999"
             }
           ],
@@ -1655,7 +1672,6 @@ const COURSE_DATA = {
               titulo: "Excel para Concursos Públicos: DIA.LAB, DIAS.LAB, BUSCARV y Combinación de Correspondencia",
               canal: "Ofimática para el Estado",
               duracion: "15:45",
-              embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL4_H_5F8m6p1t1a0_0z5k6e8a6t9q3z7r",
               searchUrl: "https://www.youtube.com/results?search_query=Excel+DIA.LAB+DIAS.LAB+BUSCARV+combinacion+de+correspondencia+concurso"
             }
           ],

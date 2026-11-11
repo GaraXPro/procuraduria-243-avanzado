@@ -15,7 +15,19 @@
     MASTERED_FC: "pgn243_mastered_fc_v1",
     REVIEW_FC: "pgn243_review_fc_v1",
     FAILED_SIM_IDS: "pgn243_failed_sim_ids_v1",
-    THEME: "pgn243_theme_v1"
+    THEME: "pgn243_theme_v1",
+    STEPS_DONE: "pgn243_steps_done_v1",
+    USER_VIDEOS: "pgn243_user_videos_v1"
+  };
+
+  // Secuencia guiada de 5 pasos por tema (orden fijo)
+  const STEP_ORDER = ["tab-lectura", "tab-video", "tab-pdf", "tab-flashcards", "tab-simulador"];
+  const STEP_DEFS = {
+    "tab-lectura": { n: 1, icon: "📖", label: "Lectura Teórica" },
+    "tab-video": { n: 2, icon: "🎬", label: "Videoclases" },
+    "tab-pdf": { n: 3, icon: "📚", label: "Biblioteca/PDF" },
+    "tab-flashcards": { n: 4, icon: "🧠", label: "Flashcards" },
+    "tab-simulador": { n: 5, icon: "⚖️", label: "Cuestionario" }
   };
 
   // Aplanar listado de temas para navegación secuencial rápida
@@ -52,12 +64,17 @@
     reviewFlashcards: new Set(loadJSON(STORAGE_KEYS.REVIEW_FC, [])),
     failedSimIds: new Set(loadJSON(STORAGE_KEYS.FAILED_SIM_IDS, [])),
     collapsedModules: new Set(),
+    expandedTopics: new Set(),
+    stepsDone: new Set(loadJSON(STORAGE_KEYS.STEPS_DONE, [])),
+    userVideos: loadJSON(STORAGE_KEYS.USER_VIDEOS, {}),
     filterStatus: "all", // 'all' | 'pending' | 'completed'
+    moduleFilter: null, // null | índice de módulo (0..4)
     searchQuery: "",
     theme: localStorage.getItem(STORAGE_KEYS.THEME) || "light",
 
     // Estado Pestaña 3 (Biblioteca PDF)
     activePdfDocId: "doc-funciones-5am09",
+    pdfMode: "local", // 'local' | 'normas'
 
     // Estado Pestaña 4 (Flashcards 3D)
     fcDeckFilter: "topic", // 'topic' | 'comportamentales' | 'all' | 'review'
@@ -87,7 +104,7 @@
     moduleTree: document.getElementById("module-tree"),
     modulesSummaryBadge: document.getElementById("modules-summary-badge"),
     topicSearch: document.getElementById("topic-search"),
-    filterTabs: document.querySelectorAll(".filter-tab"),
+    filterChips: document.querySelectorAll(".filter-chip"),
 
     globalProgressCount: document.getElementById("global-progress-count"),
     globalProgressPercent: document.getElementById("global-progress-percent"),
@@ -110,7 +127,9 @@
     themeLabel: document.getElementById("theme-label"),
     resetProgressBtn: document.getElementById("reset-progress-btn"),
 
-    mainContent: document.getElementById("main-content"),
+    mainContent: document.getElementById("reader-scroll"),
+    readerTopicCode: document.getElementById("reader-topic-code"),
+    readerTopicName: document.getElementById("reader-topic-name"),
     crumbModule: document.getElementById("crumb-module"),
     crumbTopicCode: document.getElementById("crumb-topic-code"),
     topicDuration: document.getElementById("topic-duration"),
@@ -146,10 +165,18 @@
 
     // Pestaña 2: Videoclases y Apuntes Inteligentes
     videoTabTitle: document.getElementById("video-tab-title"),
-    activeVideoTitle: document.getElementById("active-video-title"),
-    activeVideoYtLink: document.getElementById("active-video-yt-link"),
-    videoIframe: document.getElementById("video-iframe"),
+    videoGuideSummary: document.getElementById("video-guide-summary"),
+    videoGuideCritical: document.getElementById("video-guide-critical"),
     videoCardsList: document.getElementById("video-cards-list"),
+    officialResourcesList: document.getElementById("official-resources-list"),
+    userVideoForm: document.getElementById("user-video-form"),
+    userVideoUrl: document.getElementById("user-video-url"),
+    userVideoTitle: document.getElementById("user-video-title"),
+    userVideoSaveBtn: document.getElementById("user-video-save-btn"),
+    userVideoMsg: document.getElementById("user-video-msg"),
+    userVideoStage: document.getElementById("user-video-stage"),
+    userVideoList: document.getElementById("user-video-list"),
+    videoIframe: document.getElementById("video-iframe"),
     notesTopicIndicator: document.getElementById("notes-topic-indicator"),
     notesStatus: document.getElementById("notes-status"),
     topicNotes: document.getElementById("topic-notes"),
@@ -166,6 +193,10 @@
     pdfFullscreenBtn: document.getElementById("pdf-fullscreen-btn"),
     pdfArticlesSummary: document.getElementById("pdf-articles-summary"),
     pdfEmbedViewer: document.getElementById("pdf-embed-viewer"),
+    pdfModeBtns: document.querySelectorAll(".pdf-mode-btn"),
+    pdfBackLecturaBtn: document.getElementById("pdf-back-lectura-btn"),
+    normaFicha: document.getElementById("norma-ficha"),
+    stepNavs: document.querySelectorAll("[data-step-nav]"),
 
     // Pestaña 4: Flashcards 3D
     fcFilterBtns: document.querySelectorAll(".fc-filter-btn"),
@@ -245,6 +276,8 @@
       localStorage.setItem(STORAGE_KEYS.REVIEW_FC, JSON.stringify(Array.from(state.reviewFlashcards)));
       localStorage.setItem(STORAGE_KEYS.FAILED_SIM_IDS, JSON.stringify(Array.from(state.failedSimIds)));
       localStorage.setItem(STORAGE_KEYS.THEME, state.theme);
+      localStorage.setItem(STORAGE_KEYS.STEPS_DONE, JSON.stringify(Array.from(state.stepsDone)));
+      localStorage.setItem(STORAGE_KEYS.USER_VIDEOS, JSON.stringify(state.userVideos));
     } catch (err) {
       // Ignorar errores de almacenamiento
     }
@@ -303,7 +336,95 @@
       renderPdfLibrary();
     }
 
+    state.expandedTopics.add(state.activeTopicId);
+    renderModuleTree();
+    renderStepNavs();
+
     dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ==========================================================================
+     Barra inferior de pasos (← Paso anterior / Siguiente paso →) y sub-pasos
+     ========================================================================== */
+
+  function stepKey(topicId, tabId) {
+    return `${topicId}:${tabId}`;
+  }
+
+  function goToStep(topicId, tabId) {
+    if (topicId !== state.activeTopicId) {
+      state.activeTopicId = topicId;
+      state.expandedTopics.add(topicId);
+      const topicObj = allTopicsFlat.find((t) => t.id === topicId);
+      if (topicObj) state.collapsedModules.delete(topicObj.moduleId);
+      saveState();
+      renderActiveLesson();
+    }
+    switchTab(tabId);
+  }
+
+  function toggleStepDone(topicId, tabId) {
+    const key = stepKey(topicId, tabId);
+    if (state.stepsDone.has(key)) {
+      state.stepsDone.delete(key);
+    } else {
+      state.stepsDone.add(key);
+    }
+
+    // Los 5 sub-pasos completos => el tema queda marcado como leído
+    const allDone = STEP_ORDER.every((s) => state.stepsDone.has(stepKey(topicId, s)));
+    if (allDone) {
+      state.completedTopics.add(topicId);
+    }
+
+    saveState();
+    updateGlobalProgress();
+    renderModuleTree();
+    if (topicId === state.activeTopicId) {
+      updateReadButtonState(state.completedTopics.has(topicId));
+    }
+  }
+
+  function renderStepNavs() {
+    const idx = STEP_ORDER.indexOf(state.activeTabId);
+    const prevTab = idx > 0 ? STEP_ORDER[idx - 1] : null;
+    const nextTab = idx < STEP_ORDER.length - 1 ? STEP_ORDER[idx + 1] : null;
+    const topicIdx = allTopicsFlat.findIndex((t) => t.id === state.activeTopicId);
+    const nextTopic = topicIdx < allTopicsFlat.length - 1 ? allTopicsFlat[topicIdx + 1] : null;
+
+    const prevLabel = prevTab
+      ? `← Volver al Paso Anterior (${STEP_DEFS[prevTab].n}. ${STEP_DEFS[prevTab].label})`
+      : "← Volver al Paso Anterior";
+    let nextLabel = "Ir al Siguiente Paso →";
+    if (nextTab) {
+      nextLabel = `Ir al Siguiente Paso → (${STEP_DEFS[nextTab].n}. ${STEP_DEFS[nextTab].label})`;
+    } else if (nextTopic) {
+      nextLabel = `Siguiente Tema ${nextTopic.code} →`;
+    }
+
+    dom.stepNavs.forEach((nav) => {
+      nav.innerHTML = `
+        <button type="button" class="step-nav__btn step-nav__btn--prev" data-step-dir="prev" ${prevTab ? "" : "disabled"}>${escapeHTML(prevLabel)}</button>
+        <span class="step-nav__indicator">Paso ${idx + 1} de ${STEP_ORDER.length}</span>
+        <button type="button" class="step-nav__btn step-nav__btn--next" data-step-dir="next" ${nextTab || nextTopic ? "" : "disabled"}>${escapeHTML(nextLabel)}</button>
+      `;
+    });
+  }
+
+  function handleStepNavClick(dir) {
+    const idx = STEP_ORDER.indexOf(state.activeTabId);
+    if (dir === "prev" && idx > 0) {
+      switchTab(STEP_ORDER[idx - 1]);
+    } else if (dir === "next") {
+      if (idx < STEP_ORDER.length - 1) {
+        switchTab(STEP_ORDER[idx + 1]);
+      } else {
+        const topicIdx = allTopicsFlat.findIndex((t) => t.id === state.activeTopicId);
+        if (topicIdx < allTopicsFlat.length - 1) {
+          goToStep(allTopicsFlat[topicIdx + 1].id, "tab-lectura");
+        }
+      }
+    }
   }
 
   /* ==========================================================================
@@ -371,10 +492,12 @@
   }
 
   function renderModuleTree() {
+    const prevScroll = dom.moduleTree.scrollTop;
     dom.moduleTree.innerHTML = "";
     let visibleTopicsTotal = 0;
 
-    COURSE_DATA.modules.forEach((mod) => {
+    COURSE_DATA.modules.forEach((mod, modIndex) => {
+      if (state.moduleFilter !== null && state.moduleFilter !== modIndex) return;
       const filteredTopics = mod.topics.filter(topicMatchesFilters);
       if (filteredTopics.length === 0) return;
 
@@ -460,11 +583,64 @@
           <span class="topic-item__name">${escapeHTML(topic.title)}</span>
         `;
         selectBtn.addEventListener("click", () => {
-          selectTopic(topic.id);
+          if (topic.id === state.activeTopicId) {
+            // Tema ya activo: alternar el despliegue de sus 5 sub-pasos
+            if (state.expandedTopics.has(topic.id)) {
+              state.expandedTopics.delete(topic.id);
+            } else {
+              state.expandedTopics.add(topic.id);
+            }
+            renderModuleTree();
+          } else {
+            selectTopic(topic.id);
+          }
         });
 
         li.appendChild(checkBtn);
         li.appendChild(selectBtn);
+
+        // Secuencia guiada de sub-pasos (1.1.1 … 1.1.5)
+        if (state.expandedTopics.has(topic.id)) {
+          const subList = document.createElement("ul");
+          subList.className = "topic-substeps";
+          STEP_ORDER.forEach((tabId) => {
+            const def = STEP_DEFS[tabId];
+            const done = state.stepsDone.has(stepKey(topic.id, tabId));
+            const isCurrent = isActive && state.activeTabId === tabId;
+
+            const sub = document.createElement("li");
+            sub.className = `topic-substep${done ? " is-done" : ""}${isCurrent ? " is-current" : ""}`;
+
+            const subCheck = document.createElement("button");
+            subCheck.type = "button";
+            subCheck.className = "substep-check";
+            subCheck.title = done ? "Desmarcar este paso" : "Marcar este paso como completado";
+            subCheck.setAttribute("aria-label", `${done ? "Desmarcar" : "Marcar"} paso ${topic.code}.${def.n}`);
+            subCheck.innerHTML = `<span class="topic-check-circle">${
+              done
+                ? `<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+                : ""
+            }</span>`;
+            subCheck.addEventListener("click", (e) => {
+              e.stopPropagation();
+              toggleStepDone(topic.id, tabId);
+            });
+
+            const subGo = document.createElement("button");
+            subGo.type = "button";
+            subGo.className = "substep-go";
+            subGo.textContent = `${topic.code}.${def.n} ${def.icon} ${def.label}`;
+            subGo.addEventListener("click", () => {
+              goToStep(topic.id, tabId);
+            });
+
+            sub.appendChild(subCheck);
+            sub.appendChild(subGo);
+            subList.appendChild(sub);
+          });
+          li.appendChild(subList);
+        }
+
         topicsList.appendChild(li);
       });
 
@@ -479,6 +655,8 @@
       empty.textContent = "No se encontraron temas que coincidan con el filtro actual.";
       dom.moduleTree.appendChild(empty);
     }
+
+    dom.moduleTree.scrollTop = prevScroll;
   }
 
   /* ==========================================================================
@@ -504,6 +682,8 @@
       .join("");
     dom.lessonTitle.textContent = `${topic.code}. ${topic.title}`;
     dom.lessonSummary.textContent = topic.summary;
+    dom.readerTopicCode.textContent = `Tema ${topic.code}`;
+    dom.readerTopicName.textContent = topic.title;
 
     // 3. Cajas destacadas: Trampa del Examen y Aplicación Práctica Cargo 5AM-09
     if (topic.trampaExamen) {
@@ -670,43 +850,196 @@
     dom.topicNotes.value = state.topicNotes[topic.id] || "";
     dom.notesStatus.textContent = "Sincronizado en localStorage ✓";
 
-    const videos = Array.isArray(topic.videos) && topic.videos.length > 0 ? topic.videos : [];
-    dom.videoCardsList.innerHTML = "";
-
-    if (videos.length > 0) {
-      loadVideoInPlayer(videos[0], 0, videos);
+    // a) Guía visual: resumen clave + puntos críticos del examen PGN
+    dom.videoGuideSummary.textContent = topic.summary;
+    const critical = [];
+    if (topic.trampaExamen) {
+      critical.push(`${topic.trampaExamen.titulo.replace(/^OJO CON LA TRAMPA DEL EXAMEN:\s*/i, "Trampa: ")} — ${topic.trampaExamen.alerta}`);
     }
+    (topic.keyPoints || []).slice(0, 3).forEach((kp) => critical.push(kp));
+    dom.videoGuideCritical.innerHTML = critical.map((c) => `<li>${escapeHTML(c)}</li>`).join("");
 
-    videos.forEach((vid, idx) => {
-      const card = document.createElement("div");
-      card.className = `video-card-item${idx === 0 ? " is-active" : ""}`;
-      card.innerHTML = `
+    // b) Clases reales en YouTube (enlaces directos, sin iframes)
+    const videos = Array.isArray(topic.videos) ? topic.videos : [];
+    dom.videoCardsList.innerHTML = "";
+    videos.forEach((vid) => {
+      const a = document.createElement("a");
+      a.className = "video-card-item video-card-item--link";
+      a.href = vid.searchUrl;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.innerHTML = `
         <div>
           <div class="video-card-item__title">▶ ${escapeHTML(vid.titulo)}</div>
           <div class="video-card-item__meta">${escapeHTML(vid.canal)} · Duración: ${escapeHTML(vid.duracion)}</div>
         </div>
-        <a href="${escapeHTML(vid.searchUrl)}" target="_blank" rel="noopener noreferrer" class="btn-yt-external" onclick="event.stopPropagation();">
-          Abrir en YouTube ↗
-        </a>
+        <span class="btn-yt-external">Abrir en YouTube ↗</span>
       `;
-      card.addEventListener("click", () => {
-        loadVideoInPlayer(vid, idx, videos);
+      dom.videoCardsList.appendChild(a);
+    });
+
+    // c) Listados oficiales AGN / Función Pública / PGN
+    dom.officialResourcesList.innerHTML = "";
+    const oficiales = typeof RECURSOS_OFICIALES_VIDEO !== "undefined" ? RECURSOS_OFICIALES_VIDEO : [];
+    oficiales.forEach((res) => {
+      const a = document.createElement("a");
+      a.className = "video-card-item video-card-item--link";
+      a.href = res.url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.innerHTML = `
+        <div>
+          <div class="video-card-item__title">${escapeHTML(res.titulo)}</div>
+          <div class="video-card-item__meta">${escapeHTML(res.descripcion)}</div>
+        </div>
+        <span class="btn-yt-external">Abrir ↗</span>
+      `;
+      dom.officialResourcesList.appendChild(a);
+    });
+
+    // d) Reproductor limpio + lista personal del tema
+    stopUserVideo();
+    renderUserVideoList();
+  }
+
+  /* ---- Reproductor personal de YouTube (enlaces pegados por el usuario) ---- */
+
+  function parseYouTubeUrl(raw) {
+    const text = (raw || "").trim();
+    if (!text) return null;
+    let u;
+    try {
+      u = new URL(/^https?:\/\//i.test(text) ? text : `https://${text}`);
+    } catch (err) {
+      return null;
+    }
+    const host = u.hostname.replace(/^(www|m|music)\./, "");
+    let id = null;
+    let list = null;
+
+    if (host === "youtu.be") {
+      id = u.pathname.split("/")[1] || null;
+    } else if (host === "youtube.com" || host === "youtube-nocookie.com") {
+      if (u.pathname === "/watch") {
+        id = u.searchParams.get("v");
+      } else {
+        const m = u.pathname.match(/^\/(embed|shorts|live|v)\/([\w-]{11})/);
+        if (m) id = m[2];
+      }
+      list = u.searchParams.get("list");
+    } else {
+      return null;
+    }
+
+    if (id && !/^[\w-]{11}$/.test(id)) id = null;
+    if (list && !/^[\w-]+$/.test(list)) list = null;
+    if (!id && !list) return null;
+
+    const watchUrl = id
+      ? `https://www.youtube.com/watch?v=${id}${list ? `&list=${list}` : ""}`
+      : `https://www.youtube.com/playlist?list=${list}`;
+    const embedUrl = id
+      ? `https://www.youtube-nocookie.com/embed/${id}${list ? `?list=${list}` : ""}`
+      : `https://www.youtube-nocookie.com/embed/videoseries?list=${list}`;
+
+    return { id, list, watchUrl, embedUrl };
+  }
+
+  function setUserVideoMessage(html) {
+    dom.userVideoMsg.innerHTML = html;
+  }
+
+  function stopUserVideo() {
+    dom.userVideoStage.hidden = true;
+    dom.videoIframe.src = "about:blank";
+  }
+
+  function playUserVideo(parsed) {
+    if (window.location.protocol === "file:") {
+      // YouTube rechaza embeds desde file:// (Error 153): no se intenta incrustar.
+      stopUserVideo();
+      setUserVideoMessage(
+        `Estás abriendo la página desde tu disco (file://), por eso YouTube bloquea el reproductor incrustado (Error 153). ` +
+          `<a href="${escapeHTML(parsed.watchUrl)}" target="_blank" rel="noopener noreferrer"><strong>Abrir este video en YouTube ↗</strong></a>. ` +
+          `En GitHub Pages (https) se reproduce aquí mismo.`
+      );
+      return;
+    }
+    dom.userVideoStage.hidden = false;
+    dom.videoIframe.src = parsed.embedUrl;
+    setUserVideoMessage(
+      `Reproduciendo. Si el propietario del video desactivó la inserción, <a href="${escapeHTML(parsed.watchUrl)}" target="_blank" rel="noopener noreferrer"><strong>ábrelo en YouTube ↗</strong></a>.`
+    );
+  }
+
+  function renderUserVideoList() {
+    const list = state.userVideos[state.activeTopicId] || [];
+    dom.userVideoList.innerHTML = "";
+
+    if (list.length === 0) {
+      dom.userVideoList.innerHTML = `<p class="user-video-empty">Aún no guardaste videos en este tema. Pega un enlace arriba y pulsa «Guardar en mi lista».</p>`;
+      return;
+    }
+
+    list.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "video-card-item";
+      row.innerHTML = `
+        <div>
+          <div class="video-card-item__title">▶ ${escapeHTML(item.title)}</div>
+          <div class="video-card-item__meta">${escapeHTML(item.watchUrl)}</div>
+        </div>
+        <div class="video-card-item__actions">
+          <button type="button" class="btn-mini" data-act="play">Reproducir</button>
+          <a class="btn-mini" href="${escapeHTML(item.watchUrl)}" target="_blank" rel="noopener noreferrer">YouTube ↗</a>
+          <button type="button" class="btn-mini btn-mini--danger" data-act="del" aria-label="Quitar de mi lista">✕</button>
+        </div>
+      `;
+      row.querySelector('[data-act="play"]').addEventListener("click", () => {
+        const parsed = parseYouTubeUrl(item.watchUrl);
+        if (parsed) playUserVideo(parsed);
       });
-      dom.videoCardsList.appendChild(card);
+      row.querySelector('[data-act="del"]').addEventListener("click", () => {
+        state.userVideos[state.activeTopicId] = (state.userVideos[state.activeTopicId] || []).filter(
+          (v) => v.watchUrl !== item.watchUrl
+        );
+        saveState();
+        renderUserVideoList();
+      });
+      dom.userVideoList.appendChild(row);
     });
   }
 
-  function loadVideoInPlayer(vid, activeIdx) {
-    dom.activeVideoTitle.textContent = vid.titulo;
-    dom.activeVideoYtLink.href = vid.searchUrl;
-    dom.videoIframe.src = vid.embedUrl;
-
-    const allCards = dom.videoCardsList.querySelectorAll(".video-card-item");
-    allCards.forEach((c, i) => {
-      c.classList.toggle("is-active", i === activeIdx);
-    });
+  function handleUserVideoPlay() {
+    const parsed = parseYouTubeUrl(dom.userVideoUrl.value);
+    if (!parsed) {
+      setUserVideoMessage("⚠️ No reconozco ese enlace. Pega una URL de YouTube (youtube.com/watch?v=…, youtu.be/…, /shorts/… o una lista).");
+      return;
+    }
+    playUserVideo(parsed);
   }
 
+  function handleUserVideoSave() {
+    const parsed = parseYouTubeUrl(dom.userVideoUrl.value);
+    if (!parsed) {
+      setUserVideoMessage("⚠️ No puedo guardar: el enlace no es una URL válida de YouTube.");
+      return;
+    }
+    const topicId = state.activeTopicId;
+    const list = state.userVideos[topicId] || [];
+    if (list.some((v) => v.watchUrl === parsed.watchUrl)) {
+      setUserVideoMessage("Ese video ya está en tu lista de este tema.");
+      return;
+    }
+    const title = dom.userVideoTitle.value.trim() || `Video guardado ${list.length + 1}`;
+    list.push({ title, watchUrl: parsed.watchUrl });
+    state.userVideos[topicId] = list;
+    saveState();
+    dom.userVideoUrl.value = "";
+    dom.userVideoTitle.value = "";
+    setUserVideoMessage(`✅ Guardado en tu lista personal del tema: «${escapeHTML(title)}».`);
+    renderUserVideoList();
+  }
   function downloadTextFile(filename, content) {
     const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -765,16 +1098,27 @@
 
   function renderPdfLibrary() {
     if (typeof BIBLIOTECA_NORMOGRAMA === "undefined") return;
+
+    const isLocal = state.pdfMode === "local";
+    const docsForMode = BIBLIOTECA_NORMOGRAMA.filter((d) => (d.tipo === "local-pdf") === isLocal);
+    if (docsForMode.length === 0) return;
+
+    let activeDoc = docsForMode.find((d) => d.id === state.activePdfDocId);
+    if (!activeDoc) {
+      activeDoc = docsForMode[0];
+      state.activePdfDocId = activeDoc.id;
+    }
+
+    dom.pdfModeBtns.forEach((btn) => {
+      btn.classList.toggle("is-active", btn.getAttribute("data-pdf-mode") === state.pdfMode);
+    });
+
+    // Tarjetas del modo activo
     dom.pdfCardsGrid.innerHTML = "";
-
-    const activeDoc =
-      BIBLIOTECA_NORMOGRAMA.find((d) => d.id === state.activePdfDocId) || BIBLIOTECA_NORMOGRAMA[0];
-
-    BIBLIOTECA_NORMOGRAMA.forEach((doc) => {
-      const isSelected = doc.id === activeDoc.id;
+    docsForMode.forEach((doc) => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = `pdf-doc-card${isSelected ? " is-active" : ""}`;
+      btn.className = `pdf-doc-card${doc.id === activeDoc.id ? " is-active" : ""}`;
       btn.innerHTML = `
         <div>
           <span class="pdf-doc-card__cat">${escapeHTML(doc.categoria)}</span>
@@ -783,7 +1127,7 @@
         </div>
         <div class="pdf-doc-card__footer">
           <span>${escapeHTML(doc.subtitulo)}</span>
-          <span>Cargar en Visor →</span>
+          <span>${isLocal ? "Cargar en Visor →" : "Ver Ficha →"}</span>
         </div>
       `;
       btn.addEventListener("click", () => {
@@ -793,25 +1137,46 @@
       dom.pdfCardsGrid.appendChild(btn);
     });
 
-    // Actualizar el visor activo
-    dom.pdfActiveCategory.textContent = activeDoc.categoria;
-    dom.pdfActiveTitle.textContent = activeDoc.titulo;
-    dom.pdfExternalBtn.href = activeDoc.urlExterna || activeDoc.url;
-    dom.pdfEmbedViewer.src = activeDoc.url;
-
-    if (Array.isArray(activeDoc.resumenArticulos) && activeDoc.resumenArticulos.length > 0) {
-      dom.pdfArticlesSummary.hidden = false;
-      dom.pdfArticlesSummary.innerHTML = `
-        <strong>Artículos Clave Evaluables en el Concurso:</strong>
-        <ul class="content-bullets" style="margin-top: 0.45rem;">
-          ${activeDoc.resumenArticulos.map((a) => `<li>${escapeHTML(a)}</li>`).join("")}
-        </ul>
-      `;
-    } else {
+    if (isLocal) {
+      // Modo 1: documentos locales (docs/*.pdf) en el visor integrado
+      dom.normaFicha.hidden = true;
+      dom.pdfViewerContainer.hidden = false;
+      dom.pdfActiveCategory.textContent = activeDoc.categoria;
+      dom.pdfActiveTitle.textContent = activeDoc.titulo;
+      dom.pdfExternalBtn.href = activeDoc.urlExterna || activeDoc.url;
+      if (!dom.pdfEmbedViewer.getAttribute("src") || dom.pdfEmbedViewer.getAttribute("src") !== activeDoc.url) {
+        dom.pdfEmbedViewer.src = activeDoc.url;
+      }
       dom.pdfArticlesSummary.hidden = true;
+    } else {
+      // Modo 2: ficha resumen interactiva de la norma (sin iframes bloqueables)
+      dom.pdfViewerContainer.hidden = true;
+      dom.pdfEmbedViewer.src = "about:blank";
+      dom.normaFicha.hidden = false;
+      const articles = Array.isArray(activeDoc.resumenArticulos) ? activeDoc.resumenArticulos : [];
+      dom.normaFicha.innerHTML = `
+        <div>
+          <span class="norma-ficha__cat">${escapeHTML(activeDoc.categoria)}</span>
+          <h3 class="norma-ficha__title">${escapeHTML(activeDoc.titulo)}</h3>
+          <p class="norma-ficha__sub">${escapeHTML(activeDoc.subtitulo)}</p>
+        </div>
+        <p class="norma-ficha__desc">${escapeHTML(activeDoc.descripcion)}</p>
+        ${
+          articles.length > 0
+            ? `<div class="norma-ficha__articles"><strong>Artículos clave evaluables en el concurso</strong><ul>${articles
+                .map((a) => `<li>${escapeHTML(a)}</li>`)
+                .join("")}</ul></div>`
+            : ""
+        }
+        <div class="norma-ficha__actions">
+          <a class="btn-evaluar-conocimientos btn-sm" href="${escapeHTML(activeDoc.urlExterna || activeDoc.url)}" target="_blank" rel="noopener noreferrer">Abrir texto oficial completo ↗</a>
+          <button type="button" class="btn-back-reading" data-ficha-act="lectura">← Volver a Lectura Teórica</button>
+        </div>
+      `;
+      const backBtn = dom.normaFicha.querySelector('[data-ficha-act="lectura"]');
+      if (backBtn) backBtn.addEventListener("click", () => switchTab("tab-lectura"));
     }
   }
-
   /* ==========================================================================
      PESTAÑA 4: Laboratorio Activo de Flashcards 3D
      ========================================================================== */
@@ -1150,6 +1515,7 @@
     if (topicObj) {
       state.collapsedModules.delete(topicObj.moduleId);
     }
+    state.expandedTopics.add(topicId);
 
     saveState();
     renderModuleTree();
@@ -1220,13 +1586,15 @@
     dom.modalOpenFuncionesPdf.addEventListener("click", () => {
       closeConvocatoriaModal();
       state.activePdfDocId = "doc-funciones-5am09";
-      switchTab("tab-pdf");
+      state.pdfMode = "local";
+      goToStep(state.activeTopicId, "tab-pdf");
     });
 
     dom.modalOpenComprobantePdf.addEventListener("click", () => {
       closeConvocatoriaModal();
       state.activePdfDocId = "doc-comprobante-230688";
-      switchTab("tab-pdf");
+      state.pdfMode = "local";
+      goToStep(state.activeTopicId, "tab-pdf");
     });
 
     // 3. Eventos de Pestaña 1 (Lectura Ejecutiva)
@@ -1423,19 +1791,58 @@
       renderModuleTree();
     });
 
-    dom.filterTabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        dom.filterTabs.forEach((t) => {
-          t.classList.remove("is-active");
-          t.setAttribute("aria-selected", "false");
+    dom.filterChips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const statusFilter = chip.getAttribute("data-filter");
+        const moduleFilter = chip.getAttribute("data-module-filter");
+
+        if (statusFilter) {
+          // Todos / Pendientes / Leídos (Todos también limpia el filtro de módulo)
+          state.filterStatus = statusFilter;
+          if (statusFilter === "all") state.moduleFilter = null;
+        } else if (moduleFilter !== null) {
+          const idx = Number(moduleFilter);
+          state.moduleFilter = state.moduleFilter === idx ? null : idx;
+          if (state.moduleFilter !== null) state.collapsedModules.delete(COURSE_DATA.modules[idx].id);
+        }
+
+        dom.filterChips.forEach((c) => {
+          const cStatus = c.getAttribute("data-filter");
+          const cMod = c.getAttribute("data-module-filter");
+          const active = cStatus
+            ? cStatus === state.filterStatus && !(cStatus === "all" && state.moduleFilter !== null)
+            : Number(cMod) === state.moduleFilter;
+          c.classList.toggle("is-active", active);
         });
-        tab.classList.add("is-active");
-        tab.setAttribute("aria-selected", "true");
-        state.filterStatus = tab.getAttribute("data-filter");
         renderModuleTree();
       });
     });
 
+    // 10. Barra inferior de pasos (delegación en los 5 paneles)
+    dom.stepNavs.forEach((nav) => {
+      nav.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-step-dir]");
+        if (btn && !btn.disabled) handleStepNavClick(btn.getAttribute("data-step-dir"));
+      });
+    });
+
+    // 11. Pestaña 2: reproductor personal y lista de videos
+    dom.userVideoForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      handleUserVideoPlay();
+    });
+    dom.userVideoSaveBtn.addEventListener("click", handleUserVideoSave);
+
+    // 12. Pestaña 3: modos Documentos locales / Fichas de normas y salida a Lectura
+    dom.pdfModeBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.pdfMode = btn.getAttribute("data-pdf-mode");
+        const first = BIBLIOTECA_NORMOGRAMA.find((d) => (d.tipo === "local-pdf") === (state.pdfMode === "local"));
+        if (first) state.activePdfDocId = first.id;
+        renderPdfLibrary();
+      });
+    });
+    dom.pdfBackLecturaBtn.addEventListener("click", () => switchTab("tab-lectura"));
     // 9. Modo Nocturno y Reinicio General
     dom.themeToggle.addEventListener("click", () => {
       applyTheme(state.theme === "dark" ? "light" : "dark");
@@ -1447,6 +1854,7 @@
       );
       if (!confirmReset) return;
       state.completedTopics.clear();
+      state.stepsDone.clear();
       state.solvedCases = {};
       state.masteredFlashcards.clear();
       state.reviewFlashcards.clear();
@@ -1469,6 +1877,7 @@
 
   function init() {
     applyTheme(state.theme);
+    state.expandedTopics.add(state.activeTopicId);
     populateConvocatoriaModal();
     bindEvents();
     updateGlobalProgress();
