@@ -37,11 +37,12 @@
   const allTopicsFlat = [];
   const allFlashcardsFlat = [...(typeof FLASHCARDS_COMPORTAMENTALES_5AM09 !== "undefined" ? FLASHCARDS_COMPORTAMENTALES_5AM09 : [])];
 
-  COURSE_DATA.modules.forEach((mod) => {
+  COURSE_DATA.modules.forEach((mod, modIdx) => {
     mod.topics.forEach((topic) => {
       allTopicsFlat.push({
         ...topic,
         moduleId: mod.id,
+        moduloNumber: modIdx + 1,
         moduleCode: mod.code,
         moduleTitle: mod.title
       });
@@ -99,14 +100,16 @@
 
   // Estado interno del Simulador (Pestaña 5) y su Telemetría de Tiempos
   const simSession = {
-    mode: "caliente", // 'caliente' | 'all' | 'errors'
+    mode: "module", // 'module' | 'topic' | 'caliente' | 'all' | 'errors'
     lengthPreset: 20, // 10 | 20 | 35
+    contextTopicId: null,
+    contextModuleNumber: null,
     questions: [],
     currentIndex: 0,
     answers: {}, // { [questionId]: 'A' | 'B' | 'C' | 'D' }
     questionTimes: {}, // { [questionId]: segundos acumulados }
     elapsedSeconds: 0,
-    totalAllowedSeconds: 20 * 120,
+    totalAllowedSeconds: 9 * 120,
     startedAtISO: null,
     finishedAtISO: null,
     isActiveExam: false,
@@ -119,6 +122,11 @@
   const dom = {
     sidebar: document.getElementById("sidebar"),
     sidebarToggle: document.getElementById("sidebar-toggle"),
+    sidebarBackdrop: document.getElementById("sidebar-backdrop"),
+    sidebarCloseBtn: document.getElementById("sidebar-close-btn"),
+    jobStrip: document.getElementById("job-strip"),
+    jobStripAccordionBtn: document.getElementById("job-strip-accordion-btn"),
+    jobStripAccordionLabel: document.getElementById("job-strip-accordion-label"),
     moduleTree: document.getElementById("module-tree"),
     modulesSummaryBadge: document.getElementById("modules-summary-badge"),
     topicSearch: document.getElementById("topic-search"),
@@ -175,6 +183,7 @@
 
     // Navegación 5 Pestañas
     studyTabs: document.querySelectorAll(".study-tab"),
+    tabSimuladorLabel: document.getElementById("tab-simulador-label"),
     tabPanels: document.querySelectorAll(".tab-panel"),
     errorTrayPill: document.getElementById("error-tray-pill"),
 
@@ -252,6 +261,8 @@
     // Pestaña 5: Simulador Situacional + Examen en Caliente + Telemetría + Bandeja de Errores
     openHotExamBtn: document.getElementById("open-hot-exam-btn"),
     sidebarHotExamBtn: document.getElementById("sidebar-hot-exam-btn"),
+    simModeModuleBtn: document.getElementById("sim-mode-module-btn"),
+    simModeTopicBtn: document.getElementById("sim-mode-topic-btn"),
     simModeHotBtn: document.getElementById("sim-mode-hot-btn"),
     simModeAllBtn: document.getElementById("sim-mode-all-btn"),
     simModeErrorsBtn: document.getElementById("sim-mode-errors-btn"),
@@ -260,7 +271,9 @@
     simErrorsCountBadge: document.getElementById("sim-errors-count-badge"),
     simLobbyCard: document.getElementById("sim-lobby-card"),
     simLobbyModePill: document.getElementById("sim-lobby-mode-pill"),
+    simLobbyBankPill: document.getElementById("sim-lobby-bank-pill"),
     simLobbyHeading: document.getElementById("sim-lobby-heading"),
+    simLobbySubtitle: document.getElementById("sim-lobby-subtitle"),
     simMetricQuestions: document.getElementById("sim-metric-questions"),
     simMetricQuestionsSub: document.getElementById("sim-metric-questions-sub"),
     simMetricTime: document.getElementById("sim-metric-time"),
@@ -391,12 +404,18 @@
     });
 
     if (tabId === "tab-simulador") {
-      if (simSession.isActiveExam && !simSession.isPaused && simSession.questions.length > 0) {
-        startSimTimer();
-      } else if (dom.simResultsCard && !dom.simResultsCard.hidden) {
-        // Ya está mostrando resultados
-      } else {
+      const activeTopic = allTopicsFlat.find((t) => t.id === state.activeTopicId) || allTopicsFlat[0];
+      const contextChanged =
+        (simSession.mode === "module" && simSession.contextModuleNumber !== activeTopic.moduloNumber) ||
+        (simSession.mode === "topic" && simSession.contextTopicId !== activeTopic.id);
+
+      if (simSession.isPaused && !contextChanged) {
         renderSimLobby();
+      } else if (contextChanged || !simSession.isActiveExam || simSession.questions.length === 0) {
+        startNewSimAttempt(simSession.mode || "module", simSession.lengthPreset);
+      } else {
+        startSimTimer();
+        renderSimQuestion();
       }
     } else {
       pauseSimTimer();
@@ -433,7 +452,13 @@
       if (topicObj) state.collapsedModules.delete(topicObj.moduleId);
       saveState();
       renderActiveLesson();
+      if (simSession.mode === "module" || simSession.mode === "topic") {
+        startNewSimAttempt(simSession.mode, simSession.lengthPreset);
+      } else {
+        syncSimHeaderControls();
+      }
     }
+    closeMobileSidebar();
     switchTab(tabId);
   }
 
@@ -1640,12 +1665,39 @@
     }
   }
 
+  function getActiveTopicObj() {
+    return allTopicsFlat.find((t) => t.id === state.activeTopicId) || allTopicsFlat[0];
+  }
+
+  function getQuestionsPoolForMode(mode) {
+    const baseQuestions = Array.isArray(simuladorData) ? simuladorData : [];
+    const activeTopic = getActiveTopicObj();
+
+    if (mode === "topic") {
+      const byTopic = baseQuestions.filter((q) => String(q.temaId) === String(activeTopic.code));
+      if (byTopic.length > 0) return byTopic;
+    }
+    if (mode === "module" || mode === "topic") {
+      const byMod = baseQuestions.filter((q) => Number(q.moduloId) === Number(activeTopic.moduloNumber));
+      if (byMod.length > 0) return byMod;
+    }
+    if (mode === "errors") {
+      return baseQuestions.filter((q, idx) => {
+        const qKey = q.id || `sim-q${idx + 1}`;
+        return state.failedSimIds.has(qKey);
+      });
+    }
+    return baseQuestions;
+  }
+
   function savePausedSimToStorage() {
     if (!simSession.isActiveExam || !simSession.questions || simSession.questions.length === 0) return;
     try {
       const payload = {
         mode: simSession.mode,
         lengthPreset: simSession.lengthPreset,
+        contextTopicId: simSession.contextTopicId,
+        contextModuleNumber: simSession.contextModuleNumber,
         questionIds: simSession.questions.map((q, idx) => q.id || `sim-q${idx + 1}`),
         currentIndex: simSession.currentIndex,
         answers: simSession.answers,
@@ -1686,8 +1738,11 @@
     const restoredQuestions = payload.questionIds.map((id) => byId.get(id)).filter(Boolean);
     if (restoredQuestions.length === 0) return false;
 
-    simSession.mode = payload.mode || "caliente";
+    const activeTopic = getActiveTopicObj();
+    simSession.mode = payload.mode || "module";
     simSession.lengthPreset = Number(payload.lengthPreset) || restoredQuestions.length;
+    simSession.contextTopicId = payload.contextTopicId || activeTopic.id;
+    simSession.contextModuleNumber = payload.contextModuleNumber || activeTopic.moduloNumber;
     simSession.questions = restoredQuestions;
     simSession.currentIndex = Math.min(
       Math.max(0, Number(payload.currentIndex) || 0),
@@ -1701,7 +1756,7 @@
       Number(payload.totalAllowedSeconds) || restoredQuestions.length * 120;
     simSession.startedAtISO = payload.startedAtISO || new Date().toISOString();
     simSession.isActiveExam = true;
-    simSession.isPaused = true;
+    simSession.isPaused = Boolean(payload.isPaused);
     return true;
   }
 
@@ -1752,12 +1807,13 @@
     pauseSimTimer();
     simSession.elapsedSeconds = 0;
     if (dom.simTimerDisplay) {
-      dom.simTimerDisplay.textContent = formatTimeMMSS(simSession.totalAllowedSeconds || 2400);
+      dom.simTimerDisplay.textContent = formatTimeMMSS(simSession.totalAllowedSeconds || 1800);
     }
   }
 
   function updateLiveTelemetryUI() {
-    const total = simSession.questions.length || simSession.lengthPreset || 20;
+    const activeTopic = getActiveTopicObj();
+    const total = simSession.questions.length || simSession.lengthPreset || 9;
     const answeredCount = Object.keys(simSession.answers).length;
     const remainingSeconds = Math.max(0, (simSession.totalAllowedSeconds || total * 120) - simSession.elapsedSeconds);
 
@@ -1771,12 +1827,17 @@
       dom.simAnsweredSubtitle.textContent = `${answeredCount} de ${total} respondidas · Progreso guardado`;
     }
     if (dom.simLiveTitle) {
-      dom.simLiveTitle.textContent =
-        simSession.mode === "caliente"
-          ? `🔥 Examen Oficial en Caliente (${total} PJS)`
-          : simSession.mode === "errors"
-          ? `⚠️ Repaso de Bandeja de Errores (${total} PJS)`
-          : `🎓 Práctica Guiada con Pistas (${total} PJS)`;
+      if (simSession.mode === "module") {
+        dom.simLiveTitle.textContent = `📂 ${activeTopic.moduleCode}: ${activeTopic.moduleTitle} (${total} PJS)`;
+      } else if (simSession.mode === "topic") {
+        dom.simLiveTitle.textContent = `📌 Tema ${activeTopic.code}: ${activeTopic.title} (${total} PJS)`;
+      } else if (simSession.mode === "caliente") {
+        dom.simLiveTitle.textContent = `🔥 Examen Oficial en Caliente (${total} PJS · 7 Módulos)`;
+      } else if (simSession.mode === "errors") {
+        dom.simLiveTitle.textContent = `⚠️ Repaso de Bandeja de Errores (${total} PJS)`;
+      } else {
+        dom.simLiveTitle.textContent = `🎓 Práctica Guiada Global (${total} PJS)`;
+      }
     }
 
     // Cronómetro individual de la pregunta activa (🕒 0:16 / 2:00)
@@ -1812,9 +1873,26 @@
 
   function syncSimHeaderControls() {
     const mode = simSession.mode;
+    const activeTopic = getActiveTopicObj();
+    const baseQuestions = Array.isArray(simuladorData) ? simuladorData : [];
+    const modCount = baseQuestions.filter((q) => Number(q.moduloId) === Number(activeTopic.moduloNumber)).length;
+    const topicCount = baseQuestions.filter((q) => String(q.temaId) === String(activeTopic.code)).length;
+
+    if (dom.simModeModuleBtn) {
+      dom.simModeModuleBtn.classList.toggle("is-active", mode === "module");
+      dom.simModeModuleBtn.textContent = `📂 Todas las de este Módulo (${modCount})`;
+    }
+    if (dom.simModeTopicBtn) {
+      dom.simModeTopicBtn.classList.toggle("is-active", mode === "topic");
+      dom.simModeTopicBtn.textContent = `📌 Preguntas de este Tema ${activeTopic.code} (${topicCount})`;
+    }
     if (dom.simModeHotBtn) dom.simModeHotBtn.classList.toggle("is-active", mode === "caliente");
     if (dom.simModeAllBtn) dom.simModeAllBtn.classList.toggle("is-active", mode === "all");
     if (dom.simModeErrorsBtn) dom.simModeErrorsBtn.classList.toggle("is-active", mode === "errors");
+
+    if (dom.tabSimuladorLabel) {
+      dom.tabSimuladorLabel.textContent = `5. ⚖️ Simulador (${activeTopic.moduleCode})`;
+    }
 
     if (dom.simLengthBtns) {
       dom.simLengthBtns.forEach((btn) => {
@@ -1824,22 +1902,28 @@
     }
 
     if (dom.simLengthSelector) {
-      dom.simLengthSelector.hidden = mode === "errors";
+      dom.simLengthSelector.hidden = mode !== "caliente" && mode !== "all";
     }
 
     if (dom.simTitle && dom.simDescription) {
-      if (mode === "caliente") {
-        dom.simTitle.textContent = "🔥 Simulacro Real en Caliente · Examen Oficial 5AM-09";
+      if (mode === "module") {
+        dom.simTitle.textContent = `⚖️ Cuestionario ${activeTopic.moduleCode}: ${activeTopic.moduleTitle}`;
+        dom.simDescription.textContent = `Evaluando exclusivamente las ${modCount} preguntas situacionales oficiales del ${activeTopic.moduleCode} (${activeTopic.moduleTitle}). Puedes alternar arriba a "Preguntas de este Tema (${activeTopic.code})" o lanzar el "🔥 Examen Oficial en Caliente".`;
+      } else if (mode === "topic") {
+        dom.simTitle.textContent = `📌 Cuestionario Tema ${activeTopic.code}: ${activeTopic.title} (${activeTopic.moduleCode})`;
+        dom.simDescription.textContent = `Evaluando exclusivamente los ${topicCount} casos situacionales del Tema ${activeTopic.code} perteneciente al ${activeTopic.moduleCode}: ${activeTopic.moduleTitle}.`;
+      } else if (mode === "caliente") {
+        dom.simTitle.textContent = "🔥 Examen Oficial en Caliente · Simulacro Transversal 5AM-09";
         dom.simDescription.textContent =
-          "Preguntas seleccionadas y barajadas de forma 100% aleatoria entre los 7 módulos oficiales. En modo Examen en Caliente las respuestas y explicaciones paso a paso se revelan únicamente al finalizar el intento.";
+          "Preguntas seleccionadas y barajadas de forma 100% aleatoria entre los 7 módulos oficiales (63 casos). En modo Examen en Caliente las respuestas y explicaciones paso a paso se revelan al finalizar el intento.";
       } else if (mode === "errors") {
         dom.simTitle.textContent = "⚠️ Entrenamiento Focalizado · Bandeja de Errores";
         dom.simDescription.textContent =
           "Repasa exclusivamente los casos situacionales que has fallado previamente. Cada acierto limpia automáticamente la pregunta de tu Bandeja de Errores.";
       } else {
-        dom.simTitle.textContent = "🎓 Práctica Guiada · Retroalimentación Inmediata";
+        dom.simTitle.textContent = "🎓 Práctica Guiada Global · 7 Módulos (Con Pistas)";
         dom.simDescription.textContent =
-          "Entrena con validación inmediata en cada pregunta: al elegir una opción verás al instante la justificación normativa antes de pasar al siguiente ítem.";
+          "Entrena con validación inmediata sobre el banco completo de 63 preguntas situacionales.";
       }
     }
   }
@@ -1849,20 +1933,16 @@
     syncSimHeaderControls();
 
     const baseQuestions = Array.isArray(simuladorData) ? simuladorData : [];
+    const activeTopic = getActiveTopicObj();
+    const pool = getQuestionsPoolForMode(simSession.mode);
 
-    if (simSession.mode === "errors") {
-      const errorQuestions = baseQuestions.filter((q, idx) => {
-        const qKey = q.id || `sim-q${idx + 1}`;
-        return state.failedSimIds.has(qKey);
-      });
-      if (errorQuestions.length === 0) {
-        if (dom.simLobbyCard) dom.simLobbyCard.hidden = true;
-        if (dom.simLiveTelemetry) dom.simLiveTelemetry.hidden = true;
-        if (dom.simQuestionCard) dom.simQuestionCard.hidden = true;
-        if (dom.simResultsCard) dom.simResultsCard.hidden = true;
-        if (dom.simEmptyErrorsCard) dom.simEmptyErrorsCard.hidden = false;
-        return;
-      }
+    if (simSession.mode === "errors" && pool.length === 0) {
+      if (dom.simLobbyCard) dom.simLobbyCard.hidden = true;
+      if (dom.simLiveTelemetry) dom.simLiveTelemetry.hidden = true;
+      if (dom.simQuestionCard) dom.simQuestionCard.hidden = true;
+      if (dom.simResultsCard) dom.simResultsCard.hidden = true;
+      if (dom.simEmptyErrorsCard) dom.simEmptyErrorsCard.hidden = false;
+      return;
     }
 
     if (dom.simEmptyErrorsCard) dom.simEmptyErrorsCard.hidden = true;
@@ -1876,18 +1956,33 @@
       savedPayload && Array.isArray(savedPayload.questionIds) && savedPayload.questionIds.length > 0;
 
     const targetCount =
-      simSession.mode === "errors"
-        ? Math.max(1, state.failedSimIds.size)
-        : Math.min(simSession.lengthPreset || 20, baseQuestions.length || 35);
+      simSession.mode === "module" || simSession.mode === "topic" || simSession.mode === "errors"
+        ? pool.length
+        : Math.min(simSession.lengthPreset || 20, baseQuestions.length || 63);
     const targetMinutes = targetCount * 2;
 
     if (dom.simLobbyModePill) {
       dom.simLobbyModePill.textContent =
-        simSession.mode === "caliente"
+        simSession.mode === "module"
+          ? `📂 EVALUACIÓN EXCLUSIVA · ${activeTopic.moduleCode.toUpperCase()}`
+          : simSession.mode === "topic"
+          ? `📌 EVALUACIÓN EXCLUSIVA · TEMA ${activeTopic.code}`
+          : simSession.mode === "caliente"
           ? "🔥 MODO EXAMEN OFICIAL EN CALIENTE · SIN PISTAS HASTA FINALIZAR"
           : simSession.mode === "errors"
           ? "⚠️ MODO BANDEJA DE ERRORES · REFUERZO DE FALLOS"
-          : "🎓 MODO PRÁCTICA GUIADA · CON RETROALIMENTACIÓN INMEDIATA";
+          : "🎓 MODO PRÁCTICA GUIADA GLOBAL · CON PISTAS";
+    }
+
+    if (dom.simLobbyHeading) {
+      dom.simLobbyHeading.textContent =
+        simSession.mode === "module"
+          ? `${activeTopic.moduleCode}: ${activeTopic.moduleTitle}`
+          : simSession.mode === "topic"
+          ? `Tema ${activeTopic.code}: ${activeTopic.title}`
+          : simSession.mode === "caliente"
+          ? "🔥 Examen Oficial en Caliente · 7 Módulos PGN 243-2026"
+          : "Simulacro Oficial de Juicio Situacional · Procuraduría 243-2026";
     }
 
     if (dom.simMetricQuestions) {
@@ -1895,7 +1990,11 @@
     }
     if (dom.simMetricQuestionsSub) {
       dom.simMetricQuestionsSub.textContent =
-        simSession.mode === "errors"
+        simSession.mode === "module"
+          ? `Exclusivas de ${activeTopic.moduleCode}`
+          : simSession.mode === "topic"
+          ? `Exclusivas del Tema ${activeTopic.code}`
+          : simSession.mode === "errors"
           ? "Ítems pendientes en tu Bandeja de Errores"
           : `Sorteo 100% aleatorio de ${baseQuestions.length} casos (7 módulos)`;
     }
@@ -1917,6 +2016,10 @@
       const modeLabel =
         savedPayload.mode === "caliente"
           ? "Examen en Caliente"
+          : savedPayload.mode === "module"
+          ? `Cuestionario ${activeTopic.moduleCode}`
+          : savedPayload.mode === "topic"
+          ? `Tema ${activeTopic.code}`
           : savedPayload.mode === "errors"
           ? "Bandeja de Errores"
           : "Práctica Guiada";
@@ -1941,21 +2044,20 @@
     if (modeOverride) simSession.mode = modeOverride;
     if (lengthOverride) simSession.lengthPreset = Number(lengthOverride);
 
+    const activeTopic = getActiveTopicObj();
+    simSession.contextTopicId = activeTopic.id;
+    simSession.contextModuleNumber = activeTopic.moduloNumber;
+
     syncSimHeaderControls();
 
-    const baseQuestions = Array.isArray(simuladorData) ? simuladorData : [];
+    const pool = getQuestionsPoolForMode(simSession.mode);
     let selectedQuestions = [];
 
-    if (simSession.mode === "errors") {
-      selectedQuestions = shuffleArray(
-        baseQuestions.filter((q, idx) => {
-          const qKey = q.id || `sim-q${idx + 1}`;
-          return state.failedSimIds.has(qKey);
-        })
-      );
+    if (simSession.mode === "module" || simSession.mode === "topic" || simSession.mode === "errors") {
+      selectedQuestions = shuffleArray(pool);
     } else {
-      const count = Math.min(simSession.lengthPreset || 20, baseQuestions.length);
-      selectedQuestions = shuffleArray(baseQuestions).slice(0, count);
+      const count = Math.min(simSession.lengthPreset || 20, pool.length);
+      selectedQuestions = shuffleArray(pool).slice(0, count);
     }
 
     if (selectedQuestions.length === 0 && simSession.mode === "errors") {
@@ -1982,7 +2084,9 @@
     if (dom.simLiveTelemetry) dom.simLiveTelemetry.hidden = false;
     if (dom.simQuestionCard) dom.simQuestionCard.hidden = false;
 
-    startSimTimer();
+    if (state.activeTabId === "tab-simulador") {
+      startSimTimer();
+    }
     renderSimQuestion();
   }
 
@@ -2407,6 +2511,26 @@
      Acciones Generales de Usuario y Eventos
      ========================================================================== */
 
+  function openMobileSidebar() {
+    dom.sidebar.classList.add("is-open");
+    if (dom.sidebarBackdrop) dom.sidebarBackdrop.hidden = false;
+    if (dom.sidebarToggle) dom.sidebarToggle.setAttribute("aria-expanded", "true");
+  }
+
+  function closeMobileSidebar() {
+    dom.sidebar.classList.remove("is-open");
+    if (dom.sidebarBackdrop) dom.sidebarBackdrop.hidden = true;
+    if (dom.sidebarToggle) dom.sidebarToggle.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleMobileSidebar() {
+    if (dom.sidebar.classList.contains("is-open")) {
+      closeMobileSidebar();
+    } else {
+      openMobileSidebar();
+    }
+  }
+
   function selectTopic(topicId) {
     state.activeTopicId = topicId;
 
@@ -2419,11 +2543,19 @@
     saveState();
     renderModuleTree();
     renderActiveLesson();
-    dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
 
-    if (window.innerWidth <= 980) {
-      dom.sidebar.classList.remove("is-open");
+    if (simSession.mode === "module" || simSession.mode === "topic") {
+      startNewSimAttempt(simSession.mode, simSession.lengthPreset);
+    } else {
+      syncSimHeaderControls();
     }
+
+    if (state.activeTabId === "tab-flashcards") {
+      renderFlashcardStage();
+    }
+
+    dom.mainContent.scrollTo({ top: 0, behavior: "smooth" });
+    closeMobileSidebar();
   }
 
   function toggleTopicCompletion(topicId) {
@@ -2529,24 +2661,32 @@
     });
 
     dom.openSimuladorBtn.addEventListener("click", () => {
-      initSimuladorSession("caliente", false);
+      startNewSimAttempt("module");
       switchTab("tab-simulador");
     });
 
     if (dom.openHotExamBtn) {
       dom.openHotExamBtn.addEventListener("click", () => {
-        initSimuladorSession("caliente", false);
+        simSession.lengthPreset = 20;
+        if (simSession.isPaused && simSession.mode === "caliente") {
+          renderSimLobby();
+        } else {
+          startNewSimAttempt("caliente", 20);
+        }
         switchTab("tab-simulador");
       });
     }
 
     if (dom.sidebarHotExamBtn) {
       dom.sidebarHotExamBtn.addEventListener("click", () => {
-        initSimuladorSession("caliente", false);
-        switchTab("tab-simulador");
-        if (window.innerWidth <= 980) {
-          dom.sidebar.classList.remove("is-open");
+        simSession.lengthPreset = 20;
+        closeMobileSidebar();
+        if (simSession.isPaused && simSession.mode === "caliente") {
+          renderSimLobby();
+        } else {
+          startNewSimAttempt("caliente", 20);
         }
+        switchTab("tab-simulador");
       });
     }
 
@@ -2685,19 +2825,31 @@
       renderFlashcardStage();
     });
 
-    // 7. Eventos de Pestaña 5 (Simulador Situacional + Examen en Caliente + Telemetría + Bandeja de Errores)
+    // 7. Eventos de Pestaña 5 (Simulador por Módulo/Tema + Examen en Caliente + Telemetría + Bandeja de Errores)
+    if (dom.simModeModuleBtn) {
+      dom.simModeModuleBtn.addEventListener("click", () => {
+        startNewSimAttempt("module");
+      });
+    }
+
+    if (dom.simModeTopicBtn) {
+      dom.simModeTopicBtn.addEventListener("click", () => {
+        startNewSimAttempt("topic");
+      });
+    }
+
     if (dom.simModeHotBtn) {
       dom.simModeHotBtn.addEventListener("click", () => {
-        initSimuladorSession("caliente", false);
+        startNewSimAttempt("caliente", simSession.lengthPreset || 20);
       });
     }
 
     dom.simModeAllBtn.addEventListener("click", () => {
-      initSimuladorSession("all", false);
+      startNewSimAttempt("all", simSession.lengthPreset || 20);
     });
 
     dom.simModeErrorsBtn.addEventListener("click", () => {
-      initSimuladorSession("errors", false);
+      startNewSimAttempt("errors");
     });
 
     if (dom.simLengthBtns) {
@@ -2705,7 +2857,11 @@
         btn.addEventListener("click", () => {
           const newLen = Number(btn.getAttribute("data-length")) || 20;
           simSession.lengthPreset = newLen;
-          renderSimLobby();
+          if (simSession.isPaused || (dom.simLobbyCard && !dom.simLobbyCard.hidden)) {
+            renderSimLobby();
+          } else {
+            startNewSimAttempt(simSession.mode, newLen);
+          }
         });
       });
     }
@@ -2881,12 +3037,36 @@
       updateGlobalProgress();
       renderModuleTree();
       renderActiveLesson();
-      initSimuladorSession("caliente", false);
+      startNewSimAttempt("module");
     });
 
     dom.sidebarToggle.addEventListener("click", () => {
-      dom.sidebar.classList.toggle("is-open");
+      toggleMobileSidebar();
     });
+
+    if (dom.sidebarCloseBtn) {
+      dom.sidebarCloseBtn.addEventListener("click", () => {
+        closeMobileSidebar();
+      });
+    }
+
+    if (dom.sidebarBackdrop) {
+      dom.sidebarBackdrop.addEventListener("click", () => {
+        closeMobileSidebar();
+      });
+    }
+
+    if (dom.jobStripAccordionBtn && dom.jobStrip) {
+      dom.jobStripAccordionBtn.addEventListener("click", () => {
+        const isExpanded = dom.jobStrip.classList.toggle("is-expanded");
+        dom.jobStripAccordionBtn.setAttribute("aria-expanded", String(isExpanded));
+        if (dom.jobStripAccordionLabel) {
+          dom.jobStripAccordionLabel.textContent = isExpanded
+            ? "Ocultar Ficha ▴"
+            : "Ver Ficha del Cargo ▾";
+        }
+      });
+    }
   }
 
   /* ==========================================================================
@@ -2905,10 +3085,13 @@
     renderPdfLibrary();
 
     const savedPaused = getSavedPausedSimPayload();
-    if (savedPaused) {
+    if (savedPaused && savedPaused.isPaused) {
       restoreSimSessionFromPayload(savedPaused);
+      renderSimLobby();
+    } else {
+      startNewSimAttempt("module");
+      pauseSimTimer();
     }
-    renderSimLobby();
     switchTab(state.activeTabId);
   }
 

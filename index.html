@@ -17,12 +17,9 @@
   <!-- Cabecera Institucional Superior -->
   <header class="topbar" role="banner">
     <div class="topbar__brand">
-      <button id="sidebar-toggle" class="icon-btn mobile-only" aria-label="Alternar panel de módulos" title="Mostrar/Ocultar temario">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
+      <button id="sidebar-toggle" class="icon-btn mobile-drawer-trigger mobile-only" type="button" aria-label="Abrir menú de los 7 módulos" aria-expanded="false" title="Mostrar/Ocultar temario">
+        <span aria-hidden="true">☰</span>
+        <span class="mobile-drawer-trigger__text">Módulos (7)</span>
       </button>
       <div class="brand-emblem" aria-hidden="true">
         <span>PGN</span>
@@ -90,21 +87,30 @@
     </div>
   </header>
 
-  <!-- Cinta Ejecutiva del Empleo (Resumen Permanente del Cargo 5AM-09) -->
-  <div class="job-strip" role="region" aria-label="Resumen oficial del cargo inscrito">
-    <div class="job-strip__items">
-      <span class="job-strip__item"><strong>Cargo:</strong> Auxiliar Administrativo (Código 5AM-09)</span>
-      <span class="job-strip__sep">·</span>
-      <span class="job-strip__item"><strong>Asignación:</strong> $4.565.448</span>
-      <span class="job-strip__sep">·</span>
-      <span class="job-strip__item"><strong>Vacantes:</strong> 26 (Incluye Regional Atlántico)</span>
-      <span class="job-strip__sep">·</span>
-      <span class="job-strip__item"><strong>Radicado #230688:</strong> <span class="job-strip__status">ADMITIDO</span></span>
-      <span class="job-strip__sep">·</span>
-      <span class="job-strip__item"><strong>Pesos:</strong> Conocimientos 60% (Eliminatorio ≥65/100) | Comportamentales 20% | Antecedentes 20% (Lista Elegibles ≥70%)</span>
+  <!-- Cinta Ejecutiva del Empleo (Resumen Permanente en Escritorio / Acordeón Desplegable en Móvil) -->
+  <div id="job-strip" class="job-strip" role="region" aria-label="Resumen oficial del cargo inscrito">
+    <button type="button" id="job-strip-accordion-btn" class="job-strip__accordion-btn" aria-expanded="false">
+      <span class="job-strip__accordion-summary">📋 Cargo 5AM-09 · $4.565.448 · <strong class="job-strip__status">ADMITIDO</strong></span>
+      <span id="job-strip-accordion-label" class="job-strip__accordion-cta">Ver Ficha del Cargo ▾</span>
+    </button>
+    <div id="job-strip-body" class="job-strip__body">
+      <div class="job-strip__items">
+        <span class="job-strip__item"><strong>Cargo:</strong> Auxiliar Administrativo (Código 5AM-09)</span>
+        <span class="job-strip__sep">·</span>
+        <span class="job-strip__item"><strong>Asignación:</strong> $4.565.448</span>
+        <span class="job-strip__sep">·</span>
+        <span class="job-strip__item"><strong>Vacantes:</strong> 26 (Incluye Regional Atlántico)</span>
+        <span class="job-strip__sep">·</span>
+        <span class="job-strip__item"><strong>Radicado #230688:</strong> <span class="job-strip__status">ADMITIDO</span></span>
+        <span class="job-strip__sep">·</span>
+        <span class="job-strip__item"><strong>Pesos:</strong> Conocimientos 60% (Eliminatorio ≥65/100) | Comportamentales 20% | Antecedentes 20% (Lista Elegibles ≥70%)</span>
+      </div>
+      <button type="button" id="strip-ficha-link" class="job-strip__btn">Ver Ficha y Funciones →</button>
     </div>
-    <button type="button" id="strip-ficha-link" class="job-strip__btn">Ver Ficha y Funciones →</button>
   </div>
+
+  <!-- Fondo Oscuro para el Menú Desplegable Móvil (Off-Canvas Drawer) -->
+  <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
 
   <!-- Contenedor Principal (Modo Curso + Academia 5 Pestañas) -->
   <div class="workspace">
@@ -113,7 +119,10 @@
       <div class="sidebar__header">
         <div class="sidebar__title-row">
           <h2 class="sidebar__heading">Árbol de Módulos</h2>
-          <span id="modules-summary-badge" class="badge-pill">7 Módulos · 21 Temas</span>
+          <div class="sidebar__title-actions">
+            <span id="modules-summary-badge" class="badge-pill">7 Módulos · 21 Temas</span>
+            <button type="button" id="sidebar-close-btn" class="sidebar-close-btn mobile-only" aria-label="Cerrar menú de módulos">✕</button>
+          </div>
         </div>
 
         <!-- Buscador Instantáneo -->
@@ -218,7 +227,7 @@
           <span class="study-tab__label">4. 🧠 Flashcards 3D</span>
         </button>
         <button type="button" class="study-tab" role="tab" aria-selected="false" data-tab="tab-simulador">
-          <span class="study-tab__label">5. ⚖️ Simulador (10 PJS)</span>
+          <span id="tab-simulador-label" class="study-tab__label">5. ⚖️ Simulador (Módulo I)</span>
           <span id="error-tray-pill" class="tab-error-pill" hidden>0</span>
         </button>
       </nav>
@@ -571,18 +580,24 @@
       </section>
 
       <!-- ====================================================================
-           PESTAÑA 5: SIMULADOR DE JUICIO SITUACIONAL + EXAMEN EN CALIENTE + TELEMETRÍA
+           PESTAÑA 5: SIMULADOR POR MÓDULO/TEMA + EXAMEN EN CALIENTE + TELEMETRÍA
            ==================================================================== -->
       <section id="tab-simulador" class="tab-panel simulador-container is-hidden" role="tabpanel" aria-label="Simulador de Juicio Situacional">
-        <!-- Selector Superior de Modalidad -->
+        <!-- Selector Superior de Alcance (Módulo / Tema / Examen en Caliente / Errores) -->
         <header class="simulador-header">
           <div class="simulador-header__top">
-            <div class="sim-mode-pills" role="tablist" aria-label="Modalidad del simulador">
-              <button type="button" id="sim-mode-hot-btn" class="sim-mode-btn is-active" data-sim-mode="caliente">
-                🔥 Examen Oficial en Caliente
+            <div class="sim-mode-pills" role="tablist" aria-label="Alcance y modalidad del simulador">
+              <button type="button" id="sim-mode-module-btn" class="sim-mode-btn is-active" data-sim-mode="module">
+                📂 Todas las de este Módulo
+              </button>
+              <button type="button" id="sim-mode-topic-btn" class="sim-mode-btn" data-sim-mode="topic">
+                📌 Preguntas de este Tema
+              </button>
+              <button type="button" id="sim-mode-hot-btn" class="sim-mode-btn" data-sim-mode="caliente">
+                🔥 Examen Oficial en Caliente (20 PJS)
               </button>
               <button type="button" id="sim-mode-all-btn" class="sim-mode-btn" data-sim-mode="all">
-                🎓 Práctica Guiada (Con Pistas)
+                🎓 Práctica Global (63 PJS)
               </button>
               <button type="button" id="sim-mode-errors-btn" class="sim-mode-btn" data-sim-mode="errors">
                 <span>⚠️ Bandeja de Errores</span>
@@ -590,29 +605,29 @@
               </button>
             </div>
 
-            <!-- Controles rápidos de longitud del examen -->
+            <!-- Controles rápidos de longitud del examen (para Examen en Caliente / Global) -->
             <div class="sim-length-pills" id="sim-length-selector" role="group" aria-label="Cantidad de preguntas del examen">
               <button type="button" class="sim-length-btn" data-length="10">Corto (10 PJS · 20m)</button>
               <button type="button" class="sim-length-btn is-active" data-length="20">Estándar (20 PJS · 40m)</button>
-              <button type="button" class="sim-length-btn" data-length="35">Maratón Total (35 PJS · 70m)</button>
+              <button type="button" class="sim-length-btn" data-length="35">Maratón (35 PJS · 70m)</button>
             </div>
           </div>
 
-          <h2 id="sim-title" class="lesson-title">🔥 Simulacro Real en Caliente · Examen Oficial 5AM-09</h2>
+          <h2 id="sim-title" class="lesson-title">⚖️ Cuestionario del Módulo I: Gestión Documental y Archivo Institucional</h2>
           <p id="sim-description" class="lesson-summary">
-            Preguntas seleccionadas y barajadas de forma 100% aleatoria entre los 7 módulos oficiales. En modo Examen en Caliente las respuestas y explicaciones paso a paso se revelan al finalizar el intento.
+            Preguntas situacionales exclusivas del módulo y tema activo. Alterna arriba entre "Preguntas de este Tema", "Todas las de este Módulo" o lanza el "🔥 Examen Oficial en Caliente" con 20 preguntas aleatorias de los 7 módulos.
           </p>
         </header>
 
         <!-- 1. TARJETA DE INICIO Y PAUSA PERSISTENTE (ESTILO SIMULACRO FINAL) -->
         <div id="sim-lobby-card" class="sim-lobby-card">
           <div class="sim-lobby-card__badge-row">
-            <span id="sim-lobby-mode-pill" class="sim-lobby-mode-pill">🔥 MODO EXAMEN OFICIAL EN CALIENTE · SIN PISTAS HASTA FINALIZAR</span>
-            <span class="sim-lobby-bank-pill">Banco Activo: 35 Casos Situacionales (7 Módulos)</span>
+            <span id="sim-lobby-mode-pill" class="sim-lobby-mode-pill">📂 EVALUACIÓN ESPECÍFICA DEL MÓDULO ACTIVO</span>
+            <span id="sim-lobby-bank-pill" class="sim-lobby-bank-pill">Banco Total: 63 Casos Situacionales (7 Módulos · 21 Temas)</span>
           </div>
 
-          <h3 id="sim-lobby-heading" class="sim-lobby-card__title">Simulacro Oficial de Juicio Situacional · Procuraduría 243-2026</h3>
-          <p class="sim-lobby-card__subtitle">
+          <h3 id="sim-lobby-heading" class="sim-lobby-card__title">Módulo I: Gestión Documental y Archivo Institucional</h3>
+          <p id="sim-lobby-subtitle" class="sim-lobby-card__subtitle">
             Condiciones reales de prueba para el cargo Auxiliar Administrativo (Código 5AM-09). El cronómetro calcula tu ritmo sobre una base técnica de 2 minutos por pregunta.
           </p>
 
@@ -620,17 +635,17 @@
           <div class="sim-lobby-metrics">
             <div class="sim-lobby-metric">
               <span class="sim-lobby-metric__label">PREGUNTAS</span>
-              <strong id="sim-metric-questions" class="sim-lobby-metric__value">20 Preguntas</strong>
-              <span id="sim-metric-questions-sub" class="sim-lobby-metric__sub">Sorteo 100% aleatorio (7 módulos)</span>
+              <strong id="sim-metric-questions" class="sim-lobby-metric__value">9 Preguntas</strong>
+              <span id="sim-metric-questions-sub" class="sim-lobby-metric__sub">Exclusivas de este módulo</span>
             </div>
             <div class="sim-lobby-metric">
               <span class="sim-lobby-metric__label">TIEMPO</span>
-              <strong id="sim-metric-time" class="sim-lobby-metric__value">40 minutos</strong>
+              <strong id="sim-metric-time" class="sim-lobby-metric__value">18 minutos</strong>
               <span class="sim-lobby-metric__sub">Base oficial: 2:00 min por pregunta</span>
             </div>
             <div class="sim-lobby-metric">
               <span class="sim-lobby-metric__label">PARA APROBAR</span>
-              <strong id="sim-metric-pass" class="sim-lobby-metric__value">65% Eliminatorio / 80% Meta</strong>
+              <strong id="sim-metric-pass" class="sim-metric-pass-val sim-lobby-metric__value">65% Eliminatorio / 80% Meta</strong>
               <span class="sim-lobby-metric__sub">Conocimientos 60% · Comportamental 20%</span>
             </div>
           </div>
@@ -649,10 +664,10 @@
               <span>Continuar mi intento →</span>
             </button>
             <button type="button" id="sim-start-btn" class="btn-sim-resume-yellow">
-              <span>Iniciar Simulacro Ahora →</span>
+              <span>Iniciar Cuestionario Ahora →</span>
             </button>
             <button type="button" id="sim-new-random-btn" class="btn-sim-secondary-dark">
-              <span>Reiniciar / Nuevo Intento Aleatorio ↻</span>
+              <span>Reiniciar con preguntas aleatorias ↻</span>
             </button>
           </div>
         </div>

@@ -4295,3 +4295,259 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   V6: ADAPTACIÓN 100% RESPONSIVA PARA CELULAR (MOBILE UX · OFF-CANVAS + ACORDEÓN)
+   ========================================================================== */
+
+.job-strip__accordion-btn {
+  display: none;
+}
+
+.job-strip__body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.sidebar__title-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.sidebar-close-btn {
+  background: rgba(15, 23, 42, 0.08);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(6, 12, 24, 0.65);
+  backdrop-filter: blur(2px);
+  z-index: 115;
+}
+
+.mobile-drawer-trigger {
+  gap: 0.4rem;
+  width: auto !important;
+  padding: 0.42rem 0.78rem !important;
+  border: 1.5px solid #d4af37 !important;
+  background-color: rgba(212, 175, 55, 0.16) !important;
+  color: #fef08a !important;
+  font-size: 0.78rem;
+  font-weight: 800;
+  border-radius: 8px;
+}
+
+.mobile-drawer-trigger__text {
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 992px) {
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  .mobile-only {
+    display: inline-flex !important;
+  }
+
+  .topbar {
+    height: auto;
+    min-height: 58px;
+    padding: 0.55rem 0.85rem;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .topbar__brand {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .topbar__progress {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .topbar__actions {
+    order: 2;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.2rem;
+    gap: 0.4rem;
+  }
+
+  /* Menú Lateral Desplegable (Off-Canvas Drawer) */
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(86vw, 350px) !important;
+    max-width: 350px;
+    height: 100dvh;
+    z-index: 120;
+    transform: translateX(-105%);
+    transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  /* Barra de 5 Pestañas deslizable horizontalmente con el dedo */
+  .study-tabs-bar {
+    padding: 0 0.75rem;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .study-tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 0.72rem 0.85rem;
+  }
+
+  /* Apilar tarjetas de 2 columnas en 1 sola columna vertical */
+  .executive-highlights-grid,
+  .video-notes-layout,
+  .sim-lobby-metrics,
+  .sim-results-telemetry-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Barra de datos del cargo convertida en acordeón desplegable en móvil */
+  .job-strip {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.45rem 0.85rem;
+    gap: 0.45rem;
+  }
+
+  .job-strip__accordion-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.38);
+    color: #f8fafc;
+    padding: 0.48rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .job-strip__accordion-cta {
+    color: #facc15;
+    font-weight: 800;
+    white-space: nowrap;
+    margin-left: 0.5rem;
+  }
+
+  .job-strip__body {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.55rem 0.25rem 0.2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .job-strip.is-expanded .job-strip__body {
+    display: flex;
+  }
+
+  .job-strip__items {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .job-strip__sep {
+    display: none;
+  }
+
+  .reader-toolbar {
+    padding: 0.5rem 0.85rem;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .reader-topic-title {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.88rem;
+  }
+
+  .lesson-container,
+  .simulador-container {
+    padding: 1rem 0.85rem 2.5rem;
+  }
+
+  .sim-mode-pills {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sim-mode-btn {
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .sim-question-card,
+  .sim-lobby-card,
+  .sim-results-card {
+    padding: 1.15rem 1rem;
+  }
+
+  .sim-live-telemetry {
+    padding: 0.9rem 1rem;
+  }
+
+  .flashcard-3d {
+    height: 390px;
+  }
+
+  .flashcard-3d__face {
+    padding: 1.2rem 1.15rem;
+  }
+
+  .flashcard-3d__question {
+    font-size: 1.05rem;
+  }
+}
